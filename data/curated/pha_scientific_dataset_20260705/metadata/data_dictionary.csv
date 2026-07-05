@@ -1,0 +1,109 @@
+table,column,description
+sources.csv,curation_decision,Article-level inclusion/exclusion decision for curated exports.
+records_flat.csv,model_ready,Boolean flag for conservative model-ready rows.
+records_flat.csv,model_ready_reason,"Semicolon-separated reasons why a row is not model-ready, or ready."
+records_flat.csv,primary_target_name,Selected primary target according to target priority.
+records_flat.csv,primary_target_value,Numeric value of the selected primary target.
+records_flat.csv,primary_target_unit,Unit of the selected primary target.
+records_flat.csv,doi_split,Deterministic DOI-level train/validation/test split.
+model_records.csv,doi_split,Deterministic DOI-level train/validation/test split.
+inverse_design_seed.csv,target_direction,Suggested optimization direction for the target.
+inverse_design_seed.csv,doi_split,Deterministic DOI-level train/validation/test split.
+material_descriptors.csv,match_status,"PubChem enrichment status: matched, no_match, error, not_queried, or unknown_payload."
+material_descriptors.csv,canonical_smiles,PubChem canonical/connectivity SMILES for descriptor generation when available.
+material_descriptors.csv,pubchem_cid,PubChem compound identifier for matched small molecules.
+protein_descriptors.csv,match_status,"UniProt enrichment status: matched, no_match, error, not_queried, or unknown_payload."
+protein_descriptors.csv,qa_status,Whether the UniProt match is directly usable or needs accession/species review.
+protein_descriptors.csv,uniprot_accession,UniProt accession for matched protein query.
+protein_descriptors.csv,sequence_available,Whether a protein sequence was returned and can be used for sequence embeddings.
+completion_patches.csv,target_path,Whitelisted nested record path proposed for second-pass completion.
+completion_patches.csv,value_origin,Origin of the patch value; only observed_fulltext patches may be applied to experimental records.
+completion_patches.csv,apply_status,"Patch validation/application result such as applied, eligible_not_applied, or rejected_existing_value."
+article_level_properties.csv,field_name,Observed article-level field that could not be safely mapped to one exact record.
+external_material_descriptors.csv,value_origin,"Always external_descriptor; sidecar chemistry feature, not an observed experiment field."
+external_protein_descriptors.csv,value_origin,"Always external_descriptor; sidecar protein feature, not an observed experiment field."
+external_structure_descriptors.csv,rcsb_polymer_entity_ids,RCSB PDB polymer entity identifiers linked from a QA-usable UniProt accession.
+external_descriptor_audit.csv,usable,Sidecar descriptor rows considered usable after source-specific QA.
+records_flat.csv,provenance__doi,Source DOI.
+records_flat.csv,provenance__title,Source article title.
+records_flat.csv,provenance__year,Publication year if available.
+records_flat.csv,provenance__source_section,Article section used as evidence.
+records_flat.csv,provenance__source_table_or_figure,Source table or figure used as evidence.
+records_flat.csv,hydrogel__hydrogel_name,Hydrogel or hydrogel-like material name.
+records_flat.csv,hydrogel__hydrogel_format,"Material format, such as bulk gel, coating, bead, cryogel, or nanogel."
+records_flat.csv,hydrogel__polymer_backbone,Polymer backbone or family.
+records_flat.csv,hydrogel__monomers,Reported monomers.
+records_flat.csv,hydrogel__monomer_ratios,Reported monomer ratios.
+records_flat.csv,hydrogel__crosslinker,Reported crosslinker(s).
+records_flat.csv,hydrogel__crosslinker_concentration,Reported crosslinker concentration.
+records_flat.csv,hydrogel__initiator,Reported initiator(s).
+records_flat.csv,hydrogel__synthesis_method,Preparation or synthesis method.
+records_flat.csv,hydrogel__preparation_solvent,Preparation solvent.
+records_flat.csv,hydrogel__preparation_pH,Preparation pH.
+records_flat.csv,hydrogel__preparation_temp_C,Preparation temperature in Celsius.
+records_flat.csv,hydrogel__gelation_time,Gelation or curing time.
+records_flat.csv,hydrogel__functional_groups,Functional groups.
+records_flat.csv,hydrogel__ligand_or_affinity_group,Affinity ligands or recognition groups.
+records_flat.csv,hydrogel__filler_or_composite,Composite fillers.
+records_flat.csv,hydrogel__substrate_or_support,Substrate or support.
+records_flat.csv,hydrogel__post_treatment,"Post-treatment, washing, conditioning, or storage notes."
+records_flat.csv,hydrogel_properties__charge_class,Material charge class.
+records_flat.csv,hydrogel_properties__swelling_ratio,Swelling ratio.
+records_flat.csv,hydrogel_properties__water_content_pct,Water content percentage.
+records_flat.csv,hydrogel_properties__porosity_pct,Porosity percentage.
+records_flat.csv,hydrogel_properties__pore_size,Pore size.
+records_flat.csv,hydrogel_properties__mesh_size,Mesh size.
+records_flat.csv,hydrogel_properties__surface_area,Surface area.
+records_flat.csv,hydrogel_properties__particle_size,Particle size.
+records_flat.csv,hydrogel_properties__thickness,Material thickness.
+records_flat.csv,hydrogel_properties__roughness,Surface roughness.
+records_flat.csv,hydrogel_properties__zeta_potential_mV,Zeta potential.
+records_flat.csv,hydrogel_properties__contact_angle_deg,Water contact angle.
+records_flat.csv,hydrogel_properties__young_modulus,Young's modulus or mechanical modulus.
+records_flat.csv,hydrogel_properties__responsive_type,Stimuli-responsive behavior or class.
+records_flat.csv,hydrogel_properties__degradation_or_stability,"Degradation, reuse, storage, or stability notes."
+records_flat.csv,protein__protein_name,Protein name.
+records_flat.csv,protein__protein_abbreviation,Protein abbreviation.
+records_flat.csv,protein__protein_species_or_source,Protein species or biological source.
+records_flat.csv,protein__protein_role,Role of the protein in the experiment.
+records_flat.csv,protein__molecular_weight_kDa,Protein molecular weight.
+records_flat.csv,protein__pI,Protein isoelectric point.
+records_flat.csv,protein__charge_at_experiment_pH,Reported or inferred protein charge at assay pH.
+records_flat.csv,protein__protein_initial_concentration,Initial protein concentration.
+records_flat.csv,protein__protein_matrix,"Matrix, such as buffer, serum, plasma, or crude extract."
+records_flat.csv,protein__competitor_proteins,Competitor proteins.
+records_flat.csv,experiment__experiment_mode,"Batch, surface, column, SPR/QCM, or other assay mode."
+records_flat.csv,experiment__hydrogel_dosage,Hydrogel dosage.
+records_flat.csv,experiment__solution_volume,Solution volume.
+records_flat.csv,experiment__pH,Assay pH.
+records_flat.csv,experiment__buffer,Assay buffer.
+records_flat.csv,experiment__ionic_strength,Ionic strength.
+records_flat.csv,experiment__salt_type,Salt type.
+records_flat.csv,experiment__salt_concentration,Salt concentration.
+records_flat.csv,experiment__temperature_C,Assay temperature.
+records_flat.csv,experiment__contact_time,Contact or incubation time.
+records_flat.csv,experiment__flow_rate,Flow rate.
+records_flat.csv,experiment__detection_method,Detection or quantification method.
+records_flat.csv,experiment__replicate_count,Replicate count.
+records_flat.csv,experiment__adsorption_type,"Endpoint, equilibrium, kinetic, dynamic, or unknown."
+records_flat.csv,experiment__competition_system,"Single protein, binary, serum, plasma, blood, or other competition context."
+records_flat.csv,outcome__outcome_label,Qualitative outcome label.
+records_flat.csv,outcome__raw_metric_name,Metric name as reported.
+records_flat.csv,outcome__raw_metric_value,Metric value as reported.
+records_flat.csv,outcome__raw_metric_unit,Metric unit as reported.
+records_flat.csv,outcome__q_norm_mg_g,Normalized capacity in mg/g if extractable.
+records_flat.csv,outcome__q_norm_mg_mL_bed,Normalized capacity in mg/mL bed if extractable.
+records_flat.csv,outcome__surface_adsorption_ug_cm2,Surface adsorption in microgram per square centimeter.
+records_flat.csv,outcome__removal_efficiency_pct,Removal efficiency percentage.
+records_flat.csv,outcome__binding_efficiency_pct,Binding efficiency percentage.
+records_flat.csv,outcome__recovery_pct,Recovery percentage.
+records_flat.csv,outcome__purity_pct,Purity percentage.
+records_flat.csv,outcome__fouling_reduction_pct,Fouling reduction percentage.
+records_flat.csv,outcome__retained_capacity_pct,Retained capacity percentage.
+records_flat.csv,mechanism__mechanism_tags,Mechanism tags extracted from the article.
+records_flat.csv,mechanism__control_type,Control/comparator type.
+records_flat.csv,mechanism__control_material,Control/comparator material.
+records_flat.csv,mechanism__fold_change_vs_control,Fold change versus control.
+records_flat.csv,quality__unit_normalized,Whether the outcome value was normalized.
+records_flat.csv,quality__source_quality_score,Source quality score from 0 to 3.
+records_flat.csv,quality__needs_manual_review,Whether the record should be manually reviewed.

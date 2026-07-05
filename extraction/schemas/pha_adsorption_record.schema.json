@@ -1,0 +1,381 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local/PHA/pha_adsorption_record.schema.json",
+  "title": "PHA adsorption record",
+  "description": "One hydrogel-protein-condition-outcome record for protein adsorption, selective adsorption, weak adsorption, antifouling, or protein immobilization.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_id",
+    "schema_version",
+    "provenance",
+    "triage",
+    "hydrogel",
+    "protein",
+    "experiment",
+    "outcome",
+    "mechanism",
+    "quality"
+  ],
+  "properties": {
+    "record_id": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string",
+      "default": "0.1.0"
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "evidence_text", "extraction_confidence", "review_status"],
+      "properties": {
+        "doi": {"type": ["string", "null"]},
+        "pmid": {"type": ["string", "null"]},
+        "title": {"type": "string"},
+        "year": {"type": ["integer", "null"]},
+        "journal": {"type": ["string", "null"]},
+        "query_family": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "source_section": {"type": ["string", "null"]},
+        "source_table_or_figure": {"type": ["string", "null"]},
+        "evidence_text": {"type": "string"},
+        "extraction_method": {
+          "type": ["string", "null"],
+          "enum": ["manual", "llm_fulltext", "llm_abstract", "table_parser", "hybrid", null]
+        },
+        "extraction_confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "review_status": {
+          "type": "string",
+          "enum": ["raw", "needs_review", "reviewed", "rejected"]
+        }
+      }
+    },
+    "triage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relevance_label", "study_type", "has_quantitative_adsorption"],
+      "properties": {
+        "relevance_label": {
+          "type": "string",
+          "enum": ["include", "maybe", "exclude"]
+        },
+        "relevance_reason": {"type": ["string", "null"]},
+        "study_type": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "adsorption_capacity",
+              "separation_purification",
+              "antifouling_low_adsorption",
+              "imprinting_affinity",
+              "mechanism_property",
+              "screening_library",
+              "protein_immobilization",
+              "biocompatibility_fouling",
+              "biointerface_blood_contact",
+              "protein_corona_competition",
+              "formulation_process",
+              "ai_training_dataset"
+            ]
+          }
+        },
+        "is_review": {"type": ["boolean", "null"]},
+        "has_quantitative_adsorption": {"type": "boolean"},
+        "has_control_or_comparator": {"type": ["boolean", "null"]}
+      }
+    },
+    "hydrogel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hydrogel_id", "hydrogel_name", "hydrogel_format", "polymer_backbone", "functional_groups"],
+      "properties": {
+        "hydrogel_id": {"type": "string"},
+        "hydrogel_name": {"type": "string"},
+        "hydrogel_format": {
+          "type": "string",
+          "enum": [
+            "bulk_gel",
+            "film",
+            "coating",
+            "bead",
+            "microgel",
+            "nanogel",
+            "cryogel",
+            "monolith",
+            "membrane",
+            "column_bed",
+            "scaffold",
+            "composite",
+            "other"
+          ]
+        },
+        "polymer_backbone": {"type": "array", "items": {"type": "string"}},
+        "monomers": {"type": "array", "items": {"type": "string"}},
+        "monomer_ratios": {"type": ["string", "null"]},
+        "crosslinker": {"type": "array", "items": {"type": "string"}},
+        "crosslinker_concentration": {"type": ["string", "null"]},
+        "initiator": {"type": "array", "items": {"type": "string"}},
+        "synthesis_method": {"type": "array", "items": {"type": "string"}},
+        "preparation_solvent": {"type": ["string", "null"]},
+        "preparation_pH": {"type": ["number", "string", "null"]},
+        "preparation_temp_C": {"type": ["number", "null"]},
+        "gelation_time": {"type": ["string", "null"]},
+        "functional_groups": {"type": "array", "items": {"type": "string"}},
+        "ligand_or_affinity_group": {"type": "array", "items": {"type": "string"}},
+        "metal_ion_or_bridge": {"type": "array", "items": {"type": "string"}},
+        "template_molecule": {"type": ["string", "null"]},
+        "filler_or_composite": {"type": "array", "items": {"type": "string"}},
+        "substrate_or_support": {"type": ["string", "null"]},
+        "post_treatment": {"type": ["string", "null"]}
+      }
+    },
+    "hydrogel_properties": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "charge_class": {
+          "type": ["string", "null"],
+          "enum": ["cationic", "anionic", "zwitterionic", "mixed_charge", "neutral", "amphiphilic", "unknown", null]
+        },
+        "net_charge_condition": {"type": ["string", "null"]},
+        "responsive_type": {"type": "array", "items": {"type": "string"}},
+        "lcst_C": {"type": ["number", "null"]},
+        "swelling_ratio": {"$ref": "#/$defs/measured_value"},
+        "water_content_pct": {"type": ["number", "null"]},
+        "porosity_pct": {"type": ["number", "null"]},
+        "pore_size": {"$ref": "#/$defs/measured_value"},
+        "mesh_size": {"$ref": "#/$defs/measured_value"},
+        "surface_area": {"$ref": "#/$defs/measured_value"},
+        "particle_size": {"$ref": "#/$defs/measured_value"},
+        "zeta_potential_mV": {"$ref": "#/$defs/measured_value"},
+        "contact_angle_deg": {"$ref": "#/$defs/measured_value"},
+        "young_modulus": {"$ref": "#/$defs/measured_value"},
+        "adhesion_energy": {"$ref": "#/$defs/measured_value"},
+        "permeability": {"$ref": "#/$defs/measured_value"},
+        "thermal_stability": {"type": ["string", "null"]},
+        "cycle_stability": {"type": ["object", "null"]},
+        "morphology_method": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "protein": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["protein_name", "protein_role"],
+      "properties": {
+        "protein_name": {"type": "string"},
+        "protein_abbreviation": {"type": ["string", "null"]},
+        "protein_species_or_source": {"type": ["string", "null"]},
+        "protein_role": {
+          "type": "string",
+          "enum": ["target", "template", "competitor", "mixture_component", "fouling_protein", "immobilized_enzyme", "unknown"]
+        },
+        "molecular_weight_kDa": {"type": ["number", "null"]},
+        "pI": {"type": ["number", "null"]},
+        "charge_at_experiment_pH": {
+          "type": ["string", "null"],
+          "enum": ["positive", "negative", "near_neutral", "mixed", "unknown", null]
+        },
+        "protein_initial_concentration": {"$ref": "#/$defs/measured_value"},
+        "protein_matrix": {"type": ["string", "null"]},
+        "competitor_proteins": {"type": "array", "items": {"type": "string"}},
+        "protein_labeling": {"type": ["string", "null"]},
+        "protein_class": {"type": ["string", "null"]},
+        "blood_related": {"type": ["boolean", "null"]},
+        "inflammation_related": {"type": ["boolean", "null"]}
+      }
+    },
+    "experiment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["experiment_mode"],
+      "properties": {
+        "experiment_mode": {
+          "type": "string",
+          "enum": ["batch", "column", "surface", "qcm", "spr", "microarray", "flow", "implant", "hemocompatibility", "microscopy", "other"]
+        },
+        "hydrogel_dosage": {"$ref": "#/$defs/measured_value"},
+        "solution_volume": {"$ref": "#/$defs/measured_value"},
+        "pH": {"type": ["number", "string", "null"]},
+        "buffer": {"type": ["string", "null"]},
+        "ionic_strength": {"$ref": "#/$defs/measured_value"},
+        "salt_type": {"type": ["string", "null"]},
+        "salt_concentration": {"$ref": "#/$defs/measured_value"},
+        "temperature_C": {"type": ["number", "null"]},
+        "contact_time": {"$ref": "#/$defs/measured_value"},
+        "flow_rate": {"$ref": "#/$defs/measured_value"},
+        "loading_volume_CV": {"type": ["number", "null"]},
+        "wash_solution": {"type": ["string", "null"]},
+        "elution_solution": {"type": ["string", "null"]},
+        "regeneration_cycles": {"type": ["integer", "null"]},
+        "detection_method": {"type": "array", "items": {"type": "string"}},
+        "replicate_count": {"type": ["integer", "null"]},
+        "adsorption_type": {
+          "type": ["string", "null"],
+          "enum": ["endpoint", "dynamic", "equilibrium", "time_course", "breakthrough", "unknown", null]
+        },
+        "competition_system": {
+          "type": ["string", "null"],
+          "enum": ["single_protein", "binary", "multi_protein", "serum", "plasma", "crude_extract", "whole_blood", "unknown", null]
+        },
+        "desorption_test": {"type": ["boolean", "null"]}
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["outcome_label", "outcome_basis", "raw_metric_name"],
+      "properties": {
+        "outcome_label": {
+          "type": "string",
+          "enum": ["adsorbing", "selective_adsorbing", "weak_adsorbing", "non_adsorbing", "antifouling", "protein_immobilization", "ambiguous"]
+        },
+        "outcome_basis": {"type": "string"},
+        "raw_metric_name": {"type": "string"},
+        "raw_metric_value": {"type": ["number", "string", "null"]},
+        "raw_metric_unit": {"type": ["string", "null"]},
+        "q_norm_mg_g": {"type": ["number", "null"]},
+        "q_norm_mg_mL_bed": {"type": ["number", "null"]},
+        "surface_adsorption_ug_cm2": {"type": ["number", "null"]},
+        "removal_efficiency_pct": {"type": ["number", "null"]},
+        "binding_efficiency_pct": {"type": ["number", "null"]},
+        "recovery_pct": {"type": ["number", "null"]},
+        "purity_pct": {"type": ["number", "null"]},
+        "dynamic_binding_capacity": {"$ref": "#/$defs/measured_value"},
+        "selectivity_factor": {"$ref": "#/$defs/measured_value"},
+        "imprinting_factor": {"type": ["number", "null"]},
+        "association_constant_Ka": {"$ref": "#/$defs/measured_value"},
+        "dissociation_constant_Kd": {"$ref": "#/$defs/measured_value"},
+        "isotherm_model": {"type": ["string", "null"]},
+        "isotherm_parameters": {"type": ["object", "null"]},
+        "kinetic_model": {"type": ["string", "null"]},
+        "kinetic_parameters": {"type": ["object", "null"]},
+        "fouling_reduction_pct": {"type": ["number", "null"]},
+        "retained_capacity_pct": {"type": ["number", "null"]},
+        "protein_corona": {"type": ["object", "null"]},
+        "competitive_adsorption_result": {"type": ["object", "null"]},
+        "adsorption_reversibility": {"type": ["object", "null"]},
+        "side_outcomes": {"type": ["object", "null"]}
+      }
+    },
+    "mechanism": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mechanism_tags"],
+      "properties": {
+        "mechanism_tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "electrostatic_attraction",
+              "electrostatic_repulsion",
+              "hydrophobic_interaction",
+              "hydrogen_bonding",
+              "van_der_waals",
+              "steric_hindrance",
+              "hydration_layer",
+              "size_exclusion",
+              "pore_diffusion",
+              "molecular_imprinting",
+              "shape_memory",
+              "coordination_metal_bridge",
+              "ion_exchange",
+              "boronate_affinity",
+              "ligand_affinity",
+              "aptamer_recognition",
+              "pH_responsive",
+              "temperature_responsive",
+              "salt_responsive",
+              "protein_conformation_change",
+              "protein_unfolding",
+              "protein_corona_formation",
+              "competitive_adsorption",
+              "unknown"
+            ]
+          }
+        },
+        "mechanism_evidence_text": {"type": ["string", "null"]},
+        "author_claimed_mechanism": {"type": ["boolean", "null"]},
+        "inferred_mechanism": {"type": ["boolean", "null"]},
+        "control_type": {"type": ["string", "null"]},
+        "control_material": {"type": ["string", "null"]},
+        "control_outcome": {"type": ["object", "null"]},
+        "fold_change_vs_control": {"type": ["number", "null"]},
+        "comparator_notes": {"type": ["string", "null"]},
+        "protein_unfolding": {"type": ["object", "boolean", "null"]},
+        "protein_corona_evidence": {"type": ["string", "null"]}
+      }
+    },
+    "biointerface_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "platelet_adhesion": {"type": ["object", "null"]},
+        "platelet_activation": {"type": ["object", "null"]},
+        "macrophage_polarization": {"type": ["object", "null"]},
+        "complement_activation": {"type": ["object", "null"]},
+        "cell_adhesion": {"type": ["object", "null"]},
+        "hemocompatibility": {"type": ["object", "null"]},
+        "foreign_body_response": {"type": ["object", "null"]}
+      }
+    },
+    "ai_modeling_labels": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "application_scenario": {"type": ["string", "null"]},
+        "prediction_target": {"type": ["string", "null"]},
+        "positive_negative_sample": {
+          "type": ["string", "null"],
+          "enum": ["positive", "negative", "weak", "mixed", "ambiguous", null]
+        },
+        "importance_score": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "usable_for_training": {"type": ["boolean", "null"]}
+      }
+    },
+    "quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit_normalized", "source_quality_score", "needs_manual_review"],
+      "properties": {
+        "unit_normalized": {"type": "boolean"},
+        "normalization_notes": {"type": ["string", "null"]},
+        "value_ambiguity": {"type": ["string", "null"]},
+        "missing_conditions": {"type": "array", "items": {"type": "string"}},
+        "source_quality_score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "needs_manual_review": {"type": "boolean"},
+        "exclusion_reason": {"type": ["string", "null"]}
+      }
+    }
+  },
+  "$defs": {
+    "measured_value": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "value": {"type": ["number", "string", "null"]},
+        "min": {"type": ["number", "null"]},
+        "max": {"type": ["number", "null"]},
+        "unit": {"type": ["string", "null"]},
+        "condition": {"type": ["string", "null"]},
+        "raw_text": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

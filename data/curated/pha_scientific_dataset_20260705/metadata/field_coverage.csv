@@ -1,0 +1,84 @@
+field,column,description,present,total,coverage_pct
+provenance.doi,provenance__doi,Source DOI.,6436,6436,100.0
+provenance.title,provenance__title,Source article title.,6436,6436,100.0
+provenance.year,provenance__year,Publication year if available.,6436,6436,100.0
+provenance.source_section,provenance__source_section,Article section used as evidence.,6436,6436,100.0
+provenance.source_table_or_figure,provenance__source_table_or_figure,Source table or figure used as evidence.,6045,6436,93.92
+hydrogel.hydrogel_name,hydrogel__hydrogel_name,Hydrogel or hydrogel-like material name.,6434,6436,99.97
+hydrogel.hydrogel_format,hydrogel__hydrogel_format,"Material format, such as bulk gel, coating, bead, cryogel, or nanogel.",6435,6436,99.98
+hydrogel.polymer_backbone,hydrogel__polymer_backbone,Polymer backbone or family.,6391,6436,99.3
+hydrogel.monomers,hydrogel__monomers,Reported monomers.,6436,6436,100.0
+hydrogel.monomer_ratios,hydrogel__monomer_ratios,Reported monomer ratios.,281,6436,4.37
+hydrogel.crosslinker,hydrogel__crosslinker,Reported crosslinker(s).,6356,6436,98.76
+hydrogel.crosslinker_concentration,hydrogel__crosslinker_concentration,Reported crosslinker concentration.,219,6436,3.4
+hydrogel.initiator,hydrogel__initiator,Reported initiator(s).,126,6436,1.96
+hydrogel.synthesis_method,hydrogel__synthesis_method,Preparation or synthesis method.,6280,6436,97.58
+hydrogel.preparation_solvent,hydrogel__preparation_solvent,Preparation solvent.,139,6436,2.16
+hydrogel.preparation_pH,hydrogel__preparation_pH,Preparation pH.,6,6436,0.09
+hydrogel.preparation_temp_C,hydrogel__preparation_temp_C,Preparation temperature in Celsius.,155,6436,2.41
+hydrogel.gelation_time,hydrogel__gelation_time,Gelation or curing time.,63,6436,0.98
+hydrogel.functional_groups,hydrogel__functional_groups,Functional groups.,6436,6436,100.0
+hydrogel.ligand_or_affinity_group,hydrogel__ligand_or_affinity_group,Affinity ligands or recognition groups.,6415,6436,99.67
+hydrogel.filler_or_composite,hydrogel__filler_or_composite,Composite fillers.,6422,6436,99.78
+hydrogel.substrate_or_support,hydrogel__substrate_or_support,Substrate or support.,0,6436,0.0
+hydrogel.post_treatment,hydrogel__post_treatment,"Post-treatment, washing, conditioning, or storage notes.",181,6436,2.81
+hydrogel_properties.charge_class,hydrogel_properties__charge_class,Material charge class.,4037,6436,62.73
+hydrogel_properties.swelling_ratio,hydrogel_properties__swelling_ratio,Swelling ratio.,1654,6436,25.7
+hydrogel_properties.water_content_pct,hydrogel_properties__water_content_pct,Water content percentage.,24,6436,0.37
+hydrogel_properties.porosity_pct,hydrogel_properties__porosity_pct,Porosity percentage.,33,6436,0.51
+hydrogel_properties.pore_size,hydrogel_properties__pore_size,Pore size.,1874,6436,29.12
+hydrogel_properties.mesh_size,hydrogel_properties__mesh_size,Mesh size.,203,6436,3.15
+hydrogel_properties.surface_area,hydrogel_properties__surface_area,Surface area.,39,6436,0.61
+hydrogel_properties.particle_size,hydrogel_properties__particle_size,Particle size.,1954,6436,30.36
+hydrogel_properties.thickness,hydrogel_properties__thickness,Material thickness.,0,6436,0.0
+hydrogel_properties.roughness,hydrogel_properties__roughness,Surface roughness.,12,6436,0.19
+hydrogel_properties.zeta_potential_mV,hydrogel_properties__zeta_potential_mV,Zeta potential.,429,6436,6.67
+hydrogel_properties.contact_angle_deg,hydrogel_properties__contact_angle_deg,Water contact angle.,607,6436,9.43
+hydrogel_properties.young_modulus,hydrogel_properties__young_modulus,Young's modulus or mechanical modulus.,345,6436,5.36
+hydrogel_properties.responsive_type,hydrogel_properties__responsive_type,Stimuli-responsive behavior or class.,6130,6436,95.25
+hydrogel_properties.degradation_or_stability,hydrogel_properties__degradation_or_stability,"Degradation, reuse, storage, or stability notes.",36,6436,0.56
+protein.protein_name,protein__protein_name,Protein name.,6429,6436,99.89
+protein.protein_abbreviation,protein__protein_abbreviation,Protein abbreviation.,4978,6436,77.35
+protein.protein_species_or_source,protein__protein_species_or_source,Protein species or biological source.,5381,6436,83.61
+protein.protein_role,protein__protein_role,Role of the protein in the experiment.,6436,6436,100.0
+protein.molecular_weight_kDa,protein__molecular_weight_kDa,Protein molecular weight.,2243,6436,34.85
+protein.pI,protein__pI,Protein isoelectric point.,2020,6436,31.39
+protein.charge_at_experiment_pH,protein__charge_at_experiment_pH,Reported or inferred protein charge at assay pH.,2269,6436,35.25
+protein.protein_initial_concentration,protein__protein_initial_concentration,Initial protein concentration.,4487,6436,69.72
+protein.protein_matrix,protein__protein_matrix,"Matrix, such as buffer, serum, plasma, or crude extract.",5998,6436,93.19
+protein.competitor_proteins,protein__competitor_proteins,Competitor proteins.,6436,6436,100.0
+experiment.experiment_mode,experiment__experiment_mode,"Batch, surface, column, SPR/QCM, or other assay mode.",6436,6436,100.0
+experiment.hydrogel_dosage,experiment__hydrogel_dosage,Hydrogel dosage.,3480,6436,54.07
+experiment.solution_volume,experiment__solution_volume,Solution volume.,3371,6436,52.38
+experiment.pH,experiment__pH,Assay pH.,3826,6436,59.45
+experiment.buffer,experiment__buffer,Assay buffer.,4678,6436,72.68
+experiment.ionic_strength,experiment__ionic_strength,Ionic strength.,9,6436,0.14
+experiment.salt_type,experiment__salt_type,Salt type.,2066,6436,32.1
+experiment.salt_concentration,experiment__salt_concentration,Salt concentration.,1877,6436,29.16
+experiment.temperature_C,experiment__temperature_C,Assay temperature.,3164,6436,49.16
+experiment.contact_time,experiment__contact_time,Contact or incubation time.,4567,6436,70.96
+experiment.flow_rate,experiment__flow_rate,Flow rate.,948,6436,14.73
+experiment.detection_method,experiment__detection_method,Detection or quantification method.,6027,6436,93.65
+experiment.replicate_count,experiment__replicate_count,Replicate count.,132,6436,2.05
+experiment.adsorption_type,experiment__adsorption_type,"Endpoint, equilibrium, kinetic, dynamic, or unknown.",6435,6436,99.98
+experiment.competition_system,experiment__competition_system,"Single protein, binary, serum, plasma, blood, or other competition context.",5582,6436,86.73
+outcome.outcome_label,outcome__outcome_label,Qualitative outcome label.,6436,6436,100.0
+outcome.raw_metric_name,outcome__raw_metric_name,Metric name as reported.,6436,6436,100.0
+outcome.raw_metric_value,outcome__raw_metric_value,Metric value as reported.,5984,6436,92.98
+outcome.raw_metric_unit,outcome__raw_metric_unit,Metric unit as reported.,5146,6436,79.96
+outcome.q_norm_mg_g,outcome__q_norm_mg_g,Normalized capacity in mg/g if extractable.,1462,6436,22.72
+outcome.q_norm_mg_mL_bed,outcome__q_norm_mg_mL_bed,Normalized capacity in mg/mL bed if extractable.,150,6436,2.33
+outcome.surface_adsorption_ug_cm2,outcome__surface_adsorption_ug_cm2,Surface adsorption in microgram per square centimeter.,371,6436,5.76
+outcome.removal_efficiency_pct,outcome__removal_efficiency_pct,Removal efficiency percentage.,158,6436,2.45
+outcome.binding_efficiency_pct,outcome__binding_efficiency_pct,Binding efficiency percentage.,416,6436,6.46
+outcome.recovery_pct,outcome__recovery_pct,Recovery percentage.,463,6436,7.19
+outcome.purity_pct,outcome__purity_pct,Purity percentage.,77,6436,1.2
+outcome.fouling_reduction_pct,outcome__fouling_reduction_pct,Fouling reduction percentage.,282,6436,4.38
+outcome.retained_capacity_pct,outcome__retained_capacity_pct,Retained capacity percentage.,347,6436,5.39
+mechanism.mechanism_tags,mechanism__mechanism_tags,Mechanism tags extracted from the article.,6436,6436,100.0
+mechanism.control_type,mechanism__control_type,Control/comparator type.,6034,6436,93.75
+mechanism.control_material,mechanism__control_material,Control/comparator material.,5696,6436,88.5
+mechanism.fold_change_vs_control,mechanism__fold_change_vs_control,Fold change versus control.,1788,6436,27.78
+quality.unit_normalized,quality__unit_normalized,Whether the outcome value was normalized.,6436,6436,100.0
+quality.source_quality_score,quality__source_quality_score,Source quality score from 0 to 3.,6436,6436,100.0
+quality.needs_manual_review,quality__needs_manual_review,Whether the record should be manually reviewed.,6436,6436,100.0

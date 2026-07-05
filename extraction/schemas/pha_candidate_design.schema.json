@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local/PHA/pha_candidate_design.schema.json",
+  "title": "PHA candidate hydrogel design",
+  "description": "A proposed hydrogel design and matched process for a protein adsorption / non-adsorption task.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["candidate_id", "request_id", "hydrogel_design", "matched_process", "predicted_behavior", "evidence"],
+  "properties": {
+    "candidate_id": {"type": "string"},
+    "request_id": {"type": "string"},
+    "hydrogel_design": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "polymer_backbone": {"type": "array", "items": {"type": "string"}},
+        "format": {"type": ["string", "null"]},
+        "monomers": {"type": "array", "items": {"type": "string"}},
+        "monomer_ratios": {"type": ["string", "null"]},
+        "crosslinker": {"type": "array", "items": {"type": "string"}},
+        "functional_groups": {"type": "array", "items": {"type": "string"}},
+        "ligands_or_affinity_groups": {"type": "array", "items": {"type": "string"}},
+        "target_property_window": {"type": ["object", "null"]},
+        "design_rationale": {"type": ["string", "null"]}
+      }
+    },
+    "matched_process": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fabrication_method": {"type": ["string", "null"]},
+        "key_steps": {"type": "array", "items": {"type": "string"}},
+        "adsorption_conditions": {"type": ["object", "null"]},
+        "wash_solution": {"type": ["string", "null"]},
+        "elution_solution": {"type": ["string", "null"]},
+        "regeneration_method": {"type": ["string", "null"]},
+        "sterilization_or_storage": {"type": ["string", "null"]},
+        "scale_up_notes": {"type": ["string", "null"]}
+      }
+    },
+    "predicted_behavior": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "expected_adsorbed_proteins": {"type": "array", "items": {"type": "string"}},
+        "expected_rejected_proteins": {"type": "array", "items": {"type": "string"}},
+        "predicted_metrics": {"type": ["object", "null"]},
+        "main_mechanisms": {"type": "array", "items": {"type": "string"}},
+        "risk_flags": {"type": "array", "items": {"type": "string"}},
+        "confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "supporting_record_ids": {"type": "array", "items": {"type": "string"}},
+        "supporting_dois": {"type": "array", "items": {"type": "string"}},
+        "nearest_literature_analogs": {"type": "array", "items": {"type": "string"}},
+        "extrapolation_notes": {"type": ["string", "null"]},
+        "recommended_validation_experiments": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

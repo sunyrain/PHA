@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local/PHA/pha_inverse_design_request.schema.json",
+  "title": "PHA inverse design request",
+  "description": "A design task specifying proteins to adsorb, proteins to reject, operating conditions, and process constraints.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["request_id", "target_adsorb_proteins", "target_reject_proteins", "operating_conditions"],
+  "properties": {
+    "request_id": {"type": "string"},
+    "application_scenario": {"type": ["string", "null"]},
+    "target_adsorb_proteins": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/protein_target"}
+    },
+    "target_reject_proteins": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/protein_target"}
+    },
+    "operating_conditions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "matrix": {"type": ["string", "null"]},
+        "pH_range": {"$ref": "#/$defs/range"},
+        "salt_type": {"type": ["string", "null"]},
+        "salt_concentration_range": {"$ref": "#/$defs/range"},
+        "temperature_C_range": {"$ref": "#/$defs/range"},
+        "contact_time_range": {"$ref": "#/$defs/range"},
+        "flow_rate_range": {"$ref": "#/$defs/range"}
+      }
+    },
+    "material_constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowed_backbones": {"type": "array", "items": {"type": "string"}},
+        "excluded_chemistries": {"type": "array", "items": {"type": "string"}},
+        "allowed_formats": {"type": "array", "items": {"type": "string"}},
+        "biocompatibility_required": {"type": ["boolean", "null"]},
+        "water_phase_preferred": {"type": ["boolean", "null"]},
+        "max_synthesis_steps": {"type": ["integer", "null"]},
+        "cost_constraint": {"type": ["string", "null"]}
+      }
+    },
+    "performance_constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "min_target_adsorption": {"$ref": "#/$defs/measured_value"},
+        "max_reject_adsorption": {"$ref": "#/$defs/measured_value"},
+        "min_selectivity_factor": {"type": ["number", "null"]},
+        "min_recovery_pct": {"type": ["number", "null"]},
+        "min_retained_capacity_pct": {"type": ["number", "null"]},
+        "min_cycles": {"type": ["integer", "null"]}
+      }
+    },
+    "process_constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required_process_mode": {"type": ["string", "null"]},
+        "must_support_elution": {"type": ["boolean", "null"]},
+        "must_support_regeneration": {"type": ["boolean", "null"]},
+        "sterilization_required": {"type": ["boolean", "null"]},
+        "scale_up_required": {"type": ["boolean", "null"]}
+      }
+    },
+    "notes": {"type": ["string", "null"]}
+  },
+  "$defs": {
+    "protein_target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["protein_name"],
+      "properties": {
+        "protein_name": {"type": "string"},
+        "protein_abbreviation": {"type": ["string", "null"]},
+        "priority_weight": {"type": ["number", "null"]},
+        "desired_label": {"type": ["string", "null"]},
+        "threshold": {"$ref": "#/$defs/measured_value"}
+      }
+    },
+    "range": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "min": {"type": ["number", "null"]},
+        "max": {"type": ["number", "null"]},
+        "unit": {"type": ["string", "null"]}
+      }
+    },
+    "measured_value": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "value": {"type": ["number", "string", "null"]},
+        "min": {"type": ["number", "null"]},
+        "max": {"type": ["number", "null"]},
+        "unit": {"type": ["string", "null"]},
+        "condition": {"type": ["string", "null"]},
+        "raw_text": {"type": ["string", "null"]}
+      }
+    }
+  }
+}
+

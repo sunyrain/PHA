@@ -1,0 +1,4 @@
+source_database,entity_type,rows,matched,usable,needs_review,not_queried,skipped,no_match,error
+PubChem,material,13662,931,931,0,8729,3995,0,7
+UniProt,protein,4290,338,70,268,2795,1156,0,1
+RCSB PDB,structure,70,0,0,0,70,0,0,0

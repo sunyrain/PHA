@@ -1,0 +1,430 @@
+directories:
+  app_home: PHA
+  article_data_dir: PHA/data\article_data
+  chrome_binary: C:\Program Files\Google\Chrome\Application\chrome.exe
+  data_root: PHA/data
+  databases_dir: PHA/data\databases
+  downloads_dir: PHA/var\downloads
+  extensions_dir: PHA/resources\extensions
+  logs_dir: PHA/var\logs
+  output_dir: PHA/data\processed
+  temp_profiles_dir: PHA/var\temp_profiles
+  text_mining_dir: PHA/data\processed\text_mining
+files:
+  article_spider_info: PHA/data\processed\article_spider_info.xlsx
+  doi_file: PHA/data\raw\article_pending_download_precrawl_broad_non_rsc_remaining.json
+  doi_excel_file: PHA/data\processed\article_pending_download.xlsx
+project:
+  name: PHA-2026
+  domain: pha
+spider:
+  chrome_version: 149
+  force_direct_network: true
+  html_only: true
+  download_figures: false
+  download_supplementary: false
+  download_pdf: false
+  download_limit_per_publisher: null
+  use_filtered_articles_table: false
+  auth:
+    institution: ""
+    username: ""
+    password: ""
+    sso_idp: ""
+  publishers:
+  - ACS
+  - Elsevier
+  - MDPI
+  - Springer
+  - TnF
+  - Wiley
+  - Nature
+  table_format: html
+  workers: 1
+text_mining:
+  elsevier_max_results: 50
+  elsevier_max_workers: 4
+  elsevier_queries:
+  # Q1: quantitative hydrogel-protein adsorption records with property signals.
+  - >-
+    TITLE-ABS-KEY(
+      (hydrogel* OR "polymer gel*" OR cryogel* OR nanogel* OR microgel*
+       OR "hydrogel bead*" OR "hydrogel microsphere*" OR "hydrogel membrane*")
+      AND
+      ("protein adsorption" OR "protein adsorb*" OR "protein sorption"
+       OR "protein binding" OR "protein uptake" OR "nonspecific protein adsorption"
+       OR "protein fouling")
+      AND
+      ("adsorption capacity" OR "binding capacity" OR isotherm* OR kinetic*
+       OR Qmax OR "distribution coefficient" OR "adsorption mechanism"
+       OR "surface charge" OR "charge density" OR "zeta potential"
+       OR "swelling ratio" OR "water content" OR porosity OR "pore size"
+       OR "mesh size" OR modulus OR "contact angle" OR hydrophilic*
+       OR hydrophobic* OR "functional group*")
+    ) AND PUBYEAR > 1999 AND PUBYEAR < 2027 AND DOCTYPE(ar)
+
+  # Q2: named target proteins used as adsorption probes.
+  - >-
+    TITLE-ABS-KEY(
+      (hydrogel* OR "polymer gel*" OR cryogel* OR nanogel* OR microgel*
+       OR "hydrogel bead*" OR "hydrogel microsphere*" OR "hydrogel membrane*")
+      AND
+      ("bovine serum albumin" OR BSA OR "human serum albumin" OR HSA
+       OR albumin OR lysozyme OR fibrinogen OR hemoglobin OR "cytochrome c"
+       OR myoglobin OR ovalbumin OR trypsin OR pepsin OR insulin
+       OR immunoglobulin* OR IgG OR antibody OR antibodies OR transferrin
+       OR ferritin OR lactoferrin)
+      AND
+      (adsorp* OR sorption OR bind* OR uptake OR capture OR removal
+       OR "fouling resistance" OR antifouling OR "anti-fouling")
+    ) AND PUBYEAR > 1999 AND PUBYEAR < 2027 AND DOCTYPE(ar)
+
+  # Q3: biointerfaces and blood-contacting hydrogels with protein adsorption.
+  - >-
+    TITLE-ABS-KEY(
+      (hydrogel* OR "polymer gel*" OR cryogel* OR nanogel* OR microgel*
+       OR "hydrogel coating*" OR "hydrogel membrane*" OR PVA OR PEG
+       OR PEGDA OR GelMA OR alginate OR chitosan)
+      AND
+      ("protein adsorption" OR "serum protein adsorption"
+       OR "plasma protein adsorption" OR "blood protein adsorption"
+       OR "protein fouling")
+      AND
+      ("blood-contacting" OR hemocompatibility OR biointerface
+       OR "platelet adhesion" OR "platelet activation" OR "cell adhesion"
+       OR "complement activation" OR "foreign body response"
+       OR wound OR dressing)
+    ) AND PUBYEAR > 1999 AND PUBYEAR < 2027 AND DOCTYPE(ar)
+
+  # Q4: selective affinity, ion-exchange, chelating, aptamer, and imprinted hydrogels.
+  - >-
+    TITLE-ABS-KEY(
+      ("molecularly imprinted hydrogel*" OR "protein imprinted hydrogel*"
+       OR "protein-imprinted hydrogel*" OR "affinity hydrogel*"
+       OR "ion-exchange hydrogel*" OR "ion exchange hydrogel*"
+       OR "boronate affinity hydrogel*" OR "metal chelate hydrogel*"
+       OR "chelating hydrogel*" OR "Ni-NTA hydrogel*" OR "aptamer hydrogel*"
+       OR "cryogel column*" OR "hydrogel adsorbent*")
+      AND
+      (protein OR peptide OR albumin OR lysozyme OR hemoglobin
+       OR immunoglobulin* OR IgG OR antibody OR enzyme)
+      AND
+      (adsorp* OR bind* OR capture OR recognition OR selectiv* OR separation)
+    ) AND PUBYEAR > 1999 AND PUBYEAR < 2027 AND DOCTYPE(ar)
+
+  # Q5: low-adsorption / anti-fouling hydrogels as negative or weak-binding cases.
+  - >-
+    TITLE-ABS-KEY(
+      (hydrogel* OR "polymer gel*" OR cryogel* OR nanogel* OR microgel*
+       OR "hydrogel coating*" OR "hydrogel surface*" OR "hydrogel membrane*")
+      AND
+      ("low protein adsorption" OR "reduced protein adsorption"
+       OR "minimal protein adsorption" OR "resist protein adsorption"
+       OR "protein resistant" OR protein-resistant OR "protein repellent"
+       OR "fouling resistance" OR "protein fouling" OR biofouling
+       OR antifouling OR "anti-fouling" OR zwitterionic OR PEGylated
+       OR "poly(ethylene glycol)" OR "polyethylene glycol")
+      AND
+      (protein OR serum OR plasma OR albumin OR fibrinogen OR lysozyme
+       OR immunoglobulin* OR antibody)
+    ) AND PUBYEAR > 1999 AND PUBYEAR < 2027 AND DOCTYPE(ar)
+
+  # Q6: multi-protein competitive adsorption and protein corona on hydrogels.
+  - >-
+    TITLE-ABS-KEY(
+      (hydrogel* OR "polymer gel*" OR cryogel* OR nanogel* OR microgel*
+       OR PVA OR PEG OR GelMA OR alginate OR chitosan)
+      AND
+      ("competitive adsorption" OR "competitive protein adsorption"
+       OR "multi-protein adsorption" OR "protein corona" OR "protein exchange"
+       OR "serum protein adsorption" OR "plasma protein adsorption"
+       OR "Vroman effect")
+      AND
+      (protein OR serum OR plasma OR albumin OR fibrinogen
+       OR immunoglobulin* OR antibody)
+    ) AND PUBYEAR > 1999 AND PUBYEAR < 2027 AND DOCTYPE(ar)
+
+  # Q7: mechanism-centered adsorption papers where physical origin is explicit.
+  - >-
+    TITLE-ABS-KEY(
+      (hydrogel* OR "polymer gel*" OR cryogel* OR nanogel* OR microgel*)
+      AND
+      (protein OR albumin OR lysozyme OR fibrinogen OR hemoglobin
+       OR immunoglobulin* OR antibody)
+      AND
+      (adsorp* OR sorption OR bind* OR fouling)
+      AND
+      (electrostatic* OR hydrophobic* OR hydrophilic* OR "hydrogen bonding"
+       OR "van der Waals" OR "size exclusion" OR "mesh size" OR porosity
+       OR "pore size" OR "charge density" OR "surface charge"
+       OR "isoelectric point" OR pI OR "molecular imprinting"
+       OR "affinity ligand" OR "conformation change" OR "protein unfolding"
+       OR "protein corona" OR "competitive adsorption" OR "hydration layer")
+    ) AND PUBYEAR > 1999 AND PUBYEAR < 2027 AND DOCTYPE(ar)
+
+  # Q8: hydrogel adsorbents for protein separation, purification, and reuse.
+  - >-
+    TITLE-ABS-KEY(
+      (hydrogel* OR cryogel* OR "hydrogel bead*" OR "hydrogel column*"
+       OR "hydrogel monolith*" OR "hydrogel adsorbent*" OR "porous gel*")
+      AND
+      ("protein separation" OR "protein purification" OR "protein capture"
+       OR "protein adsorption" OR "affinity chromatography"
+       OR "ion exchange chromatography" OR "binding capacity"
+       OR "dynamic binding capacity")
+      AND
+      (adsorp* OR bind* OR capture OR selectivity OR regeneration OR elution)
+    ) AND PUBYEAR > 1999 AND PUBYEAR < 2027 AND DOCTYPE(ar)
+
+  # Q9: formulation, fabrication, and process-window papers linked to protein adsorption.
+  - >-
+    TITLE-ABS-KEY(
+      (hydrogel* OR cryogel* OR nanogel* OR microgel*
+       OR "hydrogel coating*" OR "hydrogel column*" OR "hydrogel membrane*")
+      AND
+      ("protein adsorption" OR "protein binding" OR "protein capture"
+       OR "protein fouling" OR "protein separation" OR "protein purification")
+      AND
+      ("hydrogel formulation" OR "hydrogel fabrication" OR synthesis
+       OR crosslink* OR "crosslinking density" OR gelation
+       OR cryopolymerization OR grafting OR coating OR regeneration
+       OR elution OR "scale-up" OR "process window")
+    ) AND PUBYEAR > 1999 AND PUBYEAR < 2027 AND DOCTYPE(ar)
+
+  # Q10: hydrogel libraries, high-throughput screening, and data-driven design.
+  - >-
+    TITLE-ABS-KEY(
+      (
+        "hydrogel library" OR "hydrogel libraries" OR "combinatorial hydrogel*"
+        OR "high-throughput hydrogel*" OR "hydrogel array*"
+        OR "hydrogel microarray*" OR "microgel library"
+        OR "polymer hydrogel library"
+        OR ((hydrogel* OR microgel* OR nanogel*) AND
+            ("machine learning" OR "data-driven" OR "inverse design"
+             OR screening OR combinatorial OR "protein binding profile"))
+      )
+      AND
+      ("protein adsorption" OR "protein binding" OR "serum protein"
+       OR "protein fouling" OR "nonspecific protein adsorption" OR biofouling
+       OR "protein capture")
+    ) AND PUBYEAR > 1999 AND PUBYEAR < 2027 AND DOCTYPE(ar)
+  elsevier_rate_limit: 8
+  thread_pool_size: 4
+  wos_max_results: 50
+  wos_max_workers: 4
+  wos_queries:
+  # Q1: quantitative hydrogel-protein adsorption records with property signals.
+  - >-
+    TS=(
+      (hydrogel* OR "polymer gel*" OR cryogel* OR nanogel* OR microgel*
+       OR "hydrogel bead*" OR "hydrogel microsphere*" OR "hydrogel membrane*")
+      AND
+      ("protein adsorption" OR "protein adsorb*" OR "protein sorption"
+       OR "protein binding" OR "protein uptake" OR "nonspecific protein adsorption"
+       OR "protein fouling")
+      AND
+      ("adsorption capacity" OR "binding capacity" OR isotherm* OR kinetic*
+       OR Qmax OR "distribution coefficient" OR "adsorption mechanism"
+       OR "surface charge" OR "charge density" OR "zeta potential"
+       OR "swelling ratio" OR "water content" OR porosity OR "pore size"
+       OR "mesh size" OR modulus OR "contact angle" OR hydrophilic*
+       OR hydrophobic* OR "functional group*")
+    ) AND PY=(2000-2026) AND DT=(Article)
+
+  # Q2: named target proteins used as adsorption probes.
+  - >-
+    TS=(
+      (hydrogel* OR "polymer gel*" OR cryogel* OR nanogel* OR microgel*
+       OR "hydrogel bead*" OR "hydrogel microsphere*" OR "hydrogel membrane*")
+      AND
+      ("bovine serum albumin" OR BSA OR "human serum albumin" OR HSA
+       OR albumin OR lysozyme OR fibrinogen OR hemoglobin OR "cytochrome c"
+       OR myoglobin OR ovalbumin OR trypsin OR pepsin OR insulin
+       OR immunoglobulin* OR IgG OR antibody OR antibodies OR transferrin
+       OR ferritin OR lactoferrin)
+      AND
+      (adsorp* OR sorption OR bind* OR uptake OR capture OR removal
+       OR "fouling resistance" OR antifouling OR "anti-fouling")
+    ) AND PY=(2000-2026) AND DT=(Article)
+
+  # Q3: biointerfaces and blood-contacting hydrogels with protein adsorption.
+  - >-
+    TS=(
+      (hydrogel* OR "polymer gel*" OR cryogel* OR nanogel* OR microgel*
+       OR "hydrogel coating*" OR "hydrogel membrane*" OR PVA OR PEG
+       OR PEGDA OR GelMA OR alginate OR chitosan)
+      AND
+      ("protein adsorption" OR "serum protein adsorption"
+       OR "plasma protein adsorption" OR "blood protein adsorption"
+       OR "protein fouling")
+      AND
+      ("blood-contacting" OR hemocompatibility OR biointerface
+       OR "platelet adhesion" OR "platelet activation" OR "cell adhesion"
+       OR "complement activation" OR "foreign body response"
+       OR wound OR dressing)
+    ) AND PY=(2000-2026) AND DT=(Article)
+
+  # Q4: selective affinity, ion-exchange, chelating, aptamer, and imprinted hydrogels.
+  - >-
+    TS=(
+      ("molecularly imprinted hydrogel*" OR "protein imprinted hydrogel*"
+       OR "protein-imprinted hydrogel*" OR "affinity hydrogel*"
+       OR "ion-exchange hydrogel*" OR "ion exchange hydrogel*"
+       OR "boronate affinity hydrogel*" OR "metal chelate hydrogel*"
+       OR "chelating hydrogel*" OR "Ni-NTA hydrogel*" OR "aptamer hydrogel*"
+       OR "cryogel column*" OR "hydrogel adsorbent*")
+      AND
+      (protein OR peptide OR albumin OR lysozyme OR hemoglobin
+       OR immunoglobulin* OR IgG OR antibody OR enzyme)
+      AND
+      (adsorp* OR bind* OR capture OR recognition OR selectiv* OR separation)
+    ) AND PY=(2000-2026) AND DT=(Article)
+
+  # Q5: low-adsorption / anti-fouling hydrogels as negative or weak-binding cases.
+  - >-
+    TS=(
+      (hydrogel* OR "polymer gel*" OR cryogel* OR nanogel* OR microgel*
+       OR "hydrogel coating*" OR "hydrogel surface*" OR "hydrogel membrane*")
+      AND
+      ("low protein adsorption" OR "reduced protein adsorption"
+       OR "minimal protein adsorption" OR "resist protein adsorption"
+       OR "protein resistant" OR protein-resistant OR "protein repellent"
+       OR "fouling resistance" OR "protein fouling" OR biofouling
+       OR antifouling OR "anti-fouling" OR zwitterionic OR PEGylated
+       OR "poly(ethylene glycol)" OR "polyethylene glycol")
+      AND
+      (protein OR serum OR plasma OR albumin OR fibrinogen OR lysozyme
+       OR immunoglobulin* OR antibody)
+    ) AND PY=(2000-2026) AND DT=(Article)
+
+  # Q6: multi-protein competitive adsorption and protein corona on hydrogels.
+  - >-
+    TS=(
+      (hydrogel* OR "polymer gel*" OR cryogel* OR nanogel* OR microgel*
+       OR PVA OR PEG OR GelMA OR alginate OR chitosan)
+      AND
+      ("competitive adsorption" OR "competitive protein adsorption"
+       OR "multi-protein adsorption" OR "protein corona" OR "protein exchange"
+       OR "serum protein adsorption" OR "plasma protein adsorption"
+       OR "Vroman effect")
+      AND
+      (protein OR serum OR plasma OR albumin OR fibrinogen
+       OR immunoglobulin* OR antibody)
+    ) AND PY=(2000-2026) AND DT=(Article)
+
+  # Q7: mechanism-centered adsorption papers where physical origin is explicit.
+  - >-
+    TS=(
+      (hydrogel* OR "polymer gel*" OR cryogel* OR nanogel* OR microgel*)
+      AND
+      (protein OR albumin OR lysozyme OR fibrinogen OR hemoglobin
+       OR immunoglobulin* OR antibody)
+      AND
+      (adsorp* OR sorption OR bind* OR fouling)
+      AND
+      (electrostatic* OR hydrophobic* OR hydrophilic* OR "hydrogen bonding"
+       OR "van der Waals" OR "size exclusion" OR "mesh size" OR porosity
+       OR "pore size" OR "charge density" OR "surface charge"
+       OR "isoelectric point" OR pI OR "molecular imprinting"
+       OR "affinity ligand" OR "conformation change" OR "protein unfolding"
+       OR "protein corona" OR "competitive adsorption" OR "hydration layer")
+    ) AND PY=(2000-2026) AND DT=(Article)
+
+  # Q8: hydrogel adsorbents for protein separation, purification, and reuse.
+  - >-
+    TS=(
+      (hydrogel* OR cryogel* OR "hydrogel bead*" OR "hydrogel column*"
+       OR "hydrogel monolith*" OR "hydrogel adsorbent*" OR "porous gel*")
+      AND
+      ("protein separation" OR "protein purification" OR "protein capture"
+       OR "protein adsorption" OR "affinity chromatography"
+       OR "ion exchange chromatography" OR "binding capacity"
+       OR "dynamic binding capacity")
+      AND
+      (adsorp* OR bind* OR capture OR selectivity OR regeneration OR elution)
+    ) AND PY=(2000-2026) AND DT=(Article)
+
+  # Q9: formulation, fabrication, and process-window papers linked to protein adsorption.
+  - >-
+    TS=(
+      (hydrogel* OR cryogel* OR nanogel* OR microgel*
+       OR "hydrogel coating*" OR "hydrogel column*" OR "hydrogel membrane*")
+      AND
+      ("protein adsorption" OR "protein binding" OR "protein capture"
+       OR "protein fouling" OR "protein separation" OR "protein purification")
+      AND
+      ("hydrogel formulation" OR "hydrogel fabrication" OR synthesis
+       OR crosslink* OR "crosslinking density" OR gelation
+       OR cryopolymerization OR grafting OR coating OR regeneration
+       OR elution OR "scale-up" OR "process window")
+    ) AND PY=(2000-2026) AND DT=(Article)
+
+  # Q10: hydrogel libraries, high-throughput screening, and data-driven design.
+  - >-
+    TS=(
+      (
+        "hydrogel library" OR "hydrogel libraries" OR "combinatorial hydrogel*"
+        OR "high-throughput hydrogel*" OR "hydrogel array*"
+        OR "hydrogel microarray*" OR "microgel library"
+        OR "polymer hydrogel library"
+        OR ((hydrogel* OR microgel* OR nanogel*) AND
+            ("machine learning" OR "data-driven" OR "inverse design"
+             OR screening OR combinatorial OR "protein binding profile"))
+      )
+      AND
+      ("protein adsorption" OR "protein binding" OR "serum protein"
+       OR "protein fouling" OR "nonspecific protein adsorption" OR biofouling
+       OR "protein capture")
+    ) AND PY=(2000-2026) AND DT=(Article)
+  wos_rate_limit: 4
+export_filters:
+  enabled: true
+  min_publish_year: 2000
+  journals: []
+  publishers: []
+  wos_subtypes:
+  - Article
+  - Article; Early Access
+  elsevier_subtypes:
+  - Article
+  exclude_title_keywords:
+  - review
+  - mini-review
+  - minireview
+  - perspective
+  - opinion
+  - editorial
+  - commentary
+  - erratum
+  - corrigendum
+  - retraction
+  - book review
+  - meta-analysis
+  - systematic review
+  - bibliometric
+  - scientometric
+  - patent
+  - molecular dynamics
+  - density functional theory
+  - DFT
+  - QSAR
+  exclude_abstract_keywords:
+  - this review summarizes
+  - this review discusses
+  - this review highlights
+  - in this review, we
+  - herein, we review
+  - bibliometric analysis
+  - scientometric analysis
+filtering:
+  capacity_min: 0
+  removal_efficiency_min: 0
+  removal_efficiency_max: 100
+  pH_min: 0
+  pH_max: 14
+  temperature_min_c: 0
+  temperature_max_c: 100
+  reject_missing_all: true
+api:
+  deepseek_api_key: ${DEEPSEEK_API_KEY}
+  deepseek_proxy: ""

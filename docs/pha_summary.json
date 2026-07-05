@@ -1,0 +1,222 @@
+{
+  "generated_at": "2026-07-05T11:36:45",
+  "db_path": "PHA\\data\\processed\\pha_extraction_1000_xhigh_fulltext_w8\\codex_extraction_results.db",
+  "articles_total": 1230,
+  "success": 985,
+  "partial": 245,
+  "failed": 0,
+  "records_total": 6436,
+  "model_ready_records": 2325,
+  "inverse_design_rows": 2325,
+  "materials": 13662,
+  "proteins": 4290,
+  "material_descriptor_matches": 931,
+  "protein_descriptor_matches": 338,
+  "protein_descriptor_needs_review": 272,
+  "special_fields": 5363,
+  "completion_patches": 0,
+  "external_material_descriptor_rows": 13662,
+  "external_protein_descriptor_rows": 4290,
+  "top_proteins": [
+    {
+      "name": "bovine serum albumin",
+      "count": 1309
+    },
+    {
+      "name": "lysozyme",
+      "count": 777
+    },
+    {
+      "name": "fibrinogen",
+      "count": 193
+    },
+    {
+      "name": "human serum albumin",
+      "count": 189
+    },
+    {
+      "name": "hemoglobin",
+      "count": 117
+    },
+    {
+      "name": "immunoglobulin G",
+      "count": 114
+    },
+    {
+      "name": "lipase",
+      "count": 111
+    },
+    {
+      "name": "human immunoglobulin G",
+      "count": 94
+    },
+    {
+      "name": "Immunoglobulin G",
+      "count": 73
+    },
+    {
+      "name": "cytochrome c",
+      "count": 60
+    },
+    {
+      "name": "bovine hemoglobin",
+      "count": 58
+    },
+    {
+      "name": "ovalbumin",
+      "count": 52
+    }
+  ],
+  "top_hydrogels": [
+    {
+      "name": "L-tryptophan-functionalized polyacrylamide cryogel",
+      "count": 24
+    },
+    {
+      "name": "Gelatin hydrogel nonwoven fabric (Genocel)",
+      "count": 21
+    },
+    {
+      "name": "poly(NIPAM-co-MAA) nanogel",
+      "count": 20
+    },
+    {
+      "name": "APC-specific DNA aptamer immobilized poly(HEMA-GMA) cryogel membrane",
+      "count": 18
+    },
+    {
+      "name": "supported cationic polyacrylamide hydrogel",
+      "count": 17
+    },
+    {
+      "name": "l-phenylalanine-functionalized polyacrylamide cryogel",
+      "count": 15
+    },
+    {
+      "name": "Tris-activated polyacrylamide cryogel",
+      "count": 14
+    },
+    {
+      "name": "quaternized polyethyleneimine-functionalized PAAm cryogel",
+      "count": 14
+    },
+    {
+      "name": "P(HEMA-MAA)",
+      "count": 13
+    },
+    {
+      "name": "P(NIPAM-co-AAC)/Zr-MOF hydrogel microspheres",
+      "count": 13
+    },
+    {
+      "name": "FITC-NVOC functional PEG hydrogel disks, 5-40% w:v series",
+      "count": 13
+    },
+    {
+      "name": "HAVCR-1 epitope-imprinted polymer nanogels",
+      "count": 12
+    }
+  ],
+  "top_targets": [
+    {
+      "name": "q_norm_mg_g",
+      "count": 1418
+    },
+    {
+      "name": "surface_adsorption_ug_cm2",
+      "count": 351
+    },
+    {
+      "name": "recovery_pct",
+      "count": 327
+    },
+    {
+      "name": "binding_efficiency_pct",
+      "count": 254
+    },
+    {
+      "name": "retained_capacity_pct",
+      "count": 187
+    },
+    {
+      "name": "fouling_reduction_pct",
+      "count": 136
+    },
+    {
+      "name": "removal_efficiency_pct",
+      "count": 115
+    },
+    {
+      "name": "purity_pct",
+      "count": 25
+    },
+    {
+      "name": "detection limit",
+      "count": 24
+    },
+    {
+      "name": "high-affinity Bhb bound",
+      "count": 24
+    },
+    {
+      "name": "imprinting factor",
+      "count": 20
+    },
+    {
+      "name": "limit of detection",
+      "count": 17
+    }
+  ],
+  "top_experiment_modes": [
+    {
+      "name": "batch adsorption",
+      "count": 388
+    },
+    {
+      "name": "batch incubation",
+      "count": 104
+    },
+    {
+      "name": "continuous column adsorption",
+      "count": 96
+    },
+    {
+      "name": "static batch adsorption",
+      "count": 87
+    },
+    {
+      "name": "batch adsorption isotherm",
+      "count": 79
+    },
+    {
+      "name": "static incubation",
+      "count": 78
+    },
+    {
+      "name": "batch adsorption kinetics",
+      "count": 61
+    },
+    {
+      "name": "batch immobilization",
+      "count": 60
+    },
+    {
+      "name": "batch rebinding",
+      "count": 56
+    },
+    {
+      "name": "static adsorption",
+      "count": 52
+    },
+    {
+      "name": "batch adsorption immobilization",
+      "count": 42
+    },
+    {
+      "name": "batch equilibrium adsorption isotherm",
+      "count": 40
+    }
+  ],
+  "year_min": 2000.0,
+  "year_max": 2026.0
+}

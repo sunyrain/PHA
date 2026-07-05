@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+title: "PHA: Protein-Hydrogel Adsorption Dataset"
+message: "If you use this dataset, cite this repository and the source papers identified by DOI in the dataset rows."
+type: dataset
+authors:
+  - name: "sunyrain"
+repository-code: "https://github.com/sunyrain/PHA"
+url: "https://sunyrain.github.io/PHA/"
+date-released: "2026-07-05"
+license: "MIT"
+keywords:
+  - protein adsorption
+  - hydrogel
+  - literature mining
+  - biointerface
+  - inverse design

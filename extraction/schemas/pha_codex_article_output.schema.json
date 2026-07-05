@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local/PHA/pha_codex_article_output.schema.json",
+  "title": "PHA Codex article extraction output",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "prompt_version",
+    "article",
+    "article_common_fields",
+    "records",
+    "material_mentions",
+    "protein_mentions",
+    "special_fields",
+    "extraction_note"
+  ],
+  "properties": {
+    "schema_version": {"type": "string"},
+    "prompt_version": {"type": "string"},
+    "article": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["title", "triage_label", "triage_reason", "study_types"],
+      "properties": {
+        "doi": {"type": ["string", "null"]},
+        "title": {"type": "string"},
+        "publisher": {"type": ["string", "null"]},
+        "journal": {"type": ["string", "null"]},
+        "year": {"type": ["integer", "null"]},
+        "triage_label": {"type": "string", "enum": ["include", "maybe", "exclude"]},
+        "triage_reason": {"type": "string"},
+        "study_types": {"type": "array", "items": {"type": "string"}},
+        "has_quantitative_adsorption": {"type": "boolean"},
+        "has_control_or_comparator": {"type": ["boolean", "null"]},
+        "is_review": {"type": ["boolean", "null"]}
+      }
+    },
+    "article_common_fields": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["provenance", "triage", "hydrogel", "protein", "experiment", "outcome", "mechanism", "quality"]
+      }
+    },
+    "material_mentions": {
+      "type": "array",
+      "items": {"type": "object", "additionalProperties": true}
+    },
+    "protein_mentions": {
+      "type": "array",
+      "items": {"type": "object", "additionalProperties": true}
+    },
+    "special_fields": {
+      "type": "array",
+      "items": {"type": "object", "additionalProperties": true}
+    },
+    "extraction_note": {"type": "string"}
+  }
+}

@@ -1,0 +1,56 @@
+# PHA Protein-Hydrogel Adsorption Dataset
+
+Generated: 2026-07-05T11:36:45
+
+## Scope
+
+This curated package organizes literature-derived protein-hydrogel adsorption, binding, immobilization, antifouling, and related biointerface records extracted from the local PHA corpus.
+
+The primary unit is one record:
+
+`paper + hydrogel/sample + protein/mixture + experimental condition + measured outcome`
+
+## Contents
+
+- `data/sources.csv`: article-level metadata, extraction status, and curation decision.
+- `data/records_flat.csv`: flattened record-level table with provenance, hydrogel, protein, condition, outcome, mechanism, and quality fields.
+- `data/records_raw.jsonl`: raw nested record JSON for lossless downstream parsing.
+- `data/model_records.csv`: conservative model-ready subset.
+- `data/inverse_design_seed.csv`: compact table for inverse-design and generative-model experiments.
+- `data/materials.csv`: material, monomer, crosslinker, ligand, filler, and related mentions.
+- `data/proteins.csv`: protein mentions and reported protein properties.
+- `data/material_descriptors.csv`: flattened PubChem descriptors with match status.
+- `data/protein_descriptors.csv`: flattened UniProt descriptors with QA status.
+- `data/special_fields.csv`: article-specific fields outside the common schema.
+- `metadata/field_coverage.csv`: coverage audit for common fields.
+- `metadata/field_completion_candidates.csv`: DOI-level priority queue for second-pass preparation/property completion.
+- `metadata/completion_patches.csv`: patch-first second-pass field-completion proposals and apply status.
+- `metadata/article_level_properties.csv`: observed article-level values that could not be safely mapped to exact records.
+- `metadata/completion_coverage_before_after.csv`: coverage deltas from the latest completion run.
+- `metadata/completion_patch_audit.csv`: patch status counts by target path.
+- `metadata/external_descriptor_audit.csv`: PubChem/UniProt/RCSB sidecar descriptor QA summary.
+- `metadata/data_dictionary.csv`: table and column descriptions.
+- `metadata/failed_articles.csv`: failed DOI audit and relevance decision.
+- `metadata/partial_articles.csv`: article-level no-record exclusions.
+- `metadata/checksums_sha256.csv`: file checksums.
+
+## Summary
+
+- Articles: 1230
+- Success / partial / failed: 985 / 245 / 0
+- Records: 6436
+- Model-ready records: 2325
+- Inverse-design seed rows: 2325
+- Completion patches: 0
+
+## Curation Rules
+
+Records are marked model-ready only when they come from a successful article extraction, have a numeric target, are not marked for manual review, have source quality score >= 2, and include hydrogel and protein identity.
+
+Failed but relevant articles are retained in `sources.csv` and `failed_articles.csv` for traceability. They are excluded from record-level and model-ready training tables until manually extracted or successfully retried.
+
+Second-pass completion uses a patch-first workflow. Only `observed_fulltext` patches with exact record IDs, non-empty evidence, source section, empty target fields, and whitelisted target paths may be applied to nested records. External descriptors are exported as sidecar features and must not overwrite observed experimental fields.
+
+## Known Limitations
+
+The dataset is literature-mined and not manually verified end-to-end. Preparation and hydrogel physical-property coverage are much lower than identity and outcome coverage. Use `field_coverage.csv`, `completion_patch_audit.csv`, `external_descriptor_audit.csv`, `model_ready_reason`, and provenance/evidence columns when building predictive or generative models.

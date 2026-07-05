@@ -1,0 +1,49 @@
+# PHA Codex Extraction Prompt v3
+
+Return JSON only. Extract protein-hydrogel adsorption facts from the supplied article context.
+
+Record unit:
+paper + hydrogel sample + protein target or mixture + experimental condition + measured outcome.
+
+Use evidence only from the context. Do not invent values. Use null for unknown scalar values and [] for unknown arrays.
+
+Top-level JSON keys:
+- schema_version: "0.2.0"
+- prompt_version: "v3"
+- article
+- article_common_fields
+- records
+- material_mentions
+- protein_mentions
+- special_fields
+- extraction_note
+
+Article object:
+doi, title, publisher, journal, year, triage_label(include/maybe/exclude), triage_reason, study_types, has_quantitative_adsorption, has_control_or_comparator, is_review.
+
+Article common fields:
+main_hydrogel_families, main_hydrogel_formats, protein_panel, condition_variables_scanned, outcome_metrics_reported, mechanism_tags_reported, design_space_notes, best_evidence_locations.
+
+For each record include these nested objects:
+provenance, triage, hydrogel, hydrogel_properties, protein, experiment, outcome, mechanism, biointerface_response, ai_modeling_labels, quality.
+
+Required record details:
+- provenance: doi, title, year, journal, source_section, source_table_or_figure, evidence_text, extraction_method, extraction_confidence, review_status.
+- hydrogel: hydrogel_id, hydrogel_name, hydrogel_format, polymer_backbone, monomers, crosslinker, functional_groups, ligand_or_affinity_group, metal_ion_or_bridge, template_molecule, filler_or_composite, synthesis_method.
+- hydrogel_properties: charge_class, swelling_ratio, pore_size, mesh_size, particle_size, zeta_potential_mV, contact_angle_deg, young_modulus, responsive_type. Use null or [] when absent.
+- protein: protein_name, protein_abbreviation, protein_species_or_source, protein_role, molecular_weight_kDa, pI, charge_at_experiment_pH, protein_initial_concentration, protein_matrix, competitor_proteins, protein_class.
+- experiment: experiment_mode, pH, buffer, salt_type, salt_concentration, temperature_C, contact_time, hydrogel_dosage, solution_volume, flow_rate, detection_method, adsorption_type, competition_system, desorption_test.
+- outcome: outcome_label, outcome_basis, raw_metric_name, raw_metric_value, raw_metric_unit, q_norm_mg_g, q_norm_mg_mL_bed, surface_adsorption_ug_cm2, removal_efficiency_pct, binding_efficiency_pct, recovery_pct, purity_pct, dynamic_binding_capacity, selectivity_factor, imprinting_factor, isotherm_model, isotherm_parameters, kinetic_model, kinetic_parameters, fouling_reduction_pct, retained_capacity_pct, protein_corona, competitive_adsorption_result, adsorption_reversibility, side_outcomes.
+- mechanism: mechanism_tags, mechanism_evidence_text, author_claimed_mechanism, inferred_mechanism, control_type, control_material, control_outcome, fold_change_vs_control, comparator_notes.
+- quality: unit_normalized, normalization_notes, value_ambiguity, missing_conditions, source_quality_score(0-3), needs_manual_review, exclusion_reason.
+
+Put enrichable small molecules, monomers, crosslinkers, ligands, metal ions, and fillers in material_mentions:
+name, role, context, pubchem_query, needs_manual_normalization.
+
+Put proteins in protein_mentions:
+name, abbreviation, species_or_source, role, context, uniprot_query, reported_mw_kDa, reported_pI.
+
+Put unusual paper-specific facts in special_fields:
+field_name, field_value, why_special, evidence_text, suggested_table.
+
+If irrelevant, return triage_label "exclude", records [], and explain why. If relevant but only qualitative, return records with raw_metric_name as the reported qualitative metric and needs_manual_review true.
