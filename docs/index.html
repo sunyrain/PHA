@@ -247,7 +247,7 @@
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
-      min-width: 1260px;
+      min-width: 1080px;
       background: #fff;
     }
     col.status-col { width: 116px; }
@@ -256,7 +256,6 @@
     col.hydrogel-col { width: 236px; }
     col.protein-col { width: 168px; }
     col.mode-col { width: 184px; }
-    col.measurement-col { width: 318px; }
     col.quality-col { width: 118px; }
     col.publisher-col { width: 128px; }
     th, td {
@@ -304,8 +303,7 @@
       white-space: nowrap;
       vertical-align: top;
     }
-    .text-cell,
-    .measurement-cell {
+    .text-cell {
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -315,46 +313,6 @@
       -webkit-box-orient: vertical;
       overflow-wrap: break-word;
       line-height: 1.45;
-    }
-    .measurement-cell {
-      line-height: 1.35;
-    }
-    .measurement-name {
-      font-weight: 650;
-      color: var(--text);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .measurement-meta {
-      color: var(--soft);
-      font-size: 11px;
-      margin-top: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .measurement-value {
-      display: inline-flex;
-      max-width: 100%;
-      gap: 4px;
-      align-items: baseline;
-      margin-top: 4px;
-      padding: 2px 6px;
-      border-radius: 6px;
-      background: #f2f7fb;
-      color: #24537a;
-      font-variant-numeric: tabular-nums;
-      font-size: 11px;
-      overflow: hidden;
-    }
-    .measurement-number { font-weight: 760; }
-    .measurement-unit {
-      color: #5f7890;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
     .muted { color: var(--soft); }
     .quality-stack {
@@ -529,6 +487,7 @@
       </div>
       <div class="header-actions">
         <a class="btn" href="https://github.com/sunyrain/PHA" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="materials.html">Materials</a>
         <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/records_core.csv">Core CSV</a>
         <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/record_additional_values.csv">Values CSV</a>
         <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/records_flat.csv">Archive CSV</a>
@@ -575,10 +534,10 @@
         <div class="toolbar">
           <div class="field">
             <label for="searchInput">Search</label>
-            <input id="searchInput" type="search" placeholder="DOI, hydrogel, protein, measurement, evidence">
+            <input id="searchInput" type="search" placeholder="DOI, hydrogel, protein, mode, evidence">
           </div>
           <div class="field">
-            <label for="targetFilter">Comparable Target</label>
+            <label for="targetFilter">Outcome Filter</label>
             <select id="targetFilter">
               <option value="">Any</option>
               <option value="q_norm_mg_g">q_norm_mg_g</option>
@@ -638,7 +597,6 @@
             <col class="hydrogel-col">
             <col class="protein-col">
             <col class="mode-col">
-            <col class="measurement-col">
             <col class="quality-col">
             <col class="publisher-col">
           </colgroup>
@@ -650,7 +608,6 @@
               <th data-sort="hydrogel">Hydrogel</th>
               <th data-sort="protein">Protein</th>
               <th data-sort="experiment_mode">Mode</th>
-              <th data-sort="measurement">Reported Measurement</th>
               <th data-sort="quality_score">Score</th>
               <th data-sort="publisher">Publisher</th>
             </tr>
@@ -692,7 +649,6 @@
       hydrogel: "Hydrogel",
       protein: "Protein",
       experiment_mode: "Mode",
-      measurement: "Reported Measurement",
       quality_score: "Score",
       publisher: "Publisher",
     };
@@ -785,33 +741,6 @@
       return record.target_unit || record.unit || "";
     };
     const rowValueNumber = (record) => looseNumber(rowValue(record));
-    const reportedMeasurementName = (record) => (
-      pretty(record.metric) || pretty(record.outcome) || pretty(record.target) || "reported outcome"
-    );
-    const reportedMeasurementMeta = (record) => {
-      const metric = reportedMeasurementName(record);
-      const outcome = pretty(record.outcome);
-      return outcome && outcome !== metric ? outcome : "";
-    };
-    const reportedValueText = (record) => {
-      const value = pretty(record.value);
-      const unit = pretty(record.unit);
-      if (!isFilled(value)) return "";
-      return [value, unit].filter(isFilled).join(" ");
-    };
-    const comparableValueText = (record) => {
-      const selected = activeTarget();
-      if (!selected) return "";
-      const number = looseNumber(record[selected]);
-      if (number === null) return "";
-      return targetLabel(selected) + ": " + fmtNum(number) + (targetUnit(selected) ? " " + targetUnit(selected) : "");
-    };
-    const measurementSortText = (record) => [
-      reportedMeasurementName(record),
-      reportedMeasurementMeta(record),
-      reportedValueText(record),
-      comparableValueText(record),
-    ].filter(isFilled).join(" ");
     const targetRank = (record) => {
       const target = String(record.target || "").toLowerCase();
       const metric = String(record.metric || "").toLowerCase();
@@ -960,7 +889,6 @@
       const scalarValue = (record, key) => {
         if (key === "target_value") return rowValueNumber(record);
         if (key === "target") return rowTargetName(record);
-        if (key === "measurement") return measurementSortText(record);
         if (key === "model_ready" || key === "needs_review") return record[key] ? 1 : 0;
         return record[key];
       };
@@ -1010,25 +938,12 @@
       return '<span class="pill green">Clean</span>';
     }
 
-    function measurementHtml(record) {
-      const name = reportedMeasurementName(record);
-      const meta = reportedMeasurementMeta(record);
-      const reported = reportedValueText(record);
-      const comparable = comparableValueText(record);
-      const valueLine = comparable || reported;
-      const valuePrefix = comparable ? "filtered" : "reported";
-      return '<div class="measurement-name" title="' + esc(name) + '">' + esc(name) + '</div>' +
-        (meta ? '<div class="measurement-meta" title="' + esc(meta) + '">' + esc(meta) + '</div>' : "") +
-        (valueLine ? '<div class="measurement-value" title="' + esc(valueLine) + '"><span class="measurement-unit">' +
-          esc(valuePrefix) + '</span><span class="measurement-number">' + esc(short(valueLine, 44)) + '</span></div>' : "");
-    }
-
     function renderTable() {
       const pages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
       currentPage = Math.max(1, Math.min(currentPage, pages));
       const start = (currentPage - 1) * PER_PAGE;
       const pageRows = filtered.slice(start, start + PER_PAGE);
-      const targetScope = activeTarget() ? " - comparable target filter: " + targetLabel(activeTarget()) : "";
+      const targetScope = activeTarget() ? " - outcome filter: " + targetLabel(activeTarget()) : "";
       $("tableInfo").textContent = fmtInt(filtered.length) + " / " + fmtInt(allData.length) +
         " records - sorted by " + (SORT_LABELS[sortKey] || sortKey) + (sortAsc ? " ascending" : " descending") + targetScope;
       $("rows").innerHTML = pageRows.map((r, i) => {
@@ -1042,7 +957,6 @@
           '<td><div class="text-cell" title="' + esc(pretty(r.hydrogel)) + '">' + esc(pretty(r.hydrogel) || "-") + '</div></td>' +
           '<td><div class="text-cell" title="' + esc(pretty(r.protein)) + '">' + esc(pretty(r.protein) || "-") + '</div></td>' +
           '<td><div class="text-cell" title="' + esc(pretty(r.experiment_mode)) + '">' + esc(pretty(r.experiment_mode) || "-") + '</div></td>' +
-          '<td class="measurement-cell">' + measurementHtml(r) + '</td>' +
           '<td><div class="quality-stack"><span class="mono-cell">score ' + esc(fmtNum(r.quality_score, 0)) + '</span>' + reviewPill(r) + '</div></td>' +
           '<td><div class="text-cell" title="' + esc(pretty(r.publisher)) + '">' + esc(pretty(r.publisher) || "-") + '</div></td>' +
         '</tr>';

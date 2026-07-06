@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PHA Materials Database</title>
+  <style>
+    :root {
+      --page: #f6f7f9;
+      --panel: #ffffff;
+      --panel-2: #f9fafb;
+      --border: #dfe3ea;
+      --text: #1d2430;
+      --muted: #647082;
+      --soft: #8d98a8;
+      --blue: #1f5a8f;
+      --teal: #16807c;
+      --green: #3f8f5c;
+      --amber: #d98324;
+      --red: #b44a43;
+      --purple: #7a61a8;
+      --gray: #7e8790;
+      --shadow: 0 1px 2px rgba(18, 27, 38, 0.06);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    button, input, select { font: inherit; }
+
+    .site-header {
+      background: #17212b;
+      color: #fff;
+      border-bottom: 4px solid var(--teal);
+    }
+    .header-inner {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 20px 24px 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+    }
+    h1 {
+      margin: 0 0 5px;
+      font-size: 25px;
+      line-height: 1.15;
+      letter-spacing: 0;
+      font-weight: 750;
+    }
+    .subtitle {
+      margin: 0;
+      color: #cbd5e1;
+      max-width: 900px;
+      font-size: 13px;
+    }
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 7px;
+      padding: 7px 11px;
+      font-size: 12px;
+      font-weight: 650;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 32px;
+      white-space: nowrap;
+    }
+    .btn:hover { background: #edf2f7; text-decoration: none; }
+    .site-header .btn {
+      border-color: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+    .site-header .btn:hover { background: rgba(255,255,255,0.16); }
+    .btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .btn-primary:hover { background: #174974; }
+    .btn-secondary { background: #edf7f5; border-color: #b9d8d2; color: #0f615d; }
+    .btn-secondary:hover { background: #dff0ed; }
+
+    .wrap { max-width: 1480px; margin: 0 auto; padding: 16px 24px 34px; }
+
+    .release-strip {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px 14px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .release-title { font-weight: 750; color: var(--text); margin-bottom: 2px; }
+    .release-note { color: var(--muted); font-size: 12px; }
+    .release-id {
+      color: var(--soft);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      overflow-wrap: anywhere;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px 12px 10px;
+      min-width: 0;
+      border-top: 3px solid var(--blue);
+    }
+    .stat.teal { border-top-color: var(--teal); }
+    .stat.green { border-top-color: var(--green); }
+    .stat.amber { border-top-color: var(--amber); }
+    .stat.purple { border-top-color: var(--purple); }
+    .stat.gray { border-top-color: var(--gray); }
+    .stat .label {
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: 10.5px;
+      font-weight: 750;
+      letter-spacing: 0;
+      margin-bottom: 4px;
+    }
+    .stat .value {
+      font-size: 24px;
+      line-height: 1.1;
+      font-weight: 760;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat .sub { color: var(--soft); font-size: 11px; margin-top: 3px; min-height: 14px; }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+    .panel-header {
+      padding: 12px 14px 8px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .panel-title { margin: 0; font-size: 14px; font-weight: 760; }
+    .panel-body { padding: 12px 14px 14px; }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: minmax(135px, 1fr) 2fr 64px;
+      gap: 9px;
+      align-items: center;
+      min-height: 24px;
+      font-size: 12px;
+    }
+    .bar-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--muted);
+    }
+    .bar-track { height: 7px; background: #edf1f5; border-radius: 999px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--blue); border-radius: 999px; }
+    .bar-fill.teal { background: var(--teal); }
+    .bar-fill.amber { background: var(--amber); }
+    .bar-count { text-align: right; color: var(--soft); font-variant-numeric: tabular-nums; }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 110px 130px auto auto;
+      gap: 9px;
+      align-items: end;
+    }
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .field label {
+      color: var(--muted);
+      font-size: 10.5px;
+      text-transform: uppercase;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+    input, select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #fff;
+      color: var(--text);
+      min-height: 34px;
+      padding: 7px 9px;
+      font-size: 12px;
+      outline: none;
+    }
+    input:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 2px rgba(31, 90, 143, 0.12); }
+
+    .table-wrap {
+      overflow: auto;
+      max-height: 70vh;
+      border-top: 1px solid var(--border);
+      border-radius: 0 0 var(--radius) var(--radius);
+      background: #fff;
+    }
+    table {
+      width: 100%;
+      min-width: 1180px;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    col.name-col { width: 230px; }
+    col.role-col { width: 190px; }
+    col.count-col { width: 86px; }
+    col.status-col { width: 140px; }
+    col.formula-col { width: 140px; }
+    col.cid-col { width: 100px; }
+    col.smiles-col { width: 270px; }
+    col.review-col { width: 110px; }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      min-width: 0;
+    }
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      background: var(--panel-2);
+      color: #516176;
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 760;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    th:hover { color: var(--blue); }
+    th.sorted { color: var(--blue); }
+    tbody tr { cursor: pointer; }
+    tbody tr:hover { background: #f4f8fb; }
+    .material-name {
+      color: var(--blue);
+      font-weight: 720;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+    .subline {
+      color: var(--soft);
+      font-size: 11px;
+      margin-top: 3px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .text-cell {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+    .num { font-variant-numeric: tabular-nums; text-align: right; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: #f6f7f9;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .badge.matched { background: #eef8f1; border-color: #b9dfc5; color: #2f7447; }
+    .badge.not_queried { background: #f4f6f8; border-color: #dce2e8; color: #657383; }
+    .badge.error { background: #fff1ef; border-color: #efc5be; color: #9b3f38; }
+    .badge.review { background: #fff7e8; border-color: #edc98f; color: #996019; }
+
+    .table-footer {
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid var(--border);
+      background: #fff;
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+    .error-box {
+      background: #fff1ef;
+      color: #8f3830;
+      border: 1px solid #efc5be;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      background: rgba(23, 33, 43, 0.52);
+      padding: 24px;
+      overflow: auto;
+    }
+    .modal.show { display: flex; }
+    .modal-panel {
+      width: min(980px, 100%);
+      margin: auto;
+      background: var(--panel);
+      border-radius: 8px;
+      box-shadow: 0 20px 50px rgba(18, 27, 38, 0.24);
+      overflow: hidden;
+    }
+    .modal-header {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: start;
+    }
+    .modal-title {
+      font-size: 19px;
+      font-weight: 780;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+    .modal-subtitle { color: var(--muted); font-size: 12px; margin-top: 4px; }
+    .modal-body {
+      padding: 16px 18px 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .detail-section {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      min-width: 0;
+    }
+    .detail-section.wide { grid-column: 1 / -1; }
+    .section-title {
+      margin: 0 0 9px;
+      font-size: 12px;
+      color: #516176;
+      text-transform: uppercase;
+      font-weight: 780;
+      letter-spacing: 0;
+    }
+    .kv {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 10px;
+      padding: 5px 0;
+      border-top: 1px solid #edf0f3;
+      font-size: 12px;
+    }
+    .kv:first-of-type { border-top: 0; }
+    .k { color: var(--muted); }
+    .v { overflow-wrap: anywhere; }
+    .example-list {
+      display: grid;
+      gap: 8px;
+    }
+    .example {
+      border: 1px solid #edf0f3;
+      border-radius: 7px;
+      padding: 8px 9px;
+      background: #fbfcfd;
+      min-width: 0;
+    }
+    .example-head {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .example-context { font-size: 12px; color: var(--text); overflow-wrap: anywhere; }
+
+    @media (max-width: 1100px) {
+      .stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .summary-grid { grid-template-columns: 1fr; }
+      .toolbar { grid-template-columns: 1fr 1fr; }
+      .toolbar .btn { width: 100%; }
+    }
+    @media (max-width: 760px) {
+      .header-inner { grid-template-columns: 1fr; align-items: start; }
+      .header-actions { justify-content: flex-start; }
+      .wrap { padding: 12px 12px 26px; }
+      .release-strip { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .modal { padding: 16px 10px; }
+      .modal-body { grid-template-columns: 1fr; }
+      .kv { grid-template-columns: 1fr; gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div>
+        <h1>PHA Materials Database</h1>
+        <p class="subtitle">Material mentions, role annotations, and external small-molecule descriptors for the protein-hydrogel adsorption dataset.</p>
+      </div>
+      <div class="header-actions">
+        <a class="btn" href="index.html">Records</a>
+        <a class="btn" href="https://github.com/sunyrain/PHA" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/materials.csv" target="_blank" rel="noopener">Materials CSV</a>
+        <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/material_descriptors.csv" target="_blank" rel="noopener">Descriptors CSV</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="errorBox" class="error-box"></div>
+
+    <section class="release-strip">
+      <div>
+        <div class="release-title">Static materials sidecar</div>
+        <div class="release-note">Experimental records stay in the main records table; PubChem-like fields here are external descriptors for named materials.</div>
+      </div>
+      <div class="release-id" id="generatedAt">generated_at: loading</div>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat">
+        <div class="label">Material Mentions</div>
+        <div class="value" id="statMentions">-</div>
+        <div class="sub">rows in materials.csv</div>
+      </div>
+      <div class="stat teal">
+        <div class="label">Unique Materials</div>
+        <div class="value" id="statUnique">-</div>
+        <div class="sub">canonicalized by name</div>
+      </div>
+      <div class="stat green">
+        <div class="label">Descriptor Matched</div>
+        <div class="value" id="statMatched">-</div>
+        <div class="sub">materials with CID/formula/SMILES</div>
+      </div>
+      <div class="stat amber">
+        <div class="label">Matched Mentions</div>
+        <div class="value" id="statMatchedMentions">-</div>
+        <div class="sub">mentions carrying descriptors</div>
+      </div>
+      <div class="stat purple">
+        <div class="label">Needs Review</div>
+        <div class="value" id="statReview">-</div>
+        <div class="sub">ambiguous or broad names</div>
+      </div>
+      <div class="stat gray">
+        <div class="label">Visible Rows</div>
+        <div class="value" id="statVisible">-</div>
+        <div class="sub" id="sortState">sorted by mentions</div>
+      </div>
+    </section>
+
+    <section class="summary-grid">
+      <div class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Top Material Roles</h2>
+        </div>
+        <div class="panel-body" id="topRoles"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">Descriptor Status</h2>
+        </div>
+        <div class="panel-body" id="descriptorStatuses"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Materials</h2>
+        <button class="btn btn-secondary" id="exportBtn" type="button">Filtered CSV</button>
+      </div>
+      <div class="panel-body">
+        <div class="toolbar">
+          <div class="field">
+            <label for="searchBox">Search</label>
+            <input id="searchBox" type="search" placeholder="material, role, formula, SMILES, InChIKey, DOI, context">
+          </div>
+          <div class="field">
+            <label for="roleFilter">Role</label>
+            <select id="roleFilter"><option value="">Any</option></select>
+          </div>
+          <div class="field">
+            <label for="statusFilter">Descriptor</label>
+            <select id="statusFilter"><option value="">Any</option></select>
+          </div>
+          <div class="field">
+            <label for="minMentions">Min Mentions</label>
+            <input id="minMentions" type="number" min="0" step="1" placeholder="0">
+          </div>
+          <div class="field">
+            <label for="reviewFilter">Review</label>
+            <select id="reviewFilter">
+              <option value="">Any</option>
+              <option value="needs">Needs review</option>
+              <option value="clear">No review flag</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="applyBtn" type="button">Apply</button>
+          <button class="btn" id="clearBtn" type="button">Clear</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <colgroup>
+            <col class="name-col">
+            <col class="role-col">
+            <col class="count-col">
+            <col class="count-col">
+            <col class="status-col">
+            <col class="formula-col">
+            <col class="cid-col">
+            <col class="smiles-col">
+            <col class="review-col">
+          </colgroup>
+          <thead>
+            <tr>
+              <th data-sort="name">Material</th>
+              <th data-sort="primary_role">Primary Role</th>
+              <th data-sort="mention_count">Mentions</th>
+              <th data-sort="doi_count">DOIs</th>
+              <th data-sort="descriptor_status">Descriptor</th>
+              <th data-sort="molecular_formula">Formula / MW</th>
+              <th data-sort="pubchem_cid">CID</th>
+              <th data-sort="canonical_smiles">SMILES</th>
+              <th data-sort="needs_review_count">Review</th>
+            </tr>
+          </thead>
+          <tbody id="materialsBody">
+            <tr><td colspan="9">Loading materials...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-footer">
+        <span id="resultCount">loading</span>
+        <span>Click a row for descriptor details and source examples.</span>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="detailModal" aria-hidden="true">
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="modalTitle"></div>
+          <div class="modal-subtitle" id="modalSubtitle"></div>
+        </div>
+        <button class="btn" type="button" id="closeModal">Close</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const DATA_URL = "pha_materials_browser.json?v=20260707-materials";
+    const SUMMARY_URL = "pha_materials_summary.json?v=20260707-materials";
+
+    let allMaterials = [];
+    let filteredMaterials = [];
+    let summary = {};
+    let sortKey = "mention_count";
+    let sortAsc = false;
+
+    const els = {
+      errorBox: document.getElementById("errorBox"),
+      generatedAt: document.getElementById("generatedAt"),
+      statMentions: document.getElementById("statMentions"),
+      statUnique: document.getElementById("statUnique"),
+      statMatched: document.getElementById("statMatched"),
+      statMatchedMentions: document.getElementById("statMatchedMentions"),
+      statReview: document.getElementById("statReview"),
+      statVisible: document.getElementById("statVisible"),
+      sortState: document.getElementById("sortState"),
+      topRoles: document.getElementById("topRoles"),
+      descriptorStatuses: document.getElementById("descriptorStatuses"),
+      searchBox: document.getElementById("searchBox"),
+      roleFilter: document.getElementById("roleFilter"),
+      statusFilter: document.getElementById("statusFilter"),
+      minMentions: document.getElementById("minMentions"),
+      reviewFilter: document.getElementById("reviewFilter"),
+      applyBtn: document.getElementById("applyBtn"),
+      clearBtn: document.getElementById("clearBtn"),
+      exportBtn: document.getElementById("exportBtn"),
+      materialsBody: document.getElementById("materialsBody"),
+      resultCount: document.getElementById("resultCount"),
+      modal: document.getElementById("detailModal"),
+      modalTitle: document.getElementById("modalTitle"),
+      modalSubtitle: document.getElementById("modalSubtitle"),
+      modalBody: document.getElementById("modalBody"),
+      closeModal: document.getElementById("closeModal")
+    };
+
+    function fmtInt(value) {
+      const n = Number(value);
+      return Number.isFinite(n) ? n.toLocaleString("en-US") : "-";
+    }
+
+    function isFilled(value) {
+      return value !== undefined && value !== null && String(value).trim() !== "";
+    }
+
+    function text(value) {
+      return isFilled(value) ? String(value) : "";
+    }
+
+    function escapeHtml(value) {
+      return text(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function csvEscape(value) {
+      const s = text(value);
+      if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+      return s;
+    }
+
+    function statusBadge(status) {
+      const cls = text(status).toLowerCase().replace(/[^a-z0-9_]+/g, "_") || "not_queried";
+      const label = text(status).replace(/_/g, " ") || "no descriptor";
+      return `<span class="badge ${cls}">${escapeHtml(label)}</span>`;
+    }
+
+    function reviewBadge(row) {
+      const count = Number(row.needs_review_count || 0);
+      if (count > 0) return `<span class="badge review">${fmtInt(count)} review</span>`;
+      return `<span class="badge">clear</span>`;
+    }
+
+    function rowSearchText(row) {
+      const examples = (row.examples || []).map((ex) => [ex.doi, ex.role, ex.context].join(" ")).join(" ");
+      const roles = (row.top_roles || []).map((r) => r.name).join(" ");
+      return [
+        row.name,
+        row.primary_role,
+        row.descriptor_status,
+        row.pubchem_cid,
+        row.molecular_formula,
+        row.molecular_weight,
+        row.canonical_smiles,
+        row.inchikey,
+        row.iupac_name,
+        roles,
+        examples
+      ].join(" ").toLowerCase();
+    }
+
+    function topRoleText(row) {
+      return (row.top_roles || []).slice(0, 3).map((r) => `${r.name} (${r.count})`).join("; ");
+    }
+
+    function formulaMw(row) {
+      const formula = text(row.molecular_formula);
+      const mw = text(row.molecular_weight);
+      if (formula && mw) return `${formula} / ${mw}`;
+      return formula || mw || "";
+    }
+
+    function populateFilters() {
+      const roleCounts = new Map();
+      const statusSet = new Set();
+      allMaterials.forEach((row) => {
+        statusSet.add(text(row.descriptor_status) || "no_descriptor");
+        (row.top_roles || []).forEach((role) => {
+          const name = text(role.name);
+          if (!name) return;
+          roleCounts.set(name, (roleCounts.get(name) || 0) + Number(role.count || 0));
+        });
+      });
+      const roles = Array.from(roleCounts.entries())
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .slice(0, 80);
+      roles.forEach(([role, count]) => {
+        const opt = document.createElement("option");
+        opt.value = role;
+        opt.textContent = `${role} (${fmtInt(count)})`;
+        els.roleFilter.appendChild(opt);
+      });
+      Array.from(statusSet).sort().forEach((status) => {
+        const opt = document.createElement("option");
+        opt.value = status;
+        opt.textContent = status.replace(/_/g, " ");
+        els.statusFilter.appendChild(opt);
+      });
+    }
+
+    function renderBars(container, rows, colorClass) {
+      const max = Math.max(...rows.map((r) => Number(r.count || 0)), 1);
+      container.innerHTML = rows.map((row) => {
+        const count = Number(row.count || 0);
+        const width = Math.max(2, (count / max) * 100);
+        return `
+          <div class="bar-row" title="${escapeHtml(row.name)}">
+            <div class="bar-label">${escapeHtml(row.name)}</div>
+            <div class="bar-track"><div class="bar-fill ${colorClass}" style="width:${width}%"></div></div>
+            <div class="bar-count">${fmtInt(count)}</div>
+          </div>`;
+      }).join("");
+    }
+
+    function renderSummary() {
+      els.generatedAt.textContent = `generated_at: ${summary.generated_at || "unknown"}`;
+      els.statMentions.textContent = fmtInt(summary.material_mentions);
+      els.statUnique.textContent = fmtInt(summary.unique_materials);
+      els.statMatched.textContent = fmtInt(summary.descriptor_matched_materials);
+      els.statMatchedMentions.textContent = fmtInt(summary.descriptor_matched_mentions);
+      els.statReview.textContent = fmtInt(summary.needs_review_materials);
+      renderBars(els.topRoles, summary.top_roles || [], "teal");
+      renderBars(els.descriptorStatuses, summary.descriptor_statuses || [], "amber");
+    }
+
+    function scalar(row, key) {
+      if (["mention_count", "doi_count", "descriptor_mentions", "needs_review_count", "molecular_weight"].includes(key)) {
+        const n = Number(row[key]);
+        return Number.isFinite(n) ? n : -Infinity;
+      }
+      if (key === "molecular_formula") return formulaMw(row).toLowerCase();
+      return text(row[key]).toLowerCase();
+    }
+
+    function sortRows(rows) {
+      return rows.slice().sort((a, b) => {
+        const av = scalar(a, sortKey);
+        const bv = scalar(b, sortKey);
+        let cmp = 0;
+        if (typeof av === "number" && typeof bv === "number") cmp = av - bv;
+        else cmp = String(av).localeCompare(String(bv));
+        if (cmp === 0) cmp = Number(a.mention_count || 0) - Number(b.mention_count || 0);
+        return sortAsc ? cmp : -cmp;
+      });
+    }
+
+    function applyFilters() {
+      const q = text(els.searchBox.value).trim().toLowerCase();
+      const role = els.roleFilter.value;
+      const status = els.statusFilter.value;
+      const minMentions = Number(els.minMentions.value || 0);
+      const review = els.reviewFilter.value;
+
+      filteredMaterials = allMaterials.filter((row) => {
+        if (q && !rowSearchText(row).includes(q)) return false;
+        if (role && !(row.top_roles || []).some((r) => r.name === role)) return false;
+        if (status && (text(row.descriptor_status) || "no_descriptor") !== status) return false;
+        if (Number(row.mention_count || 0) < minMentions) return false;
+        if (review === "needs" && Number(row.needs_review_count || 0) <= 0) return false;
+        if (review === "clear" && Number(row.needs_review_count || 0) > 0) return false;
+        return true;
+      });
+      renderTable();
+    }
+
+    function renderTable() {
+      const rows = sortRows(filteredMaterials);
+      els.statVisible.textContent = fmtInt(rows.length);
+      els.sortState.textContent = `sorted by ${sortKey.replace(/_/g, " ")} ${sortAsc ? "ascending" : "descending"}`;
+      const shown = Math.min(rows.length, 1000);
+      els.resultCount.textContent = rows.length > shown
+        ? `showing first ${fmtInt(shown)} of ${fmtInt(rows.length)} filtered materials`
+        : `${fmtInt(rows.length)} of ${fmtInt(allMaterials.length)} materials`;
+      document.querySelectorAll("th[data-sort]").forEach((th) => {
+        th.classList.toggle("sorted", th.dataset.sort === sortKey);
+      });
+      if (!rows.length) {
+        els.materialsBody.innerHTML = `<tr><td colspan="9">No materials match the current filters.</td></tr>`;
+        return;
+      }
+      els.materialsBody.innerHTML = rows.slice(0, 1000).map((row, idx) => `
+        <tr data-row="${idx}">
+          <td>
+            <div class="material-name">${escapeHtml(row.name)}</div>
+            <div class="subline">${escapeHtml(text(row.iupac_name) || topRoleText(row))}</div>
+          </td>
+          <td><div class="text-cell">${escapeHtml(row.primary_role)}</div></td>
+          <td class="num">${fmtInt(row.mention_count)}</td>
+          <td class="num">${fmtInt(row.doi_count)}</td>
+          <td>${statusBadge(row.descriptor_status)}<div class="subline">${fmtInt(row.descriptor_mentions)} descriptor mentions</div></td>
+          <td class="mono">${escapeHtml(formulaMw(row)) || "-"}</td>
+          <td class="mono">${escapeHtml(row.pubchem_cid) || "-"}</td>
+          <td class="mono"><div class="text-cell">${escapeHtml(row.canonical_smiles) || "-"}</div></td>
+          <td>${reviewBadge(row)}</td>
+        </tr>`).join("");
+      Array.from(els.materialsBody.querySelectorAll("tr[data-row]")).forEach((tr) => {
+        const row = rows[Number(tr.dataset.row)];
+        tr.addEventListener("click", () => showDetail(row));
+      });
+    }
+
+    function detailKv(label, value) {
+      return `<div class="kv"><div class="k">${escapeHtml(label)}</div><div class="v">${escapeHtml(value) || "-"}</div></div>`;
+    }
+
+    function listRows(rows, emptyLabel) {
+      if (!rows || !rows.length) return `<div class="subline">${escapeHtml(emptyLabel)}</div>`;
+      return rows.map((row) => detailKv(row.name, fmtInt(row.count))).join("");
+    }
+
+    function showDetail(row) {
+      els.modalTitle.textContent = row.name || "Material";
+      els.modalSubtitle.textContent = `${fmtInt(row.mention_count)} mentions across ${fmtInt(row.doi_count)} DOI entries`;
+      const examples = (row.examples || []).map((ex) => `
+        <div class="example">
+          <div class="example-head">
+            <a href="https://doi.org/${encodeURIComponent(text(ex.doi))}" target="_blank" rel="noopener">${escapeHtml(ex.doi)}</a>
+            <span>${escapeHtml(ex.role)}</span>
+          </div>
+          <div class="example-context">${escapeHtml(ex.context)}</div>
+        </div>`).join("") || `<div class="subline">No examples recorded.</div>`;
+      els.modalBody.innerHTML = `
+        <section class="detail-section">
+          <h3 class="section-title">Identity</h3>
+          ${detailKv("Primary role", row.primary_role)}
+          ${detailKv("Descriptor status", text(row.descriptor_status).replace(/_/g, " "))}
+          ${detailKv("Needs review count", fmtInt(row.needs_review_count))}
+          ${detailKv("Descriptor mentions", fmtInt(row.descriptor_mentions))}
+        </section>
+        <section class="detail-section">
+          <h3 class="section-title">External Descriptor</h3>
+          ${detailKv("PubChem CID", row.pubchem_cid)}
+          ${detailKv("Formula", row.molecular_formula)}
+          ${detailKv("Molecular weight", row.molecular_weight)}
+          ${detailKv("IUPAC name", row.iupac_name)}
+          ${detailKv("InChIKey", row.inchikey)}
+          ${detailKv("Canonical SMILES", row.canonical_smiles)}
+        </section>
+        <section class="detail-section">
+          <h3 class="section-title">Role Distribution</h3>
+          ${listRows(row.top_roles, "No role distribution recorded.")}
+        </section>
+        <section class="detail-section">
+          <h3 class="section-title">Descriptor Matches</h3>
+          ${listRows(row.match_status_counts, "No descriptor match status recorded.")}
+          <h3 class="section-title" style="margin-top:12px;">PubChem Queries</h3>
+          ${listRows(row.pubchem_queries, "No PubChem query recorded.")}
+        </section>
+        <section class="detail-section wide">
+          <h3 class="section-title">Source Examples</h3>
+          <div class="example-list">${examples}</div>
+        </section>`;
+      els.modal.classList.add("show");
+      els.modal.setAttribute("aria-hidden", "false");
+    }
+
+    function hideDetail() {
+      els.modal.classList.remove("show");
+      els.modal.setAttribute("aria-hidden", "true");
+    }
+
+    function exportFilteredCsv() {
+      const rows = sortRows(filteredMaterials);
+      const fields = [
+        "name", "primary_role", "mention_count", "doi_count", "descriptor_status", "descriptor_mentions",
+        "needs_review_count", "pubchem_cid", "molecular_formula", "molecular_weight", "iupac_name",
+        "inchikey", "canonical_smiles"
+      ];
+      const csv = [fields.join(",")].concat(rows.map((row) => fields.map((field) => csvEscape(row[field])).join(","))).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "pha_materials_filtered.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function showError(message) {
+      els.errorBox.style.display = "block";
+      els.errorBox.textContent = message;
+    }
+
+    async function init() {
+      try {
+        const [dataRes, summaryRes] = await Promise.all([fetch(DATA_URL), fetch(SUMMARY_URL)]);
+        if (!dataRes.ok) throw new Error(`Could not load ${DATA_URL}`);
+        if (!summaryRes.ok) throw new Error(`Could not load ${SUMMARY_URL}`);
+        allMaterials = await dataRes.json();
+        summary = await summaryRes.json();
+        filteredMaterials = allMaterials.slice();
+        renderSummary();
+        populateFilters();
+        renderTable();
+      } catch (err) {
+        showError(err.message || String(err));
+        els.materialsBody.innerHTML = `<tr><td colspan="9">Failed to load materials data.</td></tr>`;
+      }
+    }
+
+    els.applyBtn.addEventListener("click", applyFilters);
+    els.clearBtn.addEventListener("click", () => {
+      els.searchBox.value = "";
+      els.roleFilter.value = "";
+      els.statusFilter.value = "";
+      els.minMentions.value = "";
+      els.reviewFilter.value = "";
+      applyFilters();
+    });
+    els.exportBtn.addEventListener("click", exportFilteredCsv);
+    els.searchBox.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") applyFilters();
+    });
+    document.querySelectorAll("th[data-sort]").forEach((th) => {
+      th.addEventListener("click", () => {
+        const key = th.dataset.sort;
+        if (sortKey === key) sortAsc = !sortAsc;
+        else {
+          sortKey = key;
+          sortAsc = !["mention_count", "doi_count", "needs_review_count"].includes(key);
+        }
+        renderTable();
+      });
+    });
+    els.closeModal.addEventListener("click", hideDetail);
+    els.modal.addEventListener("click", (event) => {
+      if (event.target === els.modal) hideDetail();
+    });
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") hideDetail();
+    });
+
+    init();
+  </script>
+</body>
+</html>

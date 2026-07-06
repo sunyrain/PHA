@@ -1,0 +1,64 @@
+﻿{
+    "generated_at":  "2026-07-07T01:34:28",
+    "material_mentions":  13662,
+    "unique_materials":  4781,
+    "descriptor_matched_materials":  403,
+    "descriptor_matched_mentions":  931,
+    "needs_review_materials":  2691,
+    "top_roles":  [
+                      {
+                          "name":  "crosslinker",
+                          "count":  144
+                      },
+                      {
+                          "name":  "monomer",
+                          "count":  87
+                      },
+                      {
+                          "name":  "hydrogel polymer backbone",
+                          "count":  57
+                      },
+                      {
+                          "name":  "photoinitiator",
+                          "count":  53
+                      },
+                      {
+                          "name":  "initiator",
+                          "count":  49
+                      },
+                      {
+                          "name":  "buffer component",
+                          "count":  44
+                      },
+                      {
+                          "name":  "functional monomer",
+                          "count":  39
+                      },
+                      {
+                          "name":  "buffer",
+                          "count":  34
+                      },
+                      {
+                          "name":  "coupling reagent",
+                          "count":  31
+                      },
+                      {
+                          "name":  "fluorescent label",
+                          "count":  28
+                      }
+                  ],
+    "descriptor_statuses":  [
+                                {
+                                    "name":  "not_queried",
+                                    "count":  4376
+                                },
+                                {
+                                    "name":  "matched",
+                                    "count":  403
+                                },
+                                {
+                                    "name":  "error",
+                                    "count":  2
+                                }
+                            ]
+}
