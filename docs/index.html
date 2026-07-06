@@ -239,18 +239,30 @@
 
     .table-wrap {
       overflow: auto;
-      max-height: 650px;
+      max-height: 680px;
       border-top: 1px solid var(--border);
+      background: #fff;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1280px;
+      table-layout: fixed;
+      min-width: 1380px;
       background: #fff;
     }
+    col.status-col { width: 116px; }
+    col.doi-col { width: 178px; }
+    col.year-col { width: 72px; }
+    col.hydrogel-col { width: 236px; }
+    col.protein-col { width: 168px; }
+    col.mode-col { width: 184px; }
+    col.target-col { width: 220px; }
+    col.value-col { width: 152px; }
+    col.quality-col { width: 118px; }
+    col.publisher-col { width: 128px; }
     th, td {
       border-bottom: 1px solid var(--border);
-      padding: 8px 9px;
+      padding: 10px 10px;
       text-align: left;
       vertical-align: top;
       font-size: 12px;
@@ -267,17 +279,85 @@
       letter-spacing: 0;
       cursor: pointer;
       white-space: nowrap;
+      user-select: none;
     }
+    th .sort-mark { color: var(--blue); margin-left: 4px; font-size: 10px; }
     tbody tr { cursor: pointer; }
     tbody tr:hover { background: #f8fbfd; }
+    tbody tr.model-row { background: #fbfefc; }
+    tbody tr.review-row { background: #fffdf8; }
     .num {
       text-align: right;
       font-variant-numeric: tabular-nums;
       white-space: nowrap;
     }
-    .doi-cell { max-width: 180px; overflow-wrap: anywhere; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; }
-    .title-cell { max-width: 260px; }
-    .text-cell { max-width: 210px; }
+    .doi-cell,
+    .mono-cell {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    .doi-link {
+      display: inline-block;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: top;
+    }
+    .text-cell,
+    .target-cell,
+    .value-cell {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .text-cell {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow-wrap: break-word;
+      line-height: 1.45;
+    }
+    .target-cell {
+      line-height: 1.35;
+    }
+    .target-name {
+      font-weight: 650;
+      color: var(--text);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .target-meta {
+      color: var(--soft);
+      font-size: 11px;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .value-cell {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.3;
+    }
+    .value-number { font-weight: 760; }
+    .value-unit {
+      color: var(--soft);
+      font-size: 11px;
+      margin-top: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .muted { color: var(--soft); }
+    .quality-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
 
     .pill {
       display: inline-flex;
@@ -373,32 +453,47 @@
       font-weight: 760;
       line-height: 1.25;
     }
-    .detail-grid {
+    .detail-body {
+      padding: 14px 16px 18px;
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      padding: 14px 16px 16px;
+      gap: 12px;
     }
-    .detail-card {
+    .detail-section {
       border: 1px solid var(--border);
       border-radius: 7px;
+      overflow: hidden;
       background: #fff;
-      padding: 10px;
-      min-width: 0;
     }
-    .detail-card.wide { grid-column: 1 / -1; }
+    .detail-section-title {
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 760;
+      padding: 8px 10px;
+    }
+    .detail-kv {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      border-bottom: 1px solid #eef1f5;
+    }
+    .detail-kv:last-child { border-bottom: 0; }
     .detail-label {
       color: var(--muted);
       text-transform: uppercase;
       font-size: 10px;
       font-weight: 760;
-      margin-bottom: 4px;
+      padding: 8px 10px;
+      background: #fcfdfe;
     }
     .detail-value {
-      overflow-wrap: anywhere;
+      overflow-wrap: break-word;
       white-space: pre-wrap;
       font-size: 12px;
+      padding: 8px 10px;
+      min-width: 0;
     }
+    .detail-value a { overflow-wrap: anywhere; }
 
     @media (max-width: 1180px) {
       .header-inner { grid-template-columns: 1fr; align-items: start; }
@@ -406,7 +501,6 @@
       .stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .toolbar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .summary-grid { grid-template-columns: 1fr; }
-      .detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 720px) {
       .header-inner, .wrap { padding-left: 14px; padding-right: 14px; }
@@ -415,7 +509,8 @@
       .release-strip { grid-template-columns: 1fr; }
       .table-footer { align-items: flex-start; flex-direction: column; }
       .pagination { justify-content: flex-start; }
-      .detail-grid { grid-template-columns: 1fr; }
+      .detail-kv { grid-template-columns: 1fr; }
+      .detail-label { border-bottom: 1px solid #eef1f5; }
       .modal { padding: 16px 10px; }
     }
   </style>
@@ -529,6 +624,18 @@
       <div id="loadingPanel" class="loading">Loading records...</div>
       <div class="table-wrap" id="tableWrap" style="display:none">
         <table>
+          <colgroup>
+            <col class="status-col">
+            <col class="doi-col">
+            <col class="year-col">
+            <col class="hydrogel-col">
+            <col class="protein-col">
+            <col class="mode-col">
+            <col class="target-col">
+            <col class="value-col">
+            <col class="quality-col">
+            <col class="publisher-col">
+          </colgroup>
           <thead>
             <tr>
               <th data-sort="model_ready">Layer</th>
@@ -539,9 +646,7 @@
               <th data-sort="experiment_mode">Mode</th>
               <th data-sort="target">Target</th>
               <th data-sort="target_value">Value</th>
-              <th data-sort="unit">Unit</th>
               <th data-sort="quality_score">Score</th>
-              <th data-sort="needs_review">Review</th>
               <th data-sort="publisher">Publisher</th>
             </tr>
           </thead>
@@ -571,8 +676,44 @@
     let filtered = [];
     let summary = {};
     let currentPage = 1;
-    let sortKey = "target_value";
+    let sortKey = "model_ready";
     let sortAsc = false;
+
+    const NUMERIC_SORT_KEYS = new Set(["target_value", "year", "quality_score", "model_ready", "needs_review"]);
+    const SORT_LABELS = {
+      model_ready: "Layer",
+      doi: "DOI",
+      year: "Year",
+      hydrogel: "Hydrogel",
+      protein: "Protein",
+      experiment_mode: "Mode",
+      target: "Target",
+      target_value: "Value",
+      quality_score: "Score",
+      publisher: "Publisher",
+    };
+    const TARGET_META = {
+      q_norm_mg_g: { label: "q_norm_mg_g", unit: "mg/g" },
+      surface_adsorption_ug_cm2: { label: "surface_adsorption_ug_cm2", unit: "ug/cm2" },
+      binding_efficiency_pct: { label: "binding_efficiency_pct", unit: "%" },
+      recovery_pct: { label: "recovery_pct", unit: "%" },
+      fouling_reduction_pct: { label: "fouling_reduction_pct", unit: "%" },
+      removal_efficiency_pct: { label: "removal_efficiency_pct", unit: "%" },
+      purity_pct: { label: "purity_pct", unit: "%" },
+      retained_capacity_pct: { label: "retained_capacity_pct", unit: "%" },
+      q_norm_mg_mL_bed: { label: "q_norm_mg_mL_bed", unit: "mg/mL bed" },
+    };
+    const TARGET_ORDER = [
+      "q_norm_mg_g",
+      "surface_adsorption_ug_cm2",
+      "binding_efficiency_pct",
+      "recovery_pct",
+      "fouling_reduction_pct",
+      "removal_efficiency_pct",
+      "purity_pct",
+      "retained_capacity_pct",
+      "q_norm_mg_mL_bed",
+    ];
 
     const $ = (id) => document.getElementById(id);
     const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (ch) => ({
@@ -588,6 +729,63 @@
     const short = (value, max = 42) => {
       const text = String(value ?? "");
       return text.length > max ? text.slice(0, max - 1) + "..." : text;
+    };
+    const pretty = (value) => {
+      if (value === null || value === undefined) return "";
+      if (typeof value !== "string") return String(value);
+      const text = value.trim();
+      if (!text || text === "[]" || text === "{}" || text.toLowerCase() === "null" || text.toLowerCase() === "none") return "";
+      if ((text.startsWith("[") && text.endsWith("]")) || (text.startsWith("{") && text.endsWith("}"))) {
+        try {
+          const parsed = JSON.parse(text);
+          if (Array.isArray(parsed)) return parsed.filter(isFilled).join(", ");
+          if (parsed && typeof parsed === "object") {
+            return Object.entries(parsed).map(([key, val]) => key + ": " + val).join("; ");
+          }
+        } catch (_) {
+          return text;
+        }
+      }
+      return text;
+    };
+    const joinPretty = (values, sep = " / ") => values.map(pretty).filter(isFilled).join(sep);
+    const looseNumber = (value) => {
+      if (typeof value === "number" && Number.isFinite(value)) return value;
+      if (!isFilled(value)) return null;
+      const text = String(value).replace(/,/g, "").trim();
+      const match = text.match(/[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?/i);
+      if (!match) return null;
+      const number = Number(match[0]);
+      return Number.isFinite(number) ? number : null;
+    };
+    const activeTarget = () => $("targetFilter") ? $("targetFilter").value : "";
+    const targetLabel = (target) => (TARGET_META[target] ? TARGET_META[target].label : target);
+    const targetUnit = (target) => (TARGET_META[target] ? TARGET_META[target].unit : "");
+    const rowTargetName = (record) => {
+      const selected = activeTarget();
+      return selected ? targetLabel(selected) : (record.target || record.metric || "");
+    };
+    const rowTargetMeta = (record) => {
+      const selected = activeTarget();
+      if (!selected) return record.outcome || record.metric || "";
+      return record.target && record.target !== selected ? "primary: " + record.target : (record.outcome || record.metric || "");
+    };
+    const rowValue = (record) => {
+      const selected = activeTarget();
+      if (selected) return record[selected];
+      return isFilled(record.target_value) ? record.target_value : record.value;
+    };
+    const rowValueUnit = (record) => {
+      const selected = activeTarget();
+      if (selected) return targetUnit(selected);
+      return record.target_unit || record.unit || "";
+    };
+    const rowValueNumber = (record) => looseNumber(rowValue(record));
+    const targetRank = (record) => {
+      const target = String(record.target || "").toLowerCase();
+      const metric = String(record.metric || "").toLowerCase();
+      const rank = TARGET_ORDER.findIndex((key) => target === key || metric === key);
+      return rank >= 0 ? rank : TARGET_ORDER.length;
     };
 
     async function loadData() {
@@ -622,7 +820,7 @@
       const modelReady = allData.filter((r) => r.model_ready).length;
       const clean = allData.filter((r) => !r.needs_review).length;
       const highQuality = allData.filter((r) => Number(r.quality_score) >= 3).length;
-      const numericTarget = allData.filter((r) => Number.isFinite(Number(r.target_value))).length;
+      const numericTarget = allData.filter((r) => isFilled(r.target_value) && Number.isFinite(Number(r.target_value))).length;
       const stats = [
         ["Articles", summary.articles_total, (summary.success || 0) + " success", "blue"],
         ["Records", total, "full extracted table", "teal"],
@@ -661,7 +859,7 @@
 
     function targetHasValue(record, target) {
       if (!target) return true;
-      return Number.isFinite(Number(record[target]));
+      return isFilled(record[target]) && Number.isFinite(Number(record[target]));
     }
 
     function applyFilters() {
@@ -669,9 +867,12 @@
       const target = $("targetFilter").value;
       const model = $("modelFilter").value;
       const review = $("reviewFilter").value;
-      const score = Number($("qualityFilter").value);
-      const yearMin = Number($("yearMin").value);
-      const yearMax = Number($("yearMax").value);
+      const scoreValue = $("qualityFilter").value;
+      const yearMinValue = $("yearMin").value;
+      const yearMaxValue = $("yearMax").value;
+      const score = scoreValue === "" ? null : Number(scoreValue);
+      const yearMin = yearMinValue === "" ? null : Number(yearMinValue);
+      const yearMax = yearMaxValue === "" ? null : Number(yearMaxValue);
       filtered = allData.filter((r) => {
         if (search) {
           const haystack = [
@@ -687,9 +888,9 @@
         if (model === "not_ready" && r.model_ready) return false;
         if (review === "clean" && r.needs_review) return false;
         if (review === "review" && !r.needs_review) return false;
-        if (Number.isFinite(score) && Number(r.quality_score) < score) return false;
-        if (Number.isFinite(yearMin) && Number(r.year) < yearMin) return false;
-        if (Number.isFinite(yearMax) && Number(r.year) > yearMax) return false;
+        if (score !== null && Number.isFinite(score) && Number(r.quality_score) < score) return false;
+        if (yearMin !== null && Number.isFinite(yearMin) && Number(r.year) < yearMin) return false;
+        if (yearMax !== null && Number.isFinite(yearMax) && Number(r.year) > yearMax) return false;
         return true;
       });
       currentPage = 1;
@@ -703,24 +904,65 @@
     }
 
     function sortRows() {
+      const compareText = (a, b) => String(a ?? "").localeCompare(String(b ?? ""), undefined, { numeric: true, sensitivity: "base" });
+      const compareNumber = (a, b) => {
+        const na = Number(a);
+        const nb = Number(b);
+        const aOk = Number.isFinite(na);
+        const bOk = Number.isFinite(nb);
+        if (!aOk && !bOk) return 0;
+        if (!aOk) return 1;
+        if (!bOk) return -1;
+        return na === nb ? 0 : (na < nb ? -1 : 1);
+      };
+      const compareNumberForSort = (a, b) => {
+        const na = Number(a);
+        const nb = Number(b);
+        const aOk = Number.isFinite(na);
+        const bOk = Number.isFinite(nb);
+        if (!aOk && !bOk) return 0;
+        if (!aOk) return 1;
+        if (!bOk) return -1;
+        if (na === nb) return 0;
+        return (na < nb ? -1 : 1) * direction;
+      };
+      const scalarValue = (record, key) => {
+        if (key === "target_value") return rowValueNumber(record);
+        if (key === "target") return rowTargetName(record);
+        if (key === "model_ready" || key === "needs_review") return record[key] ? 1 : 0;
+        return record[key];
+      };
+      const direction = sortAsc ? 1 : -1;
       filtered.sort((a, b) => {
-        let va = a[sortKey];
-        let vb = b[sortKey];
-        const na = Number(va);
-        const nb = Number(vb);
-        if (Number.isFinite(na) || Number.isFinite(nb)) {
-          va = Number.isFinite(na) ? na : (sortAsc ? Infinity : -Infinity);
-          vb = Number.isFinite(nb) ? nb : (sortAsc ? Infinity : -Infinity);
-        } else if (typeof va === "boolean" || typeof vb === "boolean") {
-          va = va ? 1 : 0;
-          vb = vb ? 1 : 0;
-        } else {
-          va = String(va ?? "").toLowerCase();
-          vb = String(vb ?? "").toLowerCase();
+        if (sortKey === "target_value" && !activeTarget()) {
+          const rankCmp = compareNumber(targetRank(a), targetRank(b));
+          if (rankCmp) return rankCmp;
+          const targetCmp = compareText(rowTargetName(a), rowTargetName(b));
+          if (targetCmp) return targetCmp;
+          const unitCmp = compareText(rowValueUnit(a), rowValueUnit(b));
+          if (unitCmp) return unitCmp;
         }
-        if (va < vb) return sortAsc ? -1 : 1;
-        if (va > vb) return sortAsc ? 1 : -1;
-        return 0;
+        const va = scalarValue(a, sortKey);
+        const vb = scalarValue(b, sortKey);
+        let primary = NUMERIC_SORT_KEYS.has(sortKey) ? compareNumberForSort(va, vb) : compareText(va, vb) * direction;
+        if (primary) return primary;
+        const readyCmp = compareNumber(a.model_ready ? 1 : 0, b.model_ready ? 1 : 0);
+        if (readyCmp) return readyCmp * -1;
+        const scoreCmp = compareNumber(a.quality_score, b.quality_score);
+        if (scoreCmp) return scoreCmp * -1;
+        const yearCmp = compareNumber(a.year, b.year);
+        if (yearCmp) return yearCmp * -1;
+        return compareText(a.record_id, b.record_id);
+      });
+    }
+
+    function updateSortHeaders() {
+      Array.from(document.querySelectorAll("th[data-sort]")).forEach((th) => {
+        const active = th.dataset.sort === sortKey;
+        th.setAttribute("aria-sort", active ? (sortAsc ? "ascending" : "descending") : "none");
+        const base = th.dataset.label || th.textContent.replace(/\s+(asc|desc)$/i, "").trim();
+        th.dataset.label = base;
+        th.innerHTML = esc(base) + (active ? '<span class="sort-mark">' + (sortAsc ? "asc" : "desc") + '</span>' : "");
       });
     }
 
@@ -736,33 +978,50 @@
       return '<span class="pill green">Clean</span>';
     }
 
+    function valueHtml(record) {
+      const value = rowValue(record);
+      const number = rowValueNumber(record);
+      const unit = rowValueUnit(record);
+      if (number !== null) {
+        return '<div class="value-number">' + esc(fmtNum(number)) + '</div>' +
+          (unit ? '<div class="value-unit" title="' + esc(unit) + '">' + esc(unit) + '</div>' : "");
+      }
+      if (!isFilled(value)) return '<span class="muted">-</span>';
+      return '<div class="value-unit" title="' + esc(value) + '">' + esc(short(value, 34)) + '</div>';
+    }
+
     function renderTable() {
       const pages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
       currentPage = Math.max(1, Math.min(currentPage, pages));
       const start = (currentPage - 1) * PER_PAGE;
       const pageRows = filtered.slice(start, start + PER_PAGE);
-      $("tableInfo").textContent = fmtInt(filtered.length) + " / " + fmtInt(allData.length) + " records";
+      const targetScope = activeTarget() ? " - target " + targetLabel(activeTarget()) : "";
+      $("tableInfo").textContent = fmtInt(filtered.length) + " / " + fmtInt(allData.length) +
+        " records - sorted by " + (SORT_LABELS[sortKey] || sortKey) + (sortAsc ? " ascending" : " descending") + targetScope;
       $("rows").innerHTML = pageRows.map((r, i) => {
         const idx = start + i;
-        const doi = r.doi ? '<a href="https://doi.org/' + esc(r.doi) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' + esc(short(r.doi, 24)) + '</a>' : "-";
-        return '<tr data-index="' + idx + '">' +
+        const doi = r.doi ? '<a class="doi-link" title="' + esc(r.doi) + '" href="https://doi.org/' + esc(r.doi) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' + esc(r.doi) + '</a>' : '<span class="muted">-</span>';
+        const rowClass = r.model_ready ? "model-row" : (r.needs_review ? "review-row" : "");
+        const targetName = rowTargetName(r);
+        const targetMeta = rowTargetMeta(r);
+        return '<tr class="' + rowClass + '" data-index="' + idx + '">' +
           '<td>' + layerPill(r) + '</td>' +
           '<td class="doi-cell">' + doi + '</td>' +
           '<td class="num">' + fmtNum(r.year, 0) + '</td>' +
-          '<td class="text-cell" title="' + esc(r.hydrogel || "") + '">' + esc(short(r.hydrogel, 36)) + '</td>' +
-          '<td class="text-cell" title="' + esc(r.protein || "") + '">' + esc(short(r.protein, 30)) + '</td>' +
-          '<td class="text-cell" title="' + esc(r.experiment_mode || "") + '">' + esc(short(r.experiment_mode, 28)) + '</td>' +
-          '<td class="text-cell" title="' + esc(r.target || r.metric || "") + '">' + esc(short(r.target || r.metric, 28)) + '</td>' +
-          '<td class="num"><strong>' + fmtNum(r.target_value ?? r.value) + '</strong></td>' +
-          '<td>' + esc(short(r.target_unit || r.unit, 18)) + '</td>' +
-          '<td class="num">' + fmtNum(r.quality_score, 0) + '</td>' +
-          '<td>' + reviewPill(r) + '</td>' +
-          '<td>' + esc(r.publisher || "-") + '</td>' +
+          '<td><div class="text-cell" title="' + esc(pretty(r.hydrogel)) + '">' + esc(pretty(r.hydrogel) || "-") + '</div></td>' +
+          '<td><div class="text-cell" title="' + esc(pretty(r.protein)) + '">' + esc(pretty(r.protein) || "-") + '</div></td>' +
+          '<td><div class="text-cell" title="' + esc(pretty(r.experiment_mode)) + '">' + esc(pretty(r.experiment_mode) || "-") + '</div></td>' +
+          '<td class="target-cell"><div class="target-name" title="' + esc(targetName || "") + '">' + esc(targetName || "-") + '</div>' +
+          (targetMeta ? '<div class="target-meta" title="' + esc(targetMeta) + '">' + esc(targetMeta) + '</div>' : "") + '</td>' +
+          '<td class="value-cell">' + valueHtml(r) + '</td>' +
+          '<td><div class="quality-stack"><span class="mono-cell">score ' + esc(fmtNum(r.quality_score, 0)) + '</span>' + reviewPill(r) + '</div></td>' +
+          '<td><div class="text-cell" title="' + esc(pretty(r.publisher)) + '">' + esc(pretty(r.publisher) || "-") + '</div></td>' +
         '</tr>';
       }).join("");
       Array.from(document.querySelectorAll("#rows tr")).forEach((row) => {
         row.addEventListener("click", () => showDetail(Number(row.dataset.index)));
       });
+      updateSortHeaders();
       renderPagination(pages);
     }
 
@@ -794,99 +1053,117 @@
       if (!r) return;
       $("detailTitle").textContent = (r.hydrogel || "Unknown hydrogel") + " / " + (r.protein || "Unknown protein");
       const doiLink = r.doi ? '<a href="https://doi.org/' + esc(r.doi) + '" target="_blank" rel="noopener">' + esc(r.doi) + '</a>' : "-";
-      const fields = [
-        ["Layer", layerPill(r)],
-        ["DOI", doiLink],
-        ["Article", r.article_title],
-        ["Year / Publisher", [fmtNum(r.year, 0), r.publisher].filter(isFilled).join(" / ")],
-        ["Hydrogel", r.hydrogel],
-        ["Format", r.format],
-        ["Backbone", r.backbone],
-        ["Monomers", r.monomers],
-        ["Crosslinker", r.crosslinker],
-        ["Functional groups", r.functional_groups],
-        ["Ligand / filler / support", [r.ligand, r.filler, r.substrate_or_support].filter(isFilled).join(" / ")],
-        ["Preparation", [
-          r.preparation_solvent ? "solvent: " + r.preparation_solvent : "",
-          r.preparation_pH ? "pH: " + r.preparation_pH : "",
-          r.preparation_temp_C ? "temp: " + r.preparation_temp_C : "",
-          r.gelation_time ? "gelation: " + r.gelation_time : "",
-          r.post_treatment ? "post: " + r.post_treatment : ""
-        ].filter(isFilled).join(" | ")],
-        ["Hydrogel properties", [
-          r.charge ? "charge: " + r.charge : "",
-          r.swelling_ratio ? "swelling: " + r.swelling_ratio : "",
-          r.water_content_pct ? "water: " + r.water_content_pct + "%" : "",
-          r.porosity_pct ? "porosity: " + r.porosity_pct + "%" : "",
-          r.pore_size ? "pore: " + r.pore_size : "",
-          r.mesh_size ? "mesh: " + r.mesh_size : "",
-          r.surface_area ? "surface area: " + r.surface_area : "",
-          r.particle_size ? "particle: " + r.particle_size : "",
-          r.thickness ? "thickness: " + r.thickness : "",
-          r.roughness ? "roughness: " + r.roughness : "",
-          r.zeta_potential_mV ? "zeta: " + r.zeta_potential_mV + " mV" : "",
-          r.contact_angle_deg ? "contact angle: " + r.contact_angle_deg : "",
-          r.young_modulus ? "modulus: " + r.young_modulus : "",
-          r.responsive_type ? "responsive: " + r.responsive_type : "",
-          r.degradation_or_stability ? "stability: " + r.degradation_or_stability : ""
-        ].filter(isFilled).join(" | ")],
-        ["Protein", [r.protein, r.protein_abbreviation].filter(isFilled).join(" / ")],
-        ["Protein source", r.protein_source],
-        ["Protein properties", [
-          r.protein_mw_kDa ? "MW " + r.protein_mw_kDa + " kDa" : "",
-          r.protein_pI ? "pI " + r.protein_pI : "",
-          r.protein_charge_at_pH ? "charge " + r.protein_charge_at_pH : ""
-        ].filter(isFilled).join(" | ")],
-        ["Experiment", [r.experiment_mode, r.adsorption_type, r.competition_system].filter(isFilled).join(" / ")],
-        ["Conditions", [
-          r.pH ? "pH " + r.pH : "",
-          r.temperature_C ? "temp " + r.temperature_C : "",
-          r.contact_time ? "time " + r.contact_time : "",
-          r.flow_rate ? "flow " + r.flow_rate : "",
-          r.hydrogel_dosage ? "dosage " + r.hydrogel_dosage : "",
-          r.solution_volume ? "volume " + r.solution_volume : "",
-          r.buffer ? "buffer " + r.buffer : "",
-          r.ionic_strength ? "ionic strength " + r.ionic_strength : "",
-          r.salt_type ? "salt " + r.salt_type : "",
-          r.salt_concentration ? "salt conc. " + r.salt_concentration : "",
-          r.replicate_count ? "n=" + r.replicate_count : ""
-        ].filter(isFilled).join(" | ")],
-        ["Detection", r.detection_method],
-        ["Outcome", r.outcome],
-        ["Target", [r.target || r.metric, fmtNum(r.target_value ?? r.value), r.target_unit || r.unit].filter(isFilled).join(" / ")],
-        ["Outcome details", [
-          r.q_norm_mg_g ? "q mg/g: " + r.q_norm_mg_g : "",
-          r.q_norm_mg_mL_bed ? "q mg/mL bed: " + r.q_norm_mg_mL_bed : "",
-          r.surface_adsorption_ug_cm2 ? "surface: " + r.surface_adsorption_ug_cm2 : "",
-          r.removal_efficiency_pct ? "removal: " + r.removal_efficiency_pct + "%" : "",
-          r.binding_efficiency_pct ? "binding: " + r.binding_efficiency_pct + "%" : "",
-          r.recovery_pct ? "recovery: " + r.recovery_pct + "%" : "",
-          r.purity_pct ? "purity: " + r.purity_pct + "%" : "",
-          r.fouling_reduction_pct ? "fouling reduction: " + r.fouling_reduction_pct + "%" : "",
-          r.retained_capacity_pct ? "retained: " + r.retained_capacity_pct + "%" : "",
-          r.dynamic_binding_capacity ? "DBC: " + r.dynamic_binding_capacity : "",
-          r.selectivity_factor ? "selectivity: " + r.selectivity_factor : "",
-          r.imprinting_factor ? "imprinting: " + r.imprinting_factor : "",
-          r.association_constant_Ka ? "Ka: " + r.association_constant_Ka : "",
-          r.dissociation_constant_Kd ? "Kd: " + r.dissociation_constant_Kd : "",
-          r.isotherm_model ? "isotherm: " + r.isotherm_model : "",
-          r.kinetic_model ? "kinetic: " + r.kinetic_model : ""
-        ].filter(isFilled).join(" | ")],
-        ["Mechanism", r.mechanism_tags],
-        ["Quality", [
-          "score " + fmtNum(r.quality_score, 0),
-          r.needs_review ? "needs review" : "no review flag",
-          r.model_ready ? "model ready" : r.model_ready_reason
-        ].filter(isFilled).join(" / ")],
-        ["Source section", [r.source_section, r.source_table_or_figure].filter(isFilled).join(" / ")],
-        ["Evidence", r.evidence],
-      ];
-      $("detailBody").innerHTML = '<div class="detail-grid">' + fields.map(([label, value]) => {
-        const wide = String(value || "").length > 90 || ["Article", "Preparation", "Conditions", "Outcome details", "Evidence", "Hydrogel properties", "Mechanism"].includes(label);
-        const raw = label === "Layer" || label === "DOI";
-        return '<div class="detail-card ' + (wide ? "wide" : "") + '"><div class="detail-label">' + esc(label) +
-          '</div><div class="detail-value">' + (raw ? (value || "-") : esc(value || "-")) + '</div></div>';
-      }).join("") + '</div>';
+      const selectedValue = rowValue(r);
+      const selectedNumber = rowValueNumber(r);
+      const selectedDisplay = selectedNumber !== null ? fmtNum(selectedNumber) : selectedValue;
+      const kv = (label, value, raw = false) => {
+        const shown = raw ? value : pretty(value);
+        if (!isFilled(shown)) return "";
+        return '<div class="detail-kv"><div class="detail-label">' + esc(label) + '</div><div class="detail-value">' +
+          (raw ? shown : esc(shown)) + '</div></div>';
+      };
+      const section = (title, rows) => {
+        const body = rows.filter((row) => row).join("");
+        if (!body) return "";
+        return '<section class="detail-section"><div class="detail-section-title">' + esc(title) + '</div>' + body + '</section>';
+      };
+      $("detailBody").innerHTML = '<div class="detail-body">' +
+        section("Article", [
+          kv("Layer", layerPill(r), true),
+          kv("DOI", doiLink, true),
+          kv("Title", r.article_title),
+          kv("Year / publisher", joinPretty([fmtNum(r.year, 0), r.publisher])),
+        ]) +
+        section("Hydrogel Identity", [
+          kv("Hydrogel", r.hydrogel),
+          kv("Format", r.format),
+          kv("Backbone", r.backbone),
+          kv("Monomers", r.monomers),
+          kv("Crosslinker", r.crosslinker),
+          kv("Functional groups", r.functional_groups),
+          kv("Ligand", r.ligand),
+          kv("Filler", r.filler),
+          kv("Support", r.substrate_or_support),
+        ]) +
+        section("Preparation", [
+          kv("Solvent", r.preparation_solvent),
+          kv("Preparation pH", r.preparation_pH),
+          kv("Temperature", r.preparation_temp_C),
+          kv("Gelation time", r.gelation_time),
+          kv("Post treatment", r.post_treatment),
+        ]) +
+        section("Hydrogel Properties", [
+          kv("Charge", r.charge),
+          kv("Swelling ratio", r.swelling_ratio),
+          kv("Water content", isFilled(r.water_content_pct) ? r.water_content_pct + "%" : ""),
+          kv("Porosity", isFilled(r.porosity_pct) ? r.porosity_pct + "%" : ""),
+          kv("Pore size", r.pore_size),
+          kv("Mesh size", r.mesh_size),
+          kv("Surface area", r.surface_area),
+          kv("Particle size", r.particle_size),
+          kv("Thickness", r.thickness),
+          kv("Roughness", r.roughness),
+          kv("Zeta potential", isFilled(r.zeta_potential_mV) ? r.zeta_potential_mV + " mV" : ""),
+          kv("Contact angle", r.contact_angle_deg),
+          kv("Modulus", r.young_modulus),
+          kv("Responsive type", r.responsive_type),
+          kv("Stability", r.degradation_or_stability),
+        ]) +
+        section("Protein", [
+          kv("Protein", joinPretty([r.protein, r.protein_abbreviation])),
+          kv("Source", r.protein_source),
+          kv("Role", r.protein_role),
+          kv("Molecular weight", isFilled(r.protein_mw_kDa) ? r.protein_mw_kDa + " kDa" : ""),
+          kv("pI", r.protein_pI),
+          kv("Charge at pH", r.protein_charge_at_pH),
+          kv("Initial concentration", r.protein_initial_concentration),
+          kv("Matrix", r.protein_matrix),
+        ]) +
+        section("Experiment", [
+          kv("Mode", r.experiment_mode),
+          kv("Adsorption type", r.adsorption_type),
+          kv("Competition system", r.competition_system),
+          kv("pH", r.pH),
+          kv("Buffer", r.buffer),
+          kv("Ionic strength", r.ionic_strength),
+          kv("Salt", joinPretty([r.salt_type, r.salt_concentration])),
+          kv("Temperature", r.temperature_C),
+          kv("Contact time", r.contact_time),
+          kv("Flow rate", r.flow_rate),
+          kv("Hydrogel dosage", r.hydrogel_dosage),
+          kv("Solution volume", r.solution_volume),
+          kv("Detection", r.detection_method),
+          kv("Replicates", r.replicate_count),
+        ]) +
+        section("Outcome", [
+          kv("Primary target", joinPretty([r.target || r.metric, fmtNum(r.target_value), r.target_unit || r.unit])),
+          kv("Displayed target", joinPretty([rowTargetName(r), selectedDisplay, rowValueUnit(r)])),
+          kv("Outcome", r.outcome),
+          kv("Raw metric", joinPretty([r.metric, r.value, r.unit])),
+          kv("q_norm_mg_g", r.q_norm_mg_g),
+          kv("q_norm_mg_mL_bed", r.q_norm_mg_mL_bed),
+          kv("Surface adsorption", r.surface_adsorption_ug_cm2),
+          kv("Removal efficiency", isFilled(r.removal_efficiency_pct) ? r.removal_efficiency_pct + "%" : ""),
+          kv("Binding efficiency", isFilled(r.binding_efficiency_pct) ? r.binding_efficiency_pct + "%" : ""),
+          kv("Recovery", isFilled(r.recovery_pct) ? r.recovery_pct + "%" : ""),
+          kv("Purity", isFilled(r.purity_pct) ? r.purity_pct + "%" : ""),
+          kv("Fouling reduction", isFilled(r.fouling_reduction_pct) ? r.fouling_reduction_pct + "%" : ""),
+          kv("Retained capacity", isFilled(r.retained_capacity_pct) ? r.retained_capacity_pct + "%" : ""),
+          kv("DBC", r.dynamic_binding_capacity),
+          kv("Selectivity", r.selectivity_factor),
+          kv("Imprinting factor", r.imprinting_factor),
+          kv("Ka", r.association_constant_Ka),
+          kv("Kd", r.dissociation_constant_Kd),
+          kv("Isotherm model", r.isotherm_model),
+          kv("Kinetic model", r.kinetic_model),
+        ]) +
+        section("Quality And Evidence", [
+          kv("Quality", joinPretty(["score " + fmtNum(r.quality_score, 0), r.needs_review ? "needs review" : "no review flag", r.model_ready ? "model ready" : r.model_ready_reason])),
+          kv("Mechanism", r.mechanism_tags),
+          kv("Source", joinPretty([r.source_section, r.source_table_or_figure])),
+          kv("Evidence", r.evidence),
+        ]) +
+      '</div>';
       $("detailModal").classList.add("show");
       $("detailModal").setAttribute("aria-hidden", "false");
     }
