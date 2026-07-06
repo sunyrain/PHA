@@ -100,6 +100,13 @@ records_flat.csv,outcome__recovery_pct,Recovery percentage.
 records_flat.csv,outcome__purity_pct,Purity percentage.
 records_flat.csv,outcome__fouling_reduction_pct,Fouling reduction percentage.
 records_flat.csv,outcome__retained_capacity_pct,Retained capacity percentage.
+records_flat.csv,outcome__dynamic_binding_capacity,"Dynamic binding capacity as reported, including its original units when available."
+records_flat.csv,outcome__selectivity_factor,Selectivity factor as reported for competitive or imprinted systems.
+records_flat.csv,outcome__imprinting_factor,Imprinting factor for molecularly imprinted hydrogel systems.
+records_flat.csv,outcome__association_constant_Ka,"Association constant as reported, including its original units when available."
+records_flat.csv,outcome__dissociation_constant_Kd,"Dissociation constant as reported, including its original units when available."
+records_flat.csv,outcome__isotherm_model,Reported adsorption isotherm model.
+records_flat.csv,outcome__kinetic_model,Reported adsorption kinetic model.
 records_flat.csv,mechanism__mechanism_tags,Mechanism tags extracted from the article.
 records_flat.csv,mechanism__control_type,Control/comparator type.
 records_flat.csv,mechanism__control_material,Control/comparator material.

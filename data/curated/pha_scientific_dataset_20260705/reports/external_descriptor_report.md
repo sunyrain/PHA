@@ -1,7 +1,7 @@
 # PHA external descriptor sidecar report
 
 - Generated: 2026-07-05T11:33:27
-- Source DB: `PHA/data\processed\pha_extraction_1000_xhigh_fulltext_w8\codex_extraction_results.db`
+- Source DB: `D:\Projects\AtctiveOPV\PHA\data\processed\pha_extraction_1000_xhigh_fulltext_w8\codex_extraction_results.db`
 - Query API: False
 - Output dir: `PHA\data\processed\pha_external_descriptors`
 

@@ -33,4 +33,4 @@ The curated export flattens nested JSON into CSV, preserves raw JSONL, assigns c
 
 Regenerate this package from the SQLite extraction database after new extraction, manual review, enrichment, or schema changes.
 
-Generated: 2026-07-05T11:36:45
+Generated: 2026-07-06T20:36:46

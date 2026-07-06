@@ -1,6 +1,6 @@
 # PHA Protein-Hydrogel Adsorption Dataset
 
-Generated: 2026-07-05T11:36:45
+Generated: 2026-07-06T20:36:46
 
 ## Scope
 
@@ -39,9 +39,9 @@ The primary unit is one record:
 - Articles: 1230
 - Success / partial / failed: 985 / 245 / 0
 - Records: 6436
-- Model-ready records: 2325
-- Inverse-design seed rows: 2325
-- Completion patches: 0
+- Model-ready records: 2337
+- Inverse-design seed rows: 2337
+- Completion patches: 56978
 
 ## Curation Rules
 

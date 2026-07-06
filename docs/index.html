@@ -593,8 +593,8 @@
     async function loadData() {
       try {
         const [recordsResponse, summaryResponse] = await Promise.all([
-          fetch("pha_records_browser.json?v=20260706", { cache: "reload" }),
-          fetch("pha_summary.json?v=20260706", { cache: "reload" })
+          fetch("pha_records_browser.json?v=20260706-v9-final", { cache: "reload" }),
+          fetch("pha_summary.json?v=20260706-v9-final", { cache: "reload" })
         ]);
         allData = await recordsResponse.json();
         summary = await summaryResponse.json();
