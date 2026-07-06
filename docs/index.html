@@ -247,7 +247,7 @@
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
-      min-width: 1380px;
+      min-width: 1260px;
       background: #fff;
     }
     col.status-col { width: 116px; }
@@ -256,8 +256,7 @@
     col.hydrogel-col { width: 236px; }
     col.protein-col { width: 168px; }
     col.mode-col { width: 184px; }
-    col.target-col { width: 220px; }
-    col.value-col { width: 152px; }
+    col.measurement-col { width: 318px; }
     col.quality-col { width: 118px; }
     col.publisher-col { width: 128px; }
     th, td {
@@ -306,8 +305,7 @@
       vertical-align: top;
     }
     .text-cell,
-    .target-cell,
-    .value-cell {
+    .measurement-cell {
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -318,10 +316,10 @@
       overflow-wrap: break-word;
       line-height: 1.45;
     }
-    .target-cell {
+    .measurement-cell {
       line-height: 1.35;
     }
-    .target-name {
+    .measurement-name {
       font-weight: 650;
       color: var(--text);
       display: -webkit-box;
@@ -329,7 +327,7 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    .target-meta {
+    .measurement-meta {
       color: var(--soft);
       font-size: 11px;
       margin-top: 2px;
@@ -337,16 +335,23 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .value-cell {
-      text-align: right;
+    .measurement-value {
+      display: inline-flex;
+      max-width: 100%;
+      gap: 4px;
+      align-items: baseline;
+      margin-top: 4px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: #f2f7fb;
+      color: #24537a;
       font-variant-numeric: tabular-nums;
-      line-height: 1.3;
-    }
-    .value-number { font-weight: 760; }
-    .value-unit {
-      color: var(--soft);
       font-size: 11px;
-      margin-top: 2px;
+      overflow: hidden;
+    }
+    .measurement-number { font-weight: 760; }
+    .measurement-unit {
+      color: #5f7890;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -570,10 +575,10 @@
         <div class="toolbar">
           <div class="field">
             <label for="searchInput">Search</label>
-            <input id="searchInput" type="search" placeholder="DOI, hydrogel, protein, target, evidence">
+            <input id="searchInput" type="search" placeholder="DOI, hydrogel, protein, measurement, evidence">
           </div>
           <div class="field">
-            <label for="targetFilter">Target</label>
+            <label for="targetFilter">Comparable Target</label>
             <select id="targetFilter">
               <option value="">Any</option>
               <option value="q_norm_mg_g">q_norm_mg_g</option>
@@ -633,8 +638,7 @@
             <col class="hydrogel-col">
             <col class="protein-col">
             <col class="mode-col">
-            <col class="target-col">
-            <col class="value-col">
+            <col class="measurement-col">
             <col class="quality-col">
             <col class="publisher-col">
           </colgroup>
@@ -646,8 +650,7 @@
               <th data-sort="hydrogel">Hydrogel</th>
               <th data-sort="protein">Protein</th>
               <th data-sort="experiment_mode">Mode</th>
-              <th data-sort="target">Target</th>
-              <th data-sort="target_value">Value</th>
+              <th data-sort="measurement">Reported Measurement</th>
               <th data-sort="quality_score">Score</th>
               <th data-sort="publisher">Publisher</th>
             </tr>
@@ -689,8 +692,7 @@
       hydrogel: "Hydrogel",
       protein: "Protein",
       experiment_mode: "Mode",
-      target: "Target",
-      target_value: "Value",
+      measurement: "Reported Measurement",
       quality_score: "Score",
       publisher: "Publisher",
     };
@@ -783,6 +785,33 @@
       return record.target_unit || record.unit || "";
     };
     const rowValueNumber = (record) => looseNumber(rowValue(record));
+    const reportedMeasurementName = (record) => (
+      pretty(record.metric) || pretty(record.outcome) || pretty(record.target) || "reported outcome"
+    );
+    const reportedMeasurementMeta = (record) => {
+      const metric = reportedMeasurementName(record);
+      const outcome = pretty(record.outcome);
+      return outcome && outcome !== metric ? outcome : "";
+    };
+    const reportedValueText = (record) => {
+      const value = pretty(record.value);
+      const unit = pretty(record.unit);
+      if (!isFilled(value)) return "";
+      return [value, unit].filter(isFilled).join(" ");
+    };
+    const comparableValueText = (record) => {
+      const selected = activeTarget();
+      if (!selected) return "";
+      const number = looseNumber(record[selected]);
+      if (number === null) return "";
+      return targetLabel(selected) + ": " + fmtNum(number) + (targetUnit(selected) ? " " + targetUnit(selected) : "");
+    };
+    const measurementSortText = (record) => [
+      reportedMeasurementName(record),
+      reportedMeasurementMeta(record),
+      reportedValueText(record),
+      comparableValueText(record),
+    ].filter(isFilled).join(" ");
     const targetRank = (record) => {
       const target = String(record.target || "").toLowerCase();
       const metric = String(record.metric || "").toLowerCase();
@@ -827,7 +856,7 @@
         ["Articles", summary.articles_total, (summary.success || 0) + " success", "blue"],
         ["Records", total, "full extracted table", "teal"],
         ["Model ready", modelReady, pctText(modelReady, total), "green"],
-        ["Numeric target", numericTarget, pctText(numericTarget, total), "amber"],
+        ["Comparable numeric", numericTarget, pctText(numericTarget, total), "amber"],
         ["No review flag", clean, pctText(clean, total), "purple"],
         ["Score 3", highQuality, pctText(highQuality, total), "gray"],
       ];
@@ -853,7 +882,7 @@
       const targetTotal = Math.max(1, ...((summary.top_targets || []).map((x) => x.count || 0)));
       $("proteinBars").innerHTML = '<h3 class="panel-title">Proteins</h3>' +
         (summary.top_proteins || []).slice(0, 8).map((x) => barRow(x.name, x.count, total, "teal")).join("");
-      $("targetBars").innerHTML = '<h3 class="panel-title">Targets</h3>' +
+      $("targetBars").innerHTML = '<h3 class="panel-title">Comparable Targets</h3>' +
         (summary.top_targets || []).slice(0, 8).map((x) => barRow(x.name, x.count, targetTotal, "amber")).join("");
       $("modeBars").innerHTML = '<h3 class="panel-title">Experiment Modes</h3>' +
         (summary.top_experiment_modes || []).slice(0, 8).map((x) => barRow(x.name, x.count, total, "purple")).join("");
@@ -931,6 +960,7 @@
       const scalarValue = (record, key) => {
         if (key === "target_value") return rowValueNumber(record);
         if (key === "target") return rowTargetName(record);
+        if (key === "measurement") return measurementSortText(record);
         if (key === "model_ready" || key === "needs_review") return record[key] ? 1 : 0;
         return record[key];
       };
@@ -980,16 +1010,17 @@
       return '<span class="pill green">Clean</span>';
     }
 
-    function valueHtml(record) {
-      const value = rowValue(record);
-      const number = rowValueNumber(record);
-      const unit = rowValueUnit(record);
-      if (number !== null) {
-        return '<div class="value-number">' + esc(fmtNum(number)) + '</div>' +
-          (unit ? '<div class="value-unit" title="' + esc(unit) + '">' + esc(unit) + '</div>' : "");
-      }
-      if (!isFilled(value)) return '<span class="muted">-</span>';
-      return '<div class="value-unit" title="' + esc(value) + '">' + esc(short(value, 34)) + '</div>';
+    function measurementHtml(record) {
+      const name = reportedMeasurementName(record);
+      const meta = reportedMeasurementMeta(record);
+      const reported = reportedValueText(record);
+      const comparable = comparableValueText(record);
+      const valueLine = comparable || reported;
+      const valuePrefix = comparable ? "filtered" : "reported";
+      return '<div class="measurement-name" title="' + esc(name) + '">' + esc(name) + '</div>' +
+        (meta ? '<div class="measurement-meta" title="' + esc(meta) + '">' + esc(meta) + '</div>' : "") +
+        (valueLine ? '<div class="measurement-value" title="' + esc(valueLine) + '"><span class="measurement-unit">' +
+          esc(valuePrefix) + '</span><span class="measurement-number">' + esc(short(valueLine, 44)) + '</span></div>' : "");
     }
 
     function renderTable() {
@@ -997,15 +1028,13 @@
       currentPage = Math.max(1, Math.min(currentPage, pages));
       const start = (currentPage - 1) * PER_PAGE;
       const pageRows = filtered.slice(start, start + PER_PAGE);
-      const targetScope = activeTarget() ? " - target " + targetLabel(activeTarget()) : "";
+      const targetScope = activeTarget() ? " - comparable target filter: " + targetLabel(activeTarget()) : "";
       $("tableInfo").textContent = fmtInt(filtered.length) + " / " + fmtInt(allData.length) +
         " records - sorted by " + (SORT_LABELS[sortKey] || sortKey) + (sortAsc ? " ascending" : " descending") + targetScope;
       $("rows").innerHTML = pageRows.map((r, i) => {
         const idx = start + i;
         const doi = r.doi ? '<a class="doi-link" title="' + esc(r.doi) + '" href="https://doi.org/' + esc(r.doi) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' + esc(r.doi) + '</a>' : '<span class="muted">-</span>';
         const rowClass = r.model_ready ? "model-row" : (r.needs_review ? "review-row" : "");
-        const targetName = rowTargetName(r);
-        const targetMeta = rowTargetMeta(r);
         return '<tr class="' + rowClass + '" data-index="' + idx + '">' +
           '<td>' + layerPill(r) + '</td>' +
           '<td class="doi-cell">' + doi + '</td>' +
@@ -1013,9 +1042,7 @@
           '<td><div class="text-cell" title="' + esc(pretty(r.hydrogel)) + '">' + esc(pretty(r.hydrogel) || "-") + '</div></td>' +
           '<td><div class="text-cell" title="' + esc(pretty(r.protein)) + '">' + esc(pretty(r.protein) || "-") + '</div></td>' +
           '<td><div class="text-cell" title="' + esc(pretty(r.experiment_mode)) + '">' + esc(pretty(r.experiment_mode) || "-") + '</div></td>' +
-          '<td class="target-cell"><div class="target-name" title="' + esc(targetName || "") + '">' + esc(targetName || "-") + '</div>' +
-          (targetMeta ? '<div class="target-meta" title="' + esc(targetMeta) + '">' + esc(targetMeta) + '</div>' : "") + '</td>' +
-          '<td class="value-cell">' + valueHtml(r) + '</td>' +
+          '<td class="measurement-cell">' + measurementHtml(r) + '</td>' +
           '<td><div class="quality-stack"><span class="mono-cell">score ' + esc(fmtNum(r.quality_score, 0)) + '</span>' + reviewPill(r) + '</div></td>' +
           '<td><div class="text-cell" title="' + esc(pretty(r.publisher)) + '">' + esc(pretty(r.publisher) || "-") + '</div></td>' +
         '</tr>';
@@ -1138,10 +1165,10 @@
           kv("Replicates", r.replicate_count),
         ]) +
         section("Outcome", [
-          kv("Primary target", joinPretty([r.target || r.metric, fmtNum(r.target_value), r.target_unit || r.unit])),
-          kv("Displayed target", joinPretty([rowTargetName(r), selectedDisplay, rowValueUnit(r)])),
+          kv("Curated comparable target", joinPretty([r.target, isFilled(r.target_value) ? fmtNum(r.target_value) : "", r.target_unit])),
+          kv("Current target filter", activeTarget() ? joinPretty([rowTargetName(r), selectedDisplay, rowValueUnit(r)]) : ""),
           kv("Outcome", r.outcome),
-          kv("Raw metric", joinPretty([r.metric, r.value, r.unit])),
+          kv("Reported metric", joinPretty([r.metric, r.value, r.unit])),
           kv("q_norm_mg_g", r.q_norm_mg_g),
           kv("q_norm_mg_mL_bed", r.q_norm_mg_mL_bed),
           kv("Surface adsorption", r.surface_adsorption_ug_cm2),
