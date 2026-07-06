@@ -14,6 +14,9 @@ The primary unit is one record:
 
 - `data/sources.csv`: article-level metadata, extraction status, and curation decision.
 - `data/records_flat.csv`: flattened record-level table with provenance, hydrogel, protein, condition, outcome, mechanism, and quality fields.
+- `data/records_core.csv`: compact record-level main table for browsing, filtering, splits, and first-pass modeling.
+- `data/record_additional_values.csv`: long-form record-level companion table for sparse preparation, property, endpoint-specific, provenance, and control values.
+- `data/field_tiers.csv`: field-level map separating main fields from record additional values.
 - `data/records_raw.jsonl`: raw nested record JSON for lossless downstream parsing.
 - `data/model_records.csv`: conservative model-ready subset.
 - `data/inverse_design_seed.csv`: compact table for inverse-design and generative-model experiments.
@@ -33,6 +36,7 @@ The primary unit is one record:
 - `metadata/failed_articles.csv`: failed DOI audit and relevance decision.
 - `metadata/partial_articles.csv`: article-level no-record exclusions.
 - `metadata/checksums_sha256.csv`: file checksums.
+- `reports/PHA_SCHEMA_TIERING_V1RC_20260707.md`: rationale for the compact main table and additional-value sidecar.
 
 ## Summary
 
@@ -40,6 +44,7 @@ The primary unit is one record:
 - Success / partial / failed: 985 / 245 / 0
 - Records: 6436
 - Model-ready records: 2337
+- Main schema: 29 main fields + 61 additional-value fields
 - Inverse-design seed rows: 2337
 - Completion patches: 56978
 
