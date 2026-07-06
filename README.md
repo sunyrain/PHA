@@ -75,6 +75,19 @@ python scripts/build_site_data.py
 This regenerates `docs/pha_records_browser.json` and `docs/pha_summary.json` from
 the curated release package.
 
+## GitHub Pages Deployment
+
+The repository is prepared for GitHub Pages through `.github/workflows/pages.yml`.
+On every push to `main`, the workflow uploads the `docs/` directory as the Pages
+artifact. The browser is fully static and reads:
+
+- `docs/index.html`
+- `docs/pha_records_browser.json`
+- `docs/pha_summary.json`
+
+Before pushing a refreshed release, rebuild the curated package if needed, rerun
+`python scripts/build_site_data.py`, and commit the changed `docs/` files.
+
 ## Citation
 
 If you use this dataset, cite this repository and the underlying source papers

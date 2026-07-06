@@ -442,7 +442,7 @@
         <div class="release-title">Release package: pha_scientific_dataset_20260705</div>
         <div class="release-note">Records are machine-extracted and should be filtered by model readiness, quality score, and evidence before downstream modeling.</div>
       </div>
-      <div class="release-id">Generated 2026-07-05T11:36:45</div>
+      <div class="release-id" id="releaseGenerated">Generated from summary metadata</div>
     </section>
 
     <section class="stats-grid" id="statsGrid"></section>
@@ -486,6 +486,8 @@
               <option value="fouling_reduction_pct">fouling_reduction_pct</option>
               <option value="removal_efficiency_pct">removal_efficiency_pct</option>
               <option value="purity_pct">purity_pct</option>
+              <option value="retained_capacity_pct">retained_capacity_pct</option>
+              <option value="q_norm_mg_mL_bed">q_norm_mg_mL_bed</option>
             </select>
           </div>
           <div class="field">
@@ -591,11 +593,12 @@
     async function loadData() {
       try {
         const [recordsResponse, summaryResponse] = await Promise.all([
-          fetch("pha_records_browser.json?v=20260705", { cache: "reload" }),
-          fetch("pha_summary.json?v=20260705", { cache: "reload" })
+          fetch("pha_records_browser.json?v=20260706", { cache: "reload" }),
+          fetch("pha_summary.json?v=20260706", { cache: "reload" })
         ]);
         allData = await recordsResponse.json();
         summary = await summaryResponse.json();
+        $("releaseGenerated").textContent = "Generated " + (summary.generated_at || "unknown");
         filtered = [...allData];
         $("loadingPanel").style.display = "none";
         $("tableWrap").style.display = "block";
@@ -673,8 +676,9 @@
         if (search) {
           const haystack = [
             r.record_id, r.doi, r.article_title, r.publisher, r.hydrogel, r.format, r.backbone,
-            r.protein, r.protein_abbreviation, r.experiment_mode, r.target, r.outcome,
-            r.metric, r.mechanism_tags, r.evidence
+            r.monomers, r.crosslinker, r.functional_groups, r.ligand, r.filler, r.substrate_or_support,
+            r.protein, r.protein_abbreviation, r.experiment_mode, r.adsorption_type, r.competition_system,
+            r.target, r.outcome, r.metric, r.isotherm_model, r.kinetic_model, r.mechanism_tags, r.evidence
           ].join(" ").toLowerCase();
           if (!haystack.includes(search)) return false;
         }
@@ -801,14 +805,30 @@
         ["Monomers", r.monomers],
         ["Crosslinker", r.crosslinker],
         ["Functional groups", r.functional_groups],
-        ["Ligand / filler", [r.ligand, r.filler].filter(isFilled).join(" / ")],
+        ["Ligand / filler / support", [r.ligand, r.filler, r.substrate_or_support].filter(isFilled).join(" / ")],
+        ["Preparation", [
+          r.preparation_solvent ? "solvent: " + r.preparation_solvent : "",
+          r.preparation_pH ? "pH: " + r.preparation_pH : "",
+          r.preparation_temp_C ? "temp: " + r.preparation_temp_C : "",
+          r.gelation_time ? "gelation: " + r.gelation_time : "",
+          r.post_treatment ? "post: " + r.post_treatment : ""
+        ].filter(isFilled).join(" | ")],
         ["Hydrogel properties", [
           r.charge ? "charge: " + r.charge : "",
           r.swelling_ratio ? "swelling: " + r.swelling_ratio : "",
+          r.water_content_pct ? "water: " + r.water_content_pct + "%" : "",
+          r.porosity_pct ? "porosity: " + r.porosity_pct + "%" : "",
           r.pore_size ? "pore: " + r.pore_size : "",
+          r.mesh_size ? "mesh: " + r.mesh_size : "",
+          r.surface_area ? "surface area: " + r.surface_area : "",
           r.particle_size ? "particle: " + r.particle_size : "",
+          r.thickness ? "thickness: " + r.thickness : "",
+          r.roughness ? "roughness: " + r.roughness : "",
+          r.zeta_potential_mV ? "zeta: " + r.zeta_potential_mV + " mV" : "",
           r.contact_angle_deg ? "contact angle: " + r.contact_angle_deg : "",
-          r.young_modulus ? "modulus: " + r.young_modulus : ""
+          r.young_modulus ? "modulus: " + r.young_modulus : "",
+          r.responsive_type ? "responsive: " + r.responsive_type : "",
+          r.degradation_or_stability ? "stability: " + r.degradation_or_stability : ""
         ].filter(isFilled).join(" | ")],
         ["Protein", [r.protein, r.protein_abbreviation].filter(isFilled).join(" / ")],
         ["Protein source", r.protein_source],
@@ -817,16 +837,41 @@
           r.protein_pI ? "pI " + r.protein_pI : "",
           r.protein_charge_at_pH ? "charge " + r.protein_charge_at_pH : ""
         ].filter(isFilled).join(" | ")],
-        ["Experiment", r.experiment_mode],
+        ["Experiment", [r.experiment_mode, r.adsorption_type, r.competition_system].filter(isFilled).join(" / ")],
         ["Conditions", [
           r.pH ? "pH " + r.pH : "",
           r.temperature_C ? "temp " + r.temperature_C : "",
           r.contact_time ? "time " + r.contact_time : "",
-          r.buffer ? "buffer " + r.buffer : ""
+          r.flow_rate ? "flow " + r.flow_rate : "",
+          r.hydrogel_dosage ? "dosage " + r.hydrogel_dosage : "",
+          r.solution_volume ? "volume " + r.solution_volume : "",
+          r.buffer ? "buffer " + r.buffer : "",
+          r.ionic_strength ? "ionic strength " + r.ionic_strength : "",
+          r.salt_type ? "salt " + r.salt_type : "",
+          r.salt_concentration ? "salt conc. " + r.salt_concentration : "",
+          r.replicate_count ? "n=" + r.replicate_count : ""
         ].filter(isFilled).join(" | ")],
         ["Detection", r.detection_method],
         ["Outcome", r.outcome],
         ["Target", [r.target || r.metric, fmtNum(r.target_value ?? r.value), r.target_unit || r.unit].filter(isFilled).join(" / ")],
+        ["Outcome details", [
+          r.q_norm_mg_g ? "q mg/g: " + r.q_norm_mg_g : "",
+          r.q_norm_mg_mL_bed ? "q mg/mL bed: " + r.q_norm_mg_mL_bed : "",
+          r.surface_adsorption_ug_cm2 ? "surface: " + r.surface_adsorption_ug_cm2 : "",
+          r.removal_efficiency_pct ? "removal: " + r.removal_efficiency_pct + "%" : "",
+          r.binding_efficiency_pct ? "binding: " + r.binding_efficiency_pct + "%" : "",
+          r.recovery_pct ? "recovery: " + r.recovery_pct + "%" : "",
+          r.purity_pct ? "purity: " + r.purity_pct + "%" : "",
+          r.fouling_reduction_pct ? "fouling reduction: " + r.fouling_reduction_pct + "%" : "",
+          r.retained_capacity_pct ? "retained: " + r.retained_capacity_pct + "%" : "",
+          r.dynamic_binding_capacity ? "DBC: " + r.dynamic_binding_capacity : "",
+          r.selectivity_factor ? "selectivity: " + r.selectivity_factor : "",
+          r.imprinting_factor ? "imprinting: " + r.imprinting_factor : "",
+          r.association_constant_Ka ? "Ka: " + r.association_constant_Ka : "",
+          r.dissociation_constant_Kd ? "Kd: " + r.dissociation_constant_Kd : "",
+          r.isotherm_model ? "isotherm: " + r.isotherm_model : "",
+          r.kinetic_model ? "kinetic: " + r.kinetic_model : ""
+        ].filter(isFilled).join(" | ")],
         ["Mechanism", r.mechanism_tags],
         ["Quality", [
           "score " + fmtNum(r.quality_score, 0),
@@ -837,7 +882,7 @@
         ["Evidence", r.evidence],
       ];
       $("detailBody").innerHTML = '<div class="detail-grid">' + fields.map(([label, value]) => {
-        const wide = String(value || "").length > 90 || ["Article", "Conditions", "Evidence", "Hydrogel properties", "Mechanism"].includes(label);
+        const wide = String(value || "").length > 90 || ["Article", "Preparation", "Conditions", "Outcome details", "Evidence", "Hydrogel properties", "Mechanism"].includes(label);
         const raw = label === "Layer" || label === "DOI";
         return '<div class="detail-card ' + (wide ? "wide" : "") + '"><div class="detail-label">' + esc(label) +
           '</div><div class="detail-value">' + (raw ? (value || "-") : esc(value || "-")) + '</div></div>';
@@ -853,8 +898,19 @@
 
     const CSV_COLUMNS = [
       "record_id", "doi", "doi_split", "year", "publisher", "hydrogel", "format", "backbone",
-      "protein", "protein_abbreviation", "experiment_mode", "pH", "temperature_C", "contact_time",
+      "monomers", "crosslinker", "functional_groups", "ligand", "filler", "substrate_or_support",
+      "preparation_solvent", "preparation_pH", "preparation_temp_C", "gelation_time", "post_treatment",
+      "charge", "swelling_ratio", "water_content_pct", "porosity_pct", "pore_size", "mesh_size",
+      "surface_area", "particle_size", "thickness", "roughness", "zeta_potential_mV",
+      "contact_angle_deg", "young_modulus", "responsive_type", "degradation_or_stability",
+      "protein", "protein_abbreviation", "experiment_mode", "adsorption_type", "competition_system",
+      "hydrogel_dosage", "solution_volume", "pH", "buffer", "ionic_strength", "salt_type",
+      "salt_concentration", "temperature_C", "contact_time", "flow_rate", "replicate_count",
       "target", "target_value", "target_unit", "target_direction", "metric", "value", "unit",
+      "q_norm_mg_g", "q_norm_mg_mL_bed", "surface_adsorption_ug_cm2", "removal_efficiency_pct",
+      "binding_efficiency_pct", "recovery_pct", "purity_pct", "fouling_reduction_pct",
+      "retained_capacity_pct", "dynamic_binding_capacity", "selectivity_factor", "imprinting_factor",
+      "association_constant_Ka", "dissociation_constant_Kd", "isotherm_model", "kinetic_model",
       "quality_score", "needs_review", "model_ready", "model_ready_reason", "evidence"
     ];
 
