@@ -70,6 +70,49 @@
       flex-wrap: wrap;
       justify-content: flex-end;
     }
+    .database-nav-wrap {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 0 24px 16px;
+    }
+    .database-nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+    .database-tab {
+      min-width: 220px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.07);
+      color: #dbe5ef;
+      border-radius: 8px;
+      padding: 9px 12px;
+      text-decoration: none;
+    }
+    .database-tab:hover {
+      background: rgba(255,255,255,0.14);
+      text-decoration: none;
+    }
+    .database-tab.active {
+      background: #fff;
+      border-color: #fff;
+      color: var(--text);
+    }
+    .database-tab span {
+      display: block;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 780;
+    }
+    .database-tab small {
+      display: block;
+      margin-top: 2px;
+      color: #aebdca;
+      font-size: 11px;
+      line-height: 1.25;
+    }
+    .database-tab.active small { color: var(--muted); }
     .btn {
       border: 1px solid var(--border);
       background: var(--panel);
@@ -161,8 +204,9 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
-      margin-bottom: 14px;
     }
+    .summary-block { min-width: 0; }
+    .summary-block .panel-title { margin-bottom: 10px; }
     .panel {
       background: var(--panel);
       border: 1px solid var(--border);
@@ -316,6 +360,19 @@
     .badge.not_queried { background: #f4f6f8; border-color: #dce2e8; color: #657383; }
     .badge.error { background: #fff1ef; border-color: #efc5be; color: #9b3f38; }
     .badge.review { background: #fff7e8; border-color: #edc98f; color: #996019; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+    .pill.blue { color: #174974; background: #eef5fb; border-color: #cbddec; }
 
     .table-footer {
       padding: 10px 12px;
@@ -434,6 +491,8 @@
     @media (max-width: 760px) {
       .header-inner { grid-template-columns: 1fr; align-items: start; }
       .header-actions { justify-content: flex-start; }
+      .database-nav-wrap { padding: 0 12px 12px; }
+      .database-tab { flex: 1 1 180px; min-width: 0; }
       .wrap { padding: 12px 12px 26px; }
       .release-strip { grid-template-columns: 1fr; }
       .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -447,15 +506,26 @@
   <header class="site-header">
     <div class="header-inner">
       <div>
-        <h1>PHA Materials Database</h1>
-        <p class="subtitle">Material mentions, role annotations, and external small-molecule descriptors for the protein-hydrogel adsorption dataset.</p>
+        <h1>PHA Protein-Hydrogel Adsorption Database</h1>
+        <p class="subtitle">Literature-mined experimental records and material descriptors for protein-hydrogel biointerfaces, with curated model-ready subsets and provenance evidence.</p>
       </div>
       <div class="header-actions">
-        <a class="btn" href="index.html">Records</a>
         <a class="btn" href="https://github.com/sunyrain/PHA" target="_blank" rel="noopener">GitHub</a>
         <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/materials.csv" target="_blank" rel="noopener">Materials CSV</a>
         <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/material_descriptors.csv" target="_blank" rel="noopener">Descriptors CSV</a>
       </div>
+    </div>
+    <div class="database-nav-wrap">
+      <nav class="database-nav" aria-label="PHA database views">
+        <a class="database-tab" href="index.html">
+          <span>Records Database</span>
+          <small>6,436 experimental rows</small>
+        </a>
+        <a class="database-tab active" href="materials.html">
+          <span>Materials Database</span>
+          <small>4,781 material entries</small>
+        </a>
+      </nav>
     </div>
   </header>
 
@@ -464,10 +534,10 @@
 
     <section class="release-strip">
       <div>
-        <div class="release-title">Static materials sidecar</div>
-        <div class="release-note">Experimental records stay in the main records table; PubChem-like fields here are external descriptors for named materials.</div>
+        <div class="release-title">Release package: pha_scientific_dataset_20260705</div>
+        <div class="release-note">Materials view from the frozen package. Experimental values stay in Records; PubChem-like fields here are external descriptors for named materials.</div>
       </div>
-      <div class="release-id" id="generatedAt">generated_at: loading</div>
+      <div class="release-id" id="generatedAt">Generated from materials metadata</div>
     </section>
 
     <section class="stats-grid">
@@ -503,18 +573,22 @@
       </div>
     </section>
 
-    <section class="summary-grid">
-      <div class="panel">
-        <div class="panel-header">
-          <h2 class="panel-title">Top Material Roles</h2>
-        </div>
-        <div class="panel-body" id="topRoles"></div>
+    <section class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Materials Composition</h2>
+        <div class="pill blue" id="materialsSummaryStatus">Loading</div>
       </div>
-      <div class="panel">
-        <div class="panel-header">
-          <h2 class="panel-title">Descriptor Status</h2>
+      <div class="panel-body">
+        <div class="summary-grid">
+          <div class="summary-block">
+            <h3 class="panel-title">Top Material Roles</h3>
+            <div id="topRoles"></div>
+          </div>
+          <div class="summary-block">
+            <h3 class="panel-title">Descriptor Status</h3>
+            <div id="descriptorStatuses"></div>
+          </div>
         </div>
-        <div class="panel-body" id="descriptorStatuses"></div>
       </div>
     </section>
 
@@ -626,6 +700,7 @@
       sortState: document.getElementById("sortState"),
       topRoles: document.getElementById("topRoles"),
       descriptorStatuses: document.getElementById("descriptorStatuses"),
+      materialsSummaryStatus: document.getElementById("materialsSummaryStatus"),
       searchBox: document.getElementById("searchBox"),
       roleFilter: document.getElementById("roleFilter"),
       statusFilter: document.getElementById("statusFilter"),
@@ -755,12 +830,13 @@
     }
 
     function renderSummary() {
-      els.generatedAt.textContent = `generated_at: ${summary.generated_at || "unknown"}`;
+      els.generatedAt.textContent = `Generated ${summary.generated_at || "unknown"}`;
       els.statMentions.textContent = fmtInt(summary.material_mentions);
       els.statUnique.textContent = fmtInt(summary.unique_materials);
       els.statMatched.textContent = fmtInt(summary.descriptor_matched_materials);
       els.statMatchedMentions.textContent = fmtInt(summary.descriptor_matched_mentions);
       els.statReview.textContent = fmtInt(summary.needs_review_materials);
+      els.materialsSummaryStatus.textContent = `${fmtInt(summary.unique_materials)} materials`;
       renderBars(els.topRoles, summary.top_roles || [], "teal");
       renderBars(els.descriptorStatuses, summary.descriptor_statuses || [], "amber");
     }
