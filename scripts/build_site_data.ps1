@@ -104,7 +104,6 @@ $RecordColumns = [ordered]@{
   experiment_mode_detail = 'experiment_mode_detail'
   application_context = 'application_context'
   comparable_target_class = 'comparable_target_class'
-  model_ready_v2 = 'model_ready_v2'
   model_ready_blocker = 'model_ready_blocker'
   manual_review_priority = 'manual_review_priority'
   q5_protein_evidence_flag = 'q5_protein_evidence_flag'
@@ -122,7 +121,7 @@ $NumericFields = @(
   'imprinting_factor', 'association_constant_Ka', 'dissociation_constant_Kd',
   'replicate_count', 'quality_score', 'target_value', 'confidence'
 )
-$BoolFields = @('model_ready', 'model_ready_v2', 'needs_review', 'q5_protein_evidence_flag')
+$BoolFields = @('model_ready', 'needs_review', 'q5_protein_evidence_flag')
 
 function Clean-Value {
   param([string]$Key, [object]$Value)

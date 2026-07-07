@@ -539,7 +539,7 @@
     <div class="header-inner">
       <div>
         <h1>PHA Protein-Hydrogel Adsorption Database</h1>
-        <p class="subtitle">Literature-mined experimental records and material descriptors for protein-hydrogel biointerfaces, with curated model-ready subsets and provenance evidence.</p>
+        <p class="subtitle">Literature-mined experimental records and material descriptors for protein-hydrogel biointerfaces, with a curated model-ready table and provenance evidence.</p>
       </div>
       <div class="header-actions">
         <a class="btn" href="https://github.com/sunyrain/PHA" target="_blank" rel="noopener">GitHub</a>
@@ -547,7 +547,6 @@
         <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/record_additional_values.csv">Values CSV</a>
         <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/records_flat.csv">Archive CSV</a>
         <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/model_records.csv">Model CSV</a>
-        <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/model_records_v2.csv">Model v2 CSV</a>
         <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/record_standardization.csv">Standard CSV</a>
         <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/inverse_design_seed.csv">Design CSV</a>
       </div>
@@ -705,14 +704,6 @@
               <option value="high">high</option>
               <option value="medium">medium</option>
               <option value="low">low</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="modelV2Filter">Model v2</label>
-            <select id="modelV2Filter">
-              <option value="">Any</option>
-              <option value="ready">Ready v2</option>
-              <option value="not_ready">Not ready v2</option>
             </select>
           </div>
         </div>
@@ -881,8 +872,8 @@
     async function loadData() {
       try {
         const [recordsResponse, summaryResponse] = await Promise.all([
-          fetch("pha_records_browser.json?v=20260707-standardization-v2", { cache: "reload" }),
-          fetch("pha_summary.json?v=20260707-standardization-v2", { cache: "reload" })
+          fetch("pha_records_browser.json?v=20260707-curated", { cache: "reload" }),
+          fetch("pha_summary.json?v=20260707-curated", { cache: "reload" })
         ]);
         allData = await recordsResponse.json();
         summary = await summaryResponse.json();
@@ -909,13 +900,11 @@
       const total = allData.length;
       const modelReady = allData.filter((r) => r.model_ready).length;
       const clean = allData.filter((r) => !r.needs_review).length;
-      const modelReadyV2 = allData.filter((r) => r.model_ready_v2).length;
       const strongMedium = allData.filter((r) => ["strong", "medium"].includes(r.comparable_target_class)).length;
       const stats = [
         ["Articles", summary.articles_total, (summary.success || 0) + " success", "blue"],
         ["Records", total, "full extracted table", "teal"],
-        ["Model ready", modelReady, "legacy " + pctText(modelReady, total), "green"],
-        ["Model v2", modelReadyV2, pctText(modelReadyV2, total), "green"],
+        ["Model ready", modelReady, pctText(modelReady, total), "green"],
         ["Strong/medium", strongMedium, "comparable class", "amber"],
         ["No review flag", clean, pctText(clean, total), "purple"],
       ];
@@ -968,7 +957,6 @@
       const interaction = $("interactionFilter").value;
       const comparable = $("comparableFilter").value;
       const priority = $("priorityFilter").value;
-      const modelV2 = $("modelV2Filter").value;
       const yearMinValue = $("yearMin").value;
       const yearMaxValue = $("yearMax").value;
       const score = scoreValue === "" ? null : Number(scoreValue);
@@ -989,8 +977,6 @@
         if (!targetHasValue(r, target)) return false;
         if (model === "ready" && !r.model_ready) return false;
         if (model === "not_ready" && r.model_ready) return false;
-        if (modelV2 === "ready" && !r.model_ready_v2) return false;
-        if (modelV2 === "not_ready" && r.model_ready_v2) return false;
         if (application && r.application_context !== application) return false;
         if (interaction && r.interaction_type !== interaction) return false;
         if (comparable && r.comparable_target_class !== comparable) return false;
@@ -1010,7 +996,7 @@
     function clearFilters() {
       [
         "searchInput", "targetFilter", "modelFilter", "reviewFilter", "qualityFilter", "yearMin", "yearMax",
-        "applicationFilter", "interactionFilter", "comparableFilter", "priorityFilter", "modelV2Filter"
+        "applicationFilter", "interactionFilter", "comparableFilter", "priorityFilter"
       ].forEach((id) => { $(id).value = ""; });
       applyFilters();
     }
@@ -1252,14 +1238,14 @@
           kv("Isotherm model", r.isotherm_model),
           kv("Kinetic model", r.kinetic_model),
         ]) +
-        section("Standardization v2", [
+        section("Curation Fields", [
           kv("Interaction type", r.interaction_type),
           kv("Covalent binding", r.is_covalent_binding),
           kv("Mode primary", r.experiment_mode_primary),
           kv("Mode detail", r.experiment_mode_detail),
           kv("Application", r.application_context),
           kv("Comparable class", r.comparable_target_class),
-          kv("Model v2", joinPretty([r.model_ready_v2 ? "ready_v2" : "not_ready_v2", r.model_ready_blocker])),
+          kv("Model ready", joinPretty([r.model_ready ? "ready" : "not_ready", r.model_ready_blocker])),
           kv("Review priority", r.manual_review_priority),
           kv("Q5 protein evidence", isFilled(r.q5_protein_evidence_flag) ? String(r.q5_protein_evidence_flag) : ""),
           kv("Q5 triage", r.q5_triage_action),
@@ -1296,7 +1282,7 @@
       "retained_capacity_pct", "dynamic_binding_capacity", "selectivity_factor", "imprinting_factor",
       "association_constant_Ka", "dissociation_constant_Kd", "isotherm_model", "kinetic_model",
       "interaction_type", "is_covalent_binding", "experiment_mode_primary", "experiment_mode_detail",
-      "application_context", "comparable_target_class", "model_ready_v2", "model_ready_blocker",
+      "application_context", "comparable_target_class", "model_ready_blocker",
       "manual_review_priority", "q5_protein_evidence_flag", "q5_triage_action",
       "quality_score", "needs_review", "model_ready", "model_ready_reason", "evidence"
     ];
@@ -1327,7 +1313,7 @@
     document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeDetail(); });
     [
       "searchInput", "targetFilter", "modelFilter", "reviewFilter", "qualityFilter", "yearMin", "yearMax",
-      "applicationFilter", "interactionFilter", "comparableFilter", "priorityFilter", "modelV2Filter"
+      "applicationFilter", "interactionFilter", "comparableFilter", "priorityFilter"
     ].forEach((id) => {
       $(id).addEventListener("keydown", (event) => { if (event.key === "Enter") applyFilters(); });
       if (id !== "searchInput") $(id).addEventListener("change", applyFilters);

@@ -38,7 +38,7 @@ The curated export was generated from `codex_extraction_results.db` using:
   --audit-md PHA\data\processed\pha_extraction_1000_xhigh_fulltext_w8\QUALITY_AUDIT_20260705_021519.md
 ```
 
-The export preserves raw nested record JSON while also providing flattened tables for analysis. Legacy model-ready records are conservatively filtered to successful article extractions with numeric targets, no manual-review flag, source quality score at least 2, and hydrogel/protein identity present. An incremental deterministic standardization v2 layer adds interaction type, assay-mode strata, application context, comparable-target class, model-ready blockers, Q5 antifouling triage, and manual-review priority without changing legacy record granularity.
+The export preserves raw nested record JSON while also providing flattened tables for analysis. Model-ready records are filtered to successful article extractions with hydrogel/protein identity, source-quality checks, and strong or medium comparable target classes. The deterministic curation layer adds interaction type, assay-mode strata, application context, comparable-target class, model-ready blockers, Q5 antifouling triage, and manual-review priority without changing record granularity.
 
 ## Data Records
 
@@ -52,8 +52,7 @@ Files:
 - `data/sources.csv`: 1230 article-level rows with extraction status and curation decision.
 - `data/records_flat.csv`: 6436 flattened record-level rows.
 - `data/records_raw.jsonl`: lossless nested record JSON.
-- `data/model_records.csv`: 2337 conservative model-ready records.
-- `data/model_records_v2.csv`: 3589 deterministic standardization v2 model-ready records.
+- `data/model_records.csv`: 3589 curated model-ready records.
 - `data/record_standardization.csv`: 6436 record-level standardization sidecar rows.
 - `data/inverse_design_seed.csv`: 2337 compact rows for inverse-design workflows.
 - `data/materials.csv`: 13662 material mentions.
@@ -64,7 +63,7 @@ Files:
 - `metadata/failed_articles.csv`: failed-source audit.
 - `metadata/partial_articles.csv`: no-record article exclusions.
 - `metadata/data_dictionary.csv`: table and column descriptions.
-- `metadata/run_comparison_summary_20260707.md`: incremental standardization comparison summary.
+- `metadata/curation_summary_20260707.md`: current-release curation summary.
 - `metadata/datasheet.md`: dataset datasheet.
 - `metadata/checksums_sha256.csv`: file checksums.
 

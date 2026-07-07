@@ -27,10 +27,10 @@ AI-ready training labels. The database must support:
 The search is intentionally split into ten query families. Each family is
 kept separate so we can later audit which source contributed each paper.
 
-The 2026-07-07 standardization update is incremental. It preserves the legacy
-record granularity, output tables, and the original Q1-Q7 retrieval meanings.
-Additional terms or fields should be logged as additive expansion rather than
-as a replacement for prior query families.
+The 2026-07-07 curation update integrates controlled fields into the current
+release schema while preserving record granularity, output tables, and the
+original Q1-Q7 retrieval meanings. Additional terms or fields should be logged
+as additive expansion rather than as a replacement for prior query families.
 
 | Family | Purpose | Positive/negative role |
 | --- | --- | --- |
@@ -50,9 +50,9 @@ therefore historical and should not be reused for the new Q3/Q6 definitions.
 The current `PHA/configs/config.yaml` contains Q1-Q10 and should be count-probed
 again before a full harvest.
 
-For compatibility with the incremental Q1-Q7 comparison, Q1-Q7 should remain
+For compatibility with Q1-Q7 audit reporting, Q1-Q7 should remain
 the primary audit families for Articles / Records / Model Ready / Comparable
-Numeric comparisons. Q8-Q10 may remain as extension families, but should not be
+Numeric summaries. Q8-Q10 may remain as extension families, but should not be
 used to redefine the meaning of the earlier Q1-Q7 families.
 
 ## Inclusion Rules
@@ -169,7 +169,7 @@ A single paper can therefore produce many records if it compares:
 - desorption efficiency, regeneration cycles, retained capacity
 - antifouling or low-adsorption reduction percentage
 
-### Standardization v2 Derived Fields
+### Curated Standardization Fields
 
 These fields are deterministic post-processing labels. They do not replace raw
 evidence fields and should not overwrite article-derived experimental values.
@@ -195,11 +195,12 @@ evidence fields and should not overwrite article-derived experimental values.
   percentages, selectivity factors, and imprinting factors. Fluorescence,
   absorbance, relative signal, SDS-PAGE band intensity, image-derived coverage,
   and qualitative staining intensity are weak unless separately normalized.
-- `model_ready_v2`, `model_ready_blocker`, and `manual_review_priority`: derived
+- `model_ready`, `model_ready_blocker`, and `manual_review_priority`: derived
   audit fields used for modeling subset selection and manual review ordering.
 
-The legacy `experiment_mode`, `model_ready`, and `model_ready_reason` fields
-must be retained so that new runs remain comparable with previous releases.
+The original free-text `experiment_mode` and the controlled
+`experiment_mode_primary/detail` fields should both be retained: the former
+preserves evidence language, while the latter supports filtering and modeling.
 
 ## Mechanism Tags
 

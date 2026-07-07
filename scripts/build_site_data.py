@@ -111,7 +111,6 @@ RECORD_COLUMNS = {
     "experiment_mode_detail": "experiment_mode_detail",
     "application_context": "application_context",
     "comparable_target_class": "comparable_target_class",
-    "model_ready_v2": "model_ready_v2",
     "model_ready_blocker": "model_ready_blocker",
     "manual_review_priority": "manual_review_priority",
     "q5_protein_evidence_flag": "q5_protein_evidence_flag",
@@ -151,7 +150,7 @@ NUMERIC_FIELDS = {
     "confidence",
 }
 
-BOOL_FIELDS = {"model_ready", "model_ready_v2", "needs_review", "q5_protein_evidence_flag"}
+BOOL_FIELDS = {"model_ready", "needs_review", "q5_protein_evidence_flag"}
 
 
 def clean_value(key: str, value: str) -> Any:

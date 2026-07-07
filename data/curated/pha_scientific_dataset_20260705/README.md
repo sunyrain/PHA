@@ -18,9 +18,8 @@ The primary unit is one record:
 - `data/record_additional_values.csv`: long-form record-level companion table for sparse preparation, property, endpoint-specific, provenance, and control values.
 - `data/field_tiers.csv`: field-level map separating main fields from record additional values.
 - `data/records_raw.jsonl`: raw nested record JSON for lossless downstream parsing.
-- `data/model_records.csv`: conservative model-ready subset.
-- `data/model_records_v2.csv`: deterministic standardization v2 model-ready subset with interaction/application/comparability strata.
-- `data/record_standardization.csv`: record-level sidecar containing `interaction_type`, `experiment_mode_primary`, `experiment_mode_detail`, `application_context`, `comparable_target_class`, `model_ready_v2`, `model_ready_blocker`, `manual_review_priority`, and Q5 triage fields.
+- `data/model_records.csv`: curated model-ready subset with interaction/application/comparability strata.
+- `data/record_standardization.csv`: record-level sidecar containing `interaction_type`, `experiment_mode_primary`, `experiment_mode_detail`, `application_context`, `comparable_target_class`, `model_ready`, `model_ready_blocker`, `manual_review_priority`, and Q5 triage fields.
 - `data/inverse_design_seed.csv`: compact table for inverse-design and generative-model experiments.
 - `data/materials.csv`: material, monomer, crosslinker, ligand, filler, and related mentions.
 - `data/proteins.csv`: protein mentions and reported protein properties.
@@ -38,26 +37,25 @@ The primary unit is one record:
 - `metadata/failed_articles.csv`: failed DOI audit and relevance decision.
 - `metadata/partial_articles.csv`: article-level no-record exclusions.
 - `metadata/checksums_sha256.csv`: file checksums.
-- `metadata/run_comparison_summary_20260707.md`: incremental update comparison for legacy and standardization v2 counts/distributions.
-- `reports/PHA_SCHEMA_TIERING_V1RC_20260707.md`: rationale for the compact main table and additional-value sidecar.
+- `metadata/curation_summary_20260707.md`: current-release curation counts and controlled-field distributions.
+- `reports/PHA_SCHEMA_TIERING_20260707.md`: rationale for the compact main table and additional-value sidecar.
 
 ## Summary
 
 - Articles: 1230
 - Success / partial / failed: 985 / 245 / 0
 - Records: 6436
-- Model-ready records: 2337
-- Model-ready v2 records: 3589
+- Model-ready records: 3589
 - Strong/medium comparable records: 3839
-- Main schema: 29 legacy main fields + 12 standardization v2 fields + 61 additional-value fields
+- Main schema: 29 extraction fields + 12 curated standardization fields + 61 additional-value fields
 - Inverse-design seed rows: 2337
 - Completion patches: 56978
 
 ## Curation Rules
 
-Records are marked model-ready only when they come from a successful article extraction, have a numeric target, are not marked for manual review, have source quality score >= 2, and include hydrogel and protein identity.
+Records are marked model-ready when they come from a successful article extraction, have hydrogel and protein identity, meet source-quality and comparability checks, and have a strong or medium comparable target class. `model_ready_blocker` records the specific blockers for rows that are not model-ready.
 
-Standardization v2 is an incremental deterministic post-processing layer. It preserves the legacy `model_ready` field and adds controlled `interaction_type`, `experiment_mode_primary/detail`, `application_context`, `comparable_target_class`, `model_ready_v2`, `model_ready_blocker`, `manual_review_priority`, and Q5 protein-antifouling triage fields. Q5 antifouling candidates are kept as protein-relevant only when they include protein, serum, plasma, albumin, fibrinogen, IgG, blood, or total-protein evidence.
+The curated standardization layer provides controlled `interaction_type`, `experiment_mode_primary/detail`, `application_context`, `comparable_target_class`, `model_ready`, `model_ready_blocker`, `manual_review_priority`, and Q5 protein-antifouling triage fields. Q5 antifouling candidates are kept as protein-relevant only when they include protein, serum, plasma, albumin, fibrinogen, IgG, blood, or total-protein evidence.
 
 Failed but relevant articles are retained in `sources.csv` and `failed_articles.csv` for traceability. They are excluded from record-level and model-ready training tables until manually extracted or successfully retried.
 
