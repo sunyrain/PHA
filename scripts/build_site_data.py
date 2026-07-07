@@ -105,6 +105,17 @@ RECORD_COLUMNS = {
     "primary_target_direction": "target_direction",
     "model_ready": "model_ready",
     "model_ready_reason": "model_ready_reason",
+    "interaction_type": "interaction_type",
+    "is_covalent_binding": "is_covalent_binding",
+    "experiment_mode_primary": "experiment_mode_primary",
+    "experiment_mode_detail": "experiment_mode_detail",
+    "application_context": "application_context",
+    "comparable_target_class": "comparable_target_class",
+    "model_ready_v2": "model_ready_v2",
+    "model_ready_blocker": "model_ready_blocker",
+    "manual_review_priority": "manual_review_priority",
+    "q5_protein_evidence_flag": "q5_protein_evidence_flag",
+    "q5_triage_action": "q5_triage_action",
     "extraction_confidence_db": "confidence",
     "evidence_text_db": "evidence",
 }
@@ -140,7 +151,7 @@ NUMERIC_FIELDS = {
     "confidence",
 }
 
-BOOL_FIELDS = {"model_ready", "needs_review"}
+BOOL_FIELDS = {"model_ready", "model_ready_v2", "needs_review", "q5_protein_evidence_flag"}
 
 
 def clean_value(key: str, value: str) -> Any:
@@ -185,6 +196,11 @@ def main() -> None:
         "top_hydrogels": counter_payload(records, "hydrogel"),
         "top_targets": counter_payload(records, "target"),
         "top_experiment_modes": counter_payload(records, "experiment_mode"),
+        "top_experiment_mode_primary": counter_payload(records, "experiment_mode_primary"),
+        "top_interaction_types": counter_payload(records, "interaction_type"),
+        "top_application_contexts": counter_payload(records, "application_context"),
+        "top_comparable_target_classes": counter_payload(records, "comparable_target_class"),
+        "top_manual_review_priorities": counter_payload(records, "manual_review_priority"),
         "year_min": min((r["year"] for r in records if isinstance(r.get("year"), float)), default=None),
         "year_max": max((r["year"] for r in records if isinstance(r.get("year"), float)), default=None),
     }

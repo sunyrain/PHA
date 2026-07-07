@@ -222,6 +222,15 @@
       gap: 9px;
       align-items: end;
     }
+    .standardization-toolbar {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(120px, 1fr));
+      gap: 9px;
+      align-items: end;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #edf0f3;
+    }
     .field { display: flex; flex-direction: column; gap: 4px; }
     .field label {
       color: var(--muted);
@@ -506,6 +515,7 @@
       .header-actions { justify-content: flex-start; }
       .stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .toolbar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .standardization-toolbar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .summary-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 720px) {
@@ -514,6 +524,7 @@
       .database-tab { flex: 1 1 180px; min-width: 0; }
       .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .toolbar { grid-template-columns: 1fr; }
+      .standardization-toolbar { grid-template-columns: 1fr; }
       .release-strip { grid-template-columns: 1fr; }
       .table-footer { align-items: flex-start; flex-direction: column; }
       .pagination { justify-content: flex-start; }
@@ -536,6 +547,8 @@
         <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/record_additional_values.csv">Values CSV</a>
         <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/records_flat.csv">Archive CSV</a>
         <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/model_records.csv">Model CSV</a>
+        <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/model_records_v2.csv">Model v2 CSV</a>
+        <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/record_standardization.csv">Standard CSV</a>
         <a class="btn" href="https://raw.githubusercontent.com/sunyrain/PHA/main/data/curated/pha_scientific_dataset_20260705/data/inverse_design_seed.csv">Design CSV</a>
       </div>
     </div>
@@ -572,6 +585,9 @@
       <div class="panel-body">
         <div class="summary-grid">
           <div id="proteinBars"></div>
+          <div id="comparableBars"></div>
+          <div id="interactionBars"></div>
+          <div id="applicationBars"></div>
           <div id="targetBars"></div>
           <div id="modeBars"></div>
         </div>
@@ -641,6 +657,64 @@
             <input id="yearMax" type="number" inputmode="numeric" placeholder="2026">
           </div>
           <button class="btn btn-primary" id="applyBtn" type="button">Apply</button>
+        </div>
+        <div class="standardization-toolbar">
+          <div class="field">
+            <label for="applicationFilter">Application</label>
+            <select id="applicationFilter">
+              <option value="">Any</option>
+              <option value="biointerface_adsorption">biointerface_adsorption</option>
+              <option value="purification">purification</option>
+              <option value="antifouling">antifouling</option>
+              <option value="protein_immobilization">protein_immobilization</option>
+              <option value="hemocompatibility">hemocompatibility</option>
+              <option value="screening_library">screening_library</option>
+              <option value="mechanism_study">mechanism_study</option>
+              <option value="other">other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="interactionFilter">Interaction</label>
+            <select id="interactionFilter">
+              <option value="">Any</option>
+              <option value="physical_adsorption">physical_adsorption</option>
+              <option value="nonspecific_adsorption">nonspecific_adsorption</option>
+              <option value="selective_adsorption">selective_adsorption</option>
+              <option value="affinity_binding">affinity_binding</option>
+              <option value="covalent_immobilization">covalent_immobilization</option>
+              <option value="entrapment">entrapment</option>
+              <option value="antifouling_low_adsorption">antifouling_low_adsorption</option>
+              <option value="protein_fouling">protein_fouling</option>
+              <option value="unknown">unknown</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="comparableFilter">Comparable Class</label>
+            <select id="comparableFilter">
+              <option value="">Any</option>
+              <option value="strong">strong</option>
+              <option value="medium">medium</option>
+              <option value="weak">weak</option>
+              <option value="not_comparable">not_comparable</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="priorityFilter">Review Priority</label>
+            <select id="priorityFilter">
+              <option value="">Any</option>
+              <option value="high">high</option>
+              <option value="medium">medium</option>
+              <option value="low">low</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="modelV2Filter">Model v2</label>
+            <select id="modelV2Filter">
+              <option value="">Any</option>
+              <option value="ready">Ready v2</option>
+              <option value="not_ready">Not ready v2</option>
+            </select>
+          </div>
         </div>
       </div>
       <div id="loadingPanel" class="loading">Loading records...</div>
@@ -807,12 +881,12 @@
     async function loadData() {
       try {
         const [recordsResponse, summaryResponse] = await Promise.all([
-          fetch("pha_records_browser.json?v=20260706-v9-final", { cache: "reload" }),
-          fetch("pha_summary.json?v=20260706-v9-final", { cache: "reload" })
+          fetch("pha_records_browser.json?v=20260707-standardization-v2", { cache: "reload" }),
+          fetch("pha_summary.json?v=20260707-standardization-v2", { cache: "reload" })
         ]);
         allData = await recordsResponse.json();
         summary = await summaryResponse.json();
-        $("releaseGenerated").textContent = "Generated " + (summary.generated_at || "unknown");
+        $("releaseGenerated").textContent = "Updated " + (summary.standardization_generated_at || summary.generated_at || "unknown");
         filtered = [...allData];
         $("loadingPanel").style.display = "none";
         $("tableWrap").style.display = "block";
@@ -835,15 +909,15 @@
       const total = allData.length;
       const modelReady = allData.filter((r) => r.model_ready).length;
       const clean = allData.filter((r) => !r.needs_review).length;
-      const highQuality = allData.filter((r) => Number(r.quality_score) >= 3).length;
-      const numericTarget = allData.filter((r) => isFilled(r.target_value) && Number.isFinite(Number(r.target_value))).length;
+      const modelReadyV2 = allData.filter((r) => r.model_ready_v2).length;
+      const strongMedium = allData.filter((r) => ["strong", "medium"].includes(r.comparable_target_class)).length;
       const stats = [
         ["Articles", summary.articles_total, (summary.success || 0) + " success", "blue"],
         ["Records", total, "full extracted table", "teal"],
-        ["Model ready", modelReady, pctText(modelReady, total), "green"],
-        ["Comparable numeric", numericTarget, pctText(numericTarget, total), "amber"],
+        ["Model ready", modelReady, "legacy " + pctText(modelReady, total), "green"],
+        ["Model v2", modelReadyV2, pctText(modelReadyV2, total), "green"],
+        ["Strong/medium", strongMedium, "comparable class", "amber"],
         ["No review flag", clean, pctText(clean, total), "purple"],
-        ["Score 3", highQuality, pctText(highQuality, total), "gray"],
       ];
       $("statsGrid").innerHTML = stats.map(([label, value, sub, cls]) => (
         '<div class="stat ' + cls + '"><div class="label">' + esc(label) + '</div><div class="value">' +
@@ -867,10 +941,16 @@
       const targetTotal = Math.max(1, ...((summary.top_targets || []).map((x) => x.count || 0)));
       $("proteinBars").innerHTML = '<h3 class="panel-title">Proteins</h3>' +
         (summary.top_proteins || []).slice(0, 8).map((x) => barRow(x.name, x.count, total, "teal")).join("");
+      $("comparableBars").innerHTML = '<h3 class="panel-title">Comparable Classes</h3>' +
+        (summary.top_comparable_target_classes || []).slice(0, 8).map((x) => barRow(x.name, x.count, total, "amber")).join("");
+      $("interactionBars").innerHTML = '<h3 class="panel-title">Interactions</h3>' +
+        (summary.top_interaction_types || []).slice(0, 8).map((x) => barRow(x.name, x.count, total, "green")).join("");
+      $("applicationBars").innerHTML = '<h3 class="panel-title">Applications</h3>' +
+        (summary.top_application_contexts || []).slice(0, 8).map((x) => barRow(x.name, x.count, total, "purple")).join("");
       $("targetBars").innerHTML = '<h3 class="panel-title">Comparable Targets</h3>' +
         (summary.top_targets || []).slice(0, 8).map((x) => barRow(x.name, x.count, targetTotal, "amber")).join("");
       $("modeBars").innerHTML = '<h3 class="panel-title">Experiment Modes</h3>' +
-        (summary.top_experiment_modes || []).slice(0, 8).map((x) => barRow(x.name, x.count, total, "purple")).join("");
+        (summary.top_experiment_mode_primary || summary.top_experiment_modes || []).slice(0, 8).map((x) => barRow(x.name, x.count, total, "teal")).join("");
     }
 
     function targetHasValue(record, target) {
@@ -884,6 +964,11 @@
       const model = $("modelFilter").value;
       const review = $("reviewFilter").value;
       const scoreValue = $("qualityFilter").value;
+      const application = $("applicationFilter").value;
+      const interaction = $("interactionFilter").value;
+      const comparable = $("comparableFilter").value;
+      const priority = $("priorityFilter").value;
+      const modelV2 = $("modelV2Filter").value;
       const yearMinValue = $("yearMin").value;
       const yearMaxValue = $("yearMax").value;
       const score = scoreValue === "" ? null : Number(scoreValue);
@@ -895,13 +980,21 @@
             r.record_id, r.doi, r.article_title, r.publisher, r.hydrogel, r.format, r.backbone,
             r.monomers, r.crosslinker, r.functional_groups, r.ligand, r.filler, r.substrate_or_support,
             r.protein, r.protein_abbreviation, r.experiment_mode, r.adsorption_type, r.competition_system,
-            r.target, r.outcome, r.metric, r.isotherm_model, r.kinetic_model, r.mechanism_tags, r.evidence
+            r.target, r.outcome, r.metric, r.isotherm_model, r.kinetic_model, r.mechanism_tags, r.evidence,
+            r.interaction_type, r.experiment_mode_primary, r.experiment_mode_detail, r.application_context,
+            r.comparable_target_class, r.manual_review_priority, r.model_ready_blocker
           ].join(" ").toLowerCase();
           if (!haystack.includes(search)) return false;
         }
         if (!targetHasValue(r, target)) return false;
         if (model === "ready" && !r.model_ready) return false;
         if (model === "not_ready" && r.model_ready) return false;
+        if (modelV2 === "ready" && !r.model_ready_v2) return false;
+        if (modelV2 === "not_ready" && r.model_ready_v2) return false;
+        if (application && r.application_context !== application) return false;
+        if (interaction && r.interaction_type !== interaction) return false;
+        if (comparable && r.comparable_target_class !== comparable) return false;
+        if (priority && r.manual_review_priority !== priority) return false;
         if (review === "clean" && r.needs_review) return false;
         if (review === "review" && !r.needs_review) return false;
         if (score !== null && Number.isFinite(score) && Number(r.quality_score) < score) return false;
@@ -915,7 +1008,10 @@
     }
 
     function clearFilters() {
-      ["searchInput", "targetFilter", "modelFilter", "reviewFilter", "qualityFilter", "yearMin", "yearMax"].forEach((id) => { $(id).value = ""; });
+      [
+        "searchInput", "targetFilter", "modelFilter", "reviewFilter", "qualityFilter", "yearMin", "yearMax",
+        "applicationFilter", "interactionFilter", "comparableFilter", "priorityFilter", "modelV2Filter"
+      ].forEach((id) => { $(id).value = ""; });
       applyFilters();
     }
 
@@ -1156,6 +1252,18 @@
           kv("Isotherm model", r.isotherm_model),
           kv("Kinetic model", r.kinetic_model),
         ]) +
+        section("Standardization v2", [
+          kv("Interaction type", r.interaction_type),
+          kv("Covalent binding", r.is_covalent_binding),
+          kv("Mode primary", r.experiment_mode_primary),
+          kv("Mode detail", r.experiment_mode_detail),
+          kv("Application", r.application_context),
+          kv("Comparable class", r.comparable_target_class),
+          kv("Model v2", joinPretty([r.model_ready_v2 ? "ready_v2" : "not_ready_v2", r.model_ready_blocker])),
+          kv("Review priority", r.manual_review_priority),
+          kv("Q5 protein evidence", isFilled(r.q5_protein_evidence_flag) ? String(r.q5_protein_evidence_flag) : ""),
+          kv("Q5 triage", r.q5_triage_action),
+        ]) +
         section("Quality And Evidence", [
           kv("Quality", joinPretty(["score " + fmtNum(r.quality_score, 0), r.needs_review ? "needs review" : "no review flag", r.model_ready ? "model ready" : r.model_ready_reason])),
           kv("Mechanism", r.mechanism_tags),
@@ -1187,6 +1295,9 @@
       "binding_efficiency_pct", "recovery_pct", "purity_pct", "fouling_reduction_pct",
       "retained_capacity_pct", "dynamic_binding_capacity", "selectivity_factor", "imprinting_factor",
       "association_constant_Ka", "dissociation_constant_Kd", "isotherm_model", "kinetic_model",
+      "interaction_type", "is_covalent_binding", "experiment_mode_primary", "experiment_mode_detail",
+      "application_context", "comparable_target_class", "model_ready_v2", "model_ready_blocker",
+      "manual_review_priority", "q5_protein_evidence_flag", "q5_triage_action",
       "quality_score", "needs_review", "model_ready", "model_ready_reason", "evidence"
     ];
 
@@ -1214,7 +1325,10 @@
     $("closeModalBtn").addEventListener("click", closeDetail);
     $("detailModal").addEventListener("click", (event) => { if (event.target.id === "detailModal") closeDetail(); });
     document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeDetail(); });
-    ["searchInput", "targetFilter", "modelFilter", "reviewFilter", "qualityFilter", "yearMin", "yearMax"].forEach((id) => {
+    [
+      "searchInput", "targetFilter", "modelFilter", "reviewFilter", "qualityFilter", "yearMin", "yearMax",
+      "applicationFilter", "interactionFilter", "comparableFilter", "priorityFilter", "modelV2Filter"
+    ].forEach((id) => {
       $(id).addEventListener("keydown", (event) => { if (event.key === "Enter") applyFilters(); });
       if (id !== "searchInput") $(id).addEventListener("change", applyFilters);
     });

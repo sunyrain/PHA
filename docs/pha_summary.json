@@ -1,222 +1,374 @@
-{
-  "generated_at": "2026-07-06T20:36:46",
-  "db_path": "PHA\\data\\processed\\pha_extraction_1000_xhigh_fulltext_w8\\codex_extraction_results.db",
-  "articles_total": 1230,
-  "success": 985,
-  "partial": 245,
-  "failed": 0,
-  "records_total": 6436,
-  "model_ready_records": 2337,
-  "inverse_design_rows": 2337,
-  "materials": 13662,
-  "proteins": 4290,
-  "material_descriptor_matches": 931,
-  "protein_descriptor_matches": 338,
-  "protein_descriptor_needs_review": 272,
-  "special_fields": 5363,
-  "completion_patches": 56978,
-  "external_material_descriptor_rows": 13662,
-  "external_protein_descriptor_rows": 4290,
-  "top_proteins": [
-    {
-      "name": "bovine serum albumin",
-      "count": 1309
-    },
-    {
-      "name": "lysozyme",
-      "count": 777
-    },
-    {
-      "name": "fibrinogen",
-      "count": 193
-    },
-    {
-      "name": "human serum albumin",
-      "count": 189
-    },
-    {
-      "name": "hemoglobin",
-      "count": 117
-    },
-    {
-      "name": "immunoglobulin G",
-      "count": 114
-    },
-    {
-      "name": "lipase",
-      "count": 111
-    },
-    {
-      "name": "human immunoglobulin G",
-      "count": 94
-    },
-    {
-      "name": "Immunoglobulin G",
-      "count": 73
-    },
-    {
-      "name": "cytochrome c",
-      "count": 60
-    },
-    {
-      "name": "bovine hemoglobin",
-      "count": 58
-    },
-    {
-      "name": "ovalbumin",
-      "count": 52
-    }
-  ],
-  "top_hydrogels": [
-    {
-      "name": "L-tryptophan-functionalized polyacrylamide cryogel",
-      "count": 24
-    },
-    {
-      "name": "Gelatin hydrogel nonwoven fabric (Genocel)",
-      "count": 21
-    },
-    {
-      "name": "poly(NIPAM-co-MAA) nanogel",
-      "count": 20
-    },
-    {
-      "name": "APC-specific DNA aptamer immobilized poly(HEMA-GMA) cryogel membrane",
-      "count": 18
-    },
-    {
-      "name": "supported cationic polyacrylamide hydrogel",
-      "count": 17
-    },
-    {
-      "name": "l-phenylalanine-functionalized polyacrylamide cryogel",
-      "count": 15
-    },
-    {
-      "name": "Tris-activated polyacrylamide cryogel",
-      "count": 14
-    },
-    {
-      "name": "quaternized polyethyleneimine-functionalized PAAm cryogel",
-      "count": 14
-    },
-    {
-      "name": "P(HEMA-MAA)",
-      "count": 13
-    },
-    {
-      "name": "P(NIPAM-co-AAC)/Zr-MOF hydrogel microspheres",
-      "count": 13
-    },
-    {
-      "name": "FITC-NVOC functional PEG hydrogel disks, 5-40% w:v series",
-      "count": 13
-    },
-    {
-      "name": "HAVCR-1 epitope-imprinted polymer nanogels",
-      "count": 12
-    }
-  ],
-  "top_targets": [
-    {
-      "name": "q_norm_mg_g",
-      "count": 1418
-    },
-    {
-      "name": "surface_adsorption_ug_cm2",
-      "count": 351
-    },
-    {
-      "name": "recovery_pct",
-      "count": 327
-    },
-    {
-      "name": "binding_efficiency_pct",
-      "count": 254
-    },
-    {
-      "name": "retained_capacity_pct",
-      "count": 187
-    },
-    {
-      "name": "fouling_reduction_pct",
-      "count": 136
-    },
-    {
-      "name": "removal_efficiency_pct",
-      "count": 115
-    },
-    {
-      "name": "purity_pct",
-      "count": 25
-    },
-    {
-      "name": "detection limit",
-      "count": 24
-    },
-    {
-      "name": "high-affinity Bhb bound",
-      "count": 24
-    },
-    {
-      "name": "imprinting factor",
-      "count": 20
-    },
-    {
-      "name": "limit of detection",
-      "count": 17
-    }
-  ],
-  "top_experiment_modes": [
-    {
-      "name": "batch adsorption",
-      "count": 388
-    },
-    {
-      "name": "batch incubation",
-      "count": 104
-    },
-    {
-      "name": "continuous column adsorption",
-      "count": 96
-    },
-    {
-      "name": "static batch adsorption",
-      "count": 87
-    },
-    {
-      "name": "batch adsorption isotherm",
-      "count": 79
-    },
-    {
-      "name": "static incubation",
-      "count": 78
-    },
-    {
-      "name": "batch adsorption kinetics",
-      "count": 61
-    },
-    {
-      "name": "batch immobilization",
-      "count": 60
-    },
-    {
-      "name": "batch rebinding",
-      "count": 56
-    },
-    {
-      "name": "static adsorption",
-      "count": 52
-    },
-    {
-      "name": "batch adsorption immobilization",
-      "count": 42
-    },
-    {
-      "name": "batch equilibrium adsorption isotherm",
-      "count": 40
-    }
-  ],
-  "year_min": 2000.0,
-  "year_max": 2026.0
+﻿{
+    "generated_at":  "2026-07-06T20:36:46",
+    "db_path":  "PHA\\data\\processed\\pha_extraction_1000_xhigh_fulltext_w8\\codex_extraction_results.db",
+    "articles_total":  1230,
+    "success":  985,
+    "partial":  245,
+    "failed":  0,
+    "records_total":  6436,
+    "model_ready_records":  2337,
+    "inverse_design_rows":  2337,
+    "materials":  13662,
+    "proteins":  4290,
+    "material_descriptor_matches":  931,
+    "protein_descriptor_matches":  338,
+    "protein_descriptor_needs_review":  272,
+    "special_fields":  5363,
+    "completion_patches":  56978,
+    "external_material_descriptor_rows":  13662,
+    "external_protein_descriptor_rows":  4290,
+    "standardization_rules_version":  "standardization_v2_20260707",
+    "standardization_generated_at":  "2026-07-07T15:46:05",
+    "model_ready_v2_records":  3589,
+    "strong_comparable_records":  2401,
+    "medium_comparable_records":  1438,
+    "high_review_priority_records":  4626,
+    "top_proteins":  [
+                         {
+                             "name":  "bovine serum albumin",
+                             "count":  1350
+                         },
+                         {
+                             "name":  "lysozyme",
+                             "count":  788
+                         },
+                         {
+                             "name":  "fibrinogen",
+                             "count":  193
+                         },
+                         {
+                             "name":  "human serum albumin",
+                             "count":  190
+                         },
+                         {
+                             "name":  "immunoglobulin G",
+                             "count":  187
+                         },
+                         {
+                             "name":  "hemoglobin",
+                             "count":  117
+                         },
+                         {
+                             "name":  "lipase",
+                             "count":  111
+                         },
+                         {
+                             "name":  "human immunoglobulin G",
+                             "count":  94
+                         },
+                         {
+                             "name":  "cytochrome C",
+                             "count":  73
+                         },
+                         {
+                             "name":  "bovine hemoglobin",
+                             "count":  59
+                         },
+                         {
+                             "name":  "ovalbumin",
+                             "count":  53
+                         },
+                         {
+                             "name":  "albumin",
+                             "count":  53
+                         }
+                     ],
+    "top_hydrogels":  [
+                          {
+                              "name":  "L-tryptophan-functionalized polyacrylamide cryogel",
+                              "count":  24
+                          },
+                          {
+                              "name":  "Gelatin hydrogel nonwoven fabric (Genocel)",
+                              "count":  21
+                          },
+                          {
+                              "name":  "poly(NIPAM-co-MAA) nanogel",
+                              "count":  20
+                          },
+                          {
+                              "name":  "l-phenylalanine-functionalized polyacrylamide cryogel",
+                              "count":  18
+                          },
+                          {
+                              "name":  "APC-specific DNA aptamer immobilized poly(HEMA-GMA) cryogel membrane",
+                              "count":  18
+                          },
+                          {
+                              "name":  "supported cationic polyacrylamide hydrogel",
+                              "count":  17
+                          },
+                          {
+                              "name":  "Tris-activated polyacrylamide cryogel",
+                              "count":  14
+                          },
+                          {
+                              "name":  "quaternized polyethyleneimine-functionalized PAAm cryogel",
+                              "count":  14
+                          },
+                          {
+                              "name":  "P(HEMA-MAA)",
+                              "count":  13
+                          },
+                          {
+                              "name":  "FITC-NVOC functional PEG hydrogel disks, 5-40% w:v series",
+                              "count":  13
+                          },
+                          {
+                              "name":  "P(NIPAM-co-AAC)/Zr-MOF hydrogel microspheres",
+                              "count":  13
+                          },
+                          {
+                              "name":  "HAVCR-1 epitope-imprinted polymer nanogels",
+                              "count":  12
+                          }
+                      ],
+    "top_targets":  [
+                        {
+                            "name":  "q_norm_mg_g",
+                            "count":  1418
+                        },
+                        {
+                            "name":  "surface_adsorption_ug_cm2",
+                            "count":  351
+                        },
+                        {
+                            "name":  "recovery_pct",
+                            "count":  327
+                        },
+                        {
+                            "name":  "binding_efficiency_pct",
+                            "count":  254
+                        },
+                        {
+                            "name":  "retained_capacity_pct",
+                            "count":  187
+                        },
+                        {
+                            "name":  "fouling_reduction_pct",
+                            "count":  136
+                        },
+                        {
+                            "name":  "removal_efficiency_pct",
+                            "count":  115
+                        },
+                        {
+                            "name":  "purity_pct",
+                            "count":  25
+                        },
+                        {
+                            "name":  "detection limit",
+                            "count":  24
+                        },
+                        {
+                            "name":  "high-affinity Bhb bound",
+                            "count":  24
+                        },
+                        {
+                            "name":  "Kd",
+                            "count":  23
+                        },
+                        {
+                            "name":  "imprinting factor",
+                            "count":  20
+                        }
+                    ],
+    "top_experiment_modes":  [
+                                 {
+                                     "name":  "batch adsorption",
+                                     "count":  388
+                                 },
+                                 {
+                                     "name":  "batch incubation",
+                                     "count":  104
+                                 },
+                                 {
+                                     "name":  "continuous column adsorption",
+                                     "count":  96
+                                 },
+                                 {
+                                     "name":  "static batch adsorption",
+                                     "count":  87
+                                 },
+                                 {
+                                     "name":  "batch adsorption isotherm",
+                                     "count":  79
+                                 },
+                                 {
+                                     "name":  "static incubation",
+                                     "count":  78
+                                 },
+                                 {
+                                     "name":  "batch adsorption kinetics",
+                                     "count":  61
+                                 },
+                                 {
+                                     "name":  "batch immobilization",
+                                     "count":  60
+                                 },
+                                 {
+                                     "name":  "batch rebinding",
+                                     "count":  56
+                                 },
+                                 {
+                                     "name":  "static adsorption",
+                                     "count":  52
+                                 },
+                                 {
+                                     "name":  "batch adsorption immobilization",
+                                     "count":  42
+                                 },
+                                 {
+                                     "name":  "batch equilibrium adsorption isotherm",
+                                     "count":  40
+                                 }
+                             ],
+    "top_experiment_mode_primary":  [
+                                        {
+                                            "name":  "surface",
+                                            "count":  1372
+                                        },
+                                        {
+                                            "name":  "column",
+                                            "count":  1321
+                                        },
+                                        {
+                                            "name":  "batch",
+                                            "count":  1008
+                                        },
+                                        {
+                                            "name":  "hemocompatibility",
+                                            "count":  841
+                                        },
+                                        {
+                                            "name":  "immobilization",
+                                            "count":  729
+                                        },
+                                        {
+                                            "name":  "other",
+                                            "count":  402
+                                        },
+                                        {
+                                            "name":  "biofouling",
+                                            "count":  371
+                                        },
+                                        {
+                                            "name":  "QCM_SPR",
+                                            "count":  214
+                                        },
+                                        {
+                                            "name":  "microarray",
+                                            "count":  123
+                                        },
+                                        {
+                                            "name":  "flow",
+                                            "count":  55
+                                        }
+                                    ],
+    "top_interaction_types":  [
+                                  {
+                                      "name":  "covalent_immobilization",
+                                      "count":  1423
+                                  },
+                                  {
+                                      "name":  "physical_adsorption",
+                                      "count":  1141
+                                  },
+                                  {
+                                      "name":  "entrapment",
+                                      "count":  994
+                                  },
+                                  {
+                                      "name":  "selective_adsorption",
+                                      "count":  976
+                                  },
+                                  {
+                                      "name":  "affinity_binding",
+                                      "count":  748
+                                  },
+                                  {
+                                      "name":  "antifouling_low_adsorption",
+                                      "count":  545
+                                  },
+                                  {
+                                      "name":  "unknown",
+                                      "count":  245
+                                  },
+                                  {
+                                      "name":  "nonspecific_adsorption",
+                                      "count":  228
+                                  },
+                                  {
+                                      "name":  "protein_fouling",
+                                      "count":  136
+                                  }
+                              ],
+    "top_application_contexts":  [
+                                     {
+                                         "name":  "protein_immobilization",
+                                         "count":  1878
+                                     },
+                                     {
+                                         "name":  "biointerface_adsorption",
+                                         "count":  1411
+                                     },
+                                     {
+                                         "name":  "purification",
+                                         "count":  1344
+                                     },
+                                     {
+                                         "name":  "antifouling",
+                                         "count":  636
+                                     },
+                                     {
+                                         "name":  "hemocompatibility",
+                                         "count":  493
+                                     },
+                                     {
+                                         "name":  "mechanism_study",
+                                         "count":  436
+                                     },
+                                     {
+                                         "name":  "other",
+                                         "count":  123
+                                     },
+                                     {
+                                         "name":  "screening_library",
+                                         "count":  115
+                                     }
+                                 ],
+    "top_comparable_target_classes":  [
+                                          {
+                                              "name":  "strong",
+                                              "count":  2401
+                                          },
+                                          {
+                                              "name":  "medium",
+                                              "count":  1438
+                                          },
+                                          {
+                                              "name":  "not_comparable",
+                                              "count":  1377
+                                          },
+                                          {
+                                              "name":  "weak",
+                                              "count":  1220
+                                          }
+                                      ],
+    "top_manual_review_priorities":  [
+                                         {
+                                             "name":  "high",
+                                             "count":  4626
+                                         },
+                                         {
+                                             "name":  "medium",
+                                             "count":  1675
+                                         },
+                                         {
+                                             "name":  "low",
+                                             "count":  135
+                                         }
+                                     ],
+    "year_min":  2000,
+    "year_max":  2026
 }

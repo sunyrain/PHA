@@ -2,8 +2,10 @@
 
 > Online database browser: <https://sunyrain.github.io/PHA/>
 
-PHA is a literature-mined dataset for protein-hydrogel adsorption, immobilization,
-antifouling, and related biointerface measurements. The primary record unit is:
+PHA means **Protein-Hydrogel Adsorption** in this repository. It does not refer
+to polyhydroxyalkanoates. PHA is a literature-mined dataset for
+protein-hydrogel adsorption, immobilization, antifouling, and related
+biointerface measurements. The primary record unit is:
 
 `paper + hydrogel/sample + protein/mixture + experimental condition + measured outcome`
 
@@ -22,8 +24,10 @@ Release package: `data/curated/pha_scientific_dataset_20260705`
 | Partial/no-record articles | 245 |
 | Failed articles | 0 |
 | Record-level rows | 6,436 |
-| Conservative model-ready rows | 2,325 |
-| Inverse-design seed rows | 2,325 |
+| Conservative model-ready rows | 2,337 |
+| Standardized model-ready v2 rows | 3,589 |
+| Strong/medium comparable rows | 3,839 |
+| Inverse-design seed rows | 2,337 |
 | Material mentions | 13,662 |
 | Protein mentions | 4,290 |
 | Special fields | 5,363 |
@@ -37,11 +41,14 @@ Release package: `data/curated/pha_scientific_dataset_20260705`
 | `data/curated/pha_scientific_dataset_20260705/data/records_flat.csv` | Full flattened record-level table. |
 | `data/curated/pha_scientific_dataset_20260705/data/records_raw.jsonl` | Raw nested record JSONL for lossless parsing and audit. |
 | `data/curated/pha_scientific_dataset_20260705/data/model_records.csv` | Conservative supervised-learning subset. |
+| `data/curated/pha_scientific_dataset_20260705/data/model_records_v2.csv` | Deterministic standardization v2 subset with application, interaction, and target-comparability strata. |
+| `data/curated/pha_scientific_dataset_20260705/data/record_standardization.csv` | Sidecar with standardized interaction, assay mode, application, comparability, model-ready blocker, Q5 triage, and review-priority fields. |
 | `data/curated/pha_scientific_dataset_20260705/data/inverse_design_seed.csv` | Compact table for inverse-design and generation experiments. |
 | `data/curated/pha_scientific_dataset_20260705/data/materials.csv` | Material, monomer, crosslinker, ligand, and filler mentions. |
 | `data/curated/pha_scientific_dataset_20260705/data/proteins.csv` | Protein mentions and reported protein properties. |
 | `data/curated/pha_scientific_dataset_20260705/metadata/field_coverage.csv` | Field-level coverage audit. |
 | `data/curated/pha_scientific_dataset_20260705/metadata/data_dictionary.csv` | Column descriptions for major tables. |
+| `data/curated/pha_scientific_dataset_20260705/metadata/run_comparison_summary_20260707.md` | Incremental comparison for legacy versus standardization v2 counts and distributions. |
 | `extraction/schemas/` | JSON schemas for adsorption records, candidate designs, and article outputs. |
 | `extraction/prompts/` | Extraction and field-completion prompt versions. |
 | `reports/` | Completion and coverage audits for the public release. |
@@ -49,10 +56,14 @@ Release package: `data/curated/pha_scientific_dataset_20260705`
 ## Recommended Use
 
 - Use `model_records.csv` for conservative tabular prediction baselines.
+- Use `model_records_v2.csv` when application context, interaction type, and
+  target-comparability strata are needed.
 - Use `inverse_design_seed.csv` for hydrogel design and candidate-generation experiments.
 - Use DOI-level `doi_split` for train/validation/test separation.
-- Use `field_coverage.csv`, `model_ready_reason`, `quality__source_quality_score`,
-  and `quality__needs_manual_review` before model training or benchmark claims.
+- Use `field_coverage.csv`, `model_ready_reason`, `model_ready_blocker`,
+  `comparable_target_class`, `manual_review_priority`,
+  `quality__source_quality_score`, and `quality__needs_manual_review` before
+  model training or benchmark claims.
 - Treat PubChem, UniProt, and RCSB descriptor tables as external sidecars; they do
   not overwrite observed experimental fields.
 
@@ -69,11 +80,13 @@ identifiers for provenance traceability.
 From the repository root:
 
 ```powershell
-python scripts/build_site_data.py
+.\scripts\apply_standardization_v2.ps1
+.\scripts\build_site_data.ps1
 ```
 
-This regenerates `docs/pha_records_browser.json` and `docs/pha_summary.json` from
-the curated release package.
+The first command applies deterministic standardization v2 fields and refreshes
+sidecar/audit outputs. The second regenerates `docs/pha_records_browser.json`
+and `docs/pha_summary.json` from the curated release package.
 
 ## GitHub Pages Deployment
 
@@ -86,7 +99,8 @@ artifact. The browser is fully static and reads:
 - `docs/pha_summary.json`
 
 Before pushing a refreshed release, rebuild the curated package if needed, rerun
-`python scripts/build_site_data.py`, and commit the changed `docs/` files.
+the standardization and site-data scripts above, and commit the changed data,
+metadata, report, and `docs/` files.
 
 ## Citation
 

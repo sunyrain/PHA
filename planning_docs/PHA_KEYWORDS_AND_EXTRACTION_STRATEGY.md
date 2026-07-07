@@ -4,6 +4,9 @@ Date: 2026-07-01
 
 ## Objective
 
+PHA means **Protein-Hydrogel Adsorption** in this project. It does not refer to
+polyhydroxyalkanoates.
+
 Build a data-driven corpus for designing hydrogel systems that adsorb, weakly
 adsorb, or resist adsorption of specified proteins. Following expert review,
 the corpus must also support biointerface/blood-contacting materials,
@@ -24,6 +27,11 @@ AI-ready training labels. The database must support:
 The search is intentionally split into ten query families. Each family is
 kept separate so we can later audit which source contributed each paper.
 
+The 2026-07-07 standardization update is incremental. It preserves the legacy
+record granularity, output tables, and the original Q1-Q7 retrieval meanings.
+Additional terms or fields should be logged as additive expansion rather than
+as a replacement for prior query families.
+
 | Family | Purpose | Positive/negative role |
 | --- | --- | --- |
 | Q1 quantitative adsorption | papers reporting capacity, kinetics, isotherms, or physical-property links | mostly positive adsorption |
@@ -42,6 +50,11 @@ therefore historical and should not be reused for the new Q3/Q6 definitions.
 The current `PHA/configs/config.yaml` contains Q1-Q10 and should be count-probed
 again before a full harvest.
 
+For compatibility with the incremental Q1-Q7 comparison, Q1-Q7 should remain
+the primary audit families for Articles / Records / Model Ready / Comparable
+Numeric comparisons. Q8-Q10 may remain as extension families, but should not be
+used to redefine the meaning of the earlier Q1-Q7 families.
+
 ## Inclusion Rules
 
 Include a paper when it contains experimental evidence for interaction between
@@ -59,6 +72,12 @@ a hydrogel material and one or more proteins, including:
 - quantitative or semi-quantitative measurements such as capacity, removal,
   surface coverage, fluorescence intensity, elution yield, fouling reduction,
   or comparison against a control hydrogel.
+
+Q5 antifouling/low-adsorption records must contain protein, serum, plasma,
+albumin, fibrinogen, IgG, blood, or total-protein measurement evidence. Articles
+with only antibacterial, cell-adhesion, marine-biofouling, or generic
+antifouling claims and no protein/blood/plasma/serum fouling measurement should
+be excluded or down-weighted.
 
 ## Exclusion Rules
 
@@ -149,6 +168,38 @@ A single paper can therefore produce many records if it compares:
   intraparticle diffusion, etc.
 - desorption efficiency, regeneration cycles, retained capacity
 - antifouling or low-adsorption reduction percentage
+
+### Standardization v2 Derived Fields
+
+These fields are deterministic post-processing labels. They do not replace raw
+evidence fields and should not overwrite article-derived experimental values.
+
+- `interaction_type`: `physical_adsorption`, `nonspecific_adsorption`,
+  `selective_adsorption`, `affinity_binding`, `covalent_immobilization`,
+  `entrapment`, `antifouling_low_adsorption`, `protein_fouling`, or `unknown`.
+- `is_covalent_binding`: `yes`, `no`, or `unclear`.
+- `experiment_mode_primary`: `batch`, `column`, `surface`, `flow`, `QCM_SPR`,
+  `microarray`, `immobilization`, `hemocompatibility`, `biofouling`, or `other`.
+- `experiment_mode_detail`: `batch_adsorption_equilibrium`,
+  `batch_adsorption_kinetics`, `batch_adsorption_isotherm`,
+  `static_incubation`, `column_dynamic_binding`, `column_breakthrough`,
+  `surface_fouling_assay`, `QCM_D`, `SPR_binding`,
+  `fluorescence_surface_quantification`, `protein_immobilization_activity`, or
+  `other`.
+- `application_context`: `biointerface_adsorption`, `purification`,
+  `antifouling`, `protein_immobilization`, `hemocompatibility`,
+  `screening_library`, `mechanism_study`, or `other`.
+- `comparable_target_class`: `strong`, `medium`, `weak`, or `not_comparable`.
+  Strong targets include normalized capacity, bed capacity, surface adsorption,
+  Ka, and Kd. Medium targets include efficiency/recovery/purity/fouling
+  percentages, selectivity factors, and imprinting factors. Fluorescence,
+  absorbance, relative signal, SDS-PAGE band intensity, image-derived coverage,
+  and qualitative staining intensity are weak unless separately normalized.
+- `model_ready_v2`, `model_ready_blocker`, and `manual_review_priority`: derived
+  audit fields used for modeling subset selection and manual review ordering.
+
+The legacy `experiment_mode`, `model_ready`, and `model_ready_reason` fields
+must be retained so that new runs remain comparable with previous releases.
 
 ## Mechanism Tags
 
